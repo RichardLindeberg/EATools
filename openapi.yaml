@@ -1,0 +1,1907 @@
+openapi: 3.0.3
+info:
+  title: EA Tool API
+  version: 1.0.0
+  description: |
+    API-first EA tool for cataloging applications, servers, integrations, and ArchiMate-based views.
+    Time handling: all timestamps are UTC, ISO 8601 with trailing 'Z'.
+    Identity: OpenID Connect (OIDC) tokens; Authorization: centralized Rego/OPA policies.
+    Authorization details:
+      - Inputs: subject (sub, email, roles, groups), action (read/write/delete), resource (type, id, owner, environment, tags), request context (method, path, scopes, tenant).
+      - Decision: allow/deny with optional obligations (field redactions, filters); include trace id for audits; fail-closed on PDP errors.
+      - Rego example (simplified):
+          package authz
+
+          default allow = false
+
+          allow {
+            input.action == "read"
+            input.resource.type == "application"
+            "viewer" in input.subject.roles
+          }
+  contact:
+    name: EA Platform Team
+servers:
+  - url: https://api.example.com
+    description: Production
+  - url: https://staging.api.example.com
+    description: Staging
+  - url: http://localhost:8000
+    description: Local
+security:
+  - bearerAuth: []
+  - openId:
+    - openid
+    - profile
+    - email
+  - apiKey: []
+tags:
+  - name: Organizations
+  - name: Applications
+  - name: Servers
+  - name: Integrations
+  - name: BusinessCapabilities
+  - name: Relations
+  - name: Views
+  - name: Imports
+  - name: Exports
+  - name: Webhooks
+paths:
+  /organizations:
+    get:
+      tags: [Organizations]
+      summary: List organizations
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: List organizations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizations'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Organizations]
+      summary: Create organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /organizations/{id}:
+    get:
+      tags: [Organizations]
+      summary: Get organization
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Organizations]
+      summary: Update organization
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Organizations]
+      summary: Delete organization
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /applications:
+    get:
+      tags: [Applications]
+      summary: List applications
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+        - in: query
+          name: owner
+          schema:
+            type: string
+        - in: query
+          name: lifecycle
+          schema:
+            $ref: '#/components/schemas/Lifecycle'
+      responses:
+        '200':
+          description: List applications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplications'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Applications]
+      summary: Create application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /applications/{id}:
+    get:
+      tags: [Applications]
+      summary: Get application
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Applications]
+      summary: Update application
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Applications]
+      summary: Delete application
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /servers:
+    get:
+      tags: [Servers]
+      summary: List servers
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - in: query
+          name: environment
+          schema:
+            type: string
+        - in: query
+          name: region
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List servers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedServers'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Servers]
+      summary: Create server
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /servers/{id}:
+    get:
+      tags: [Servers]
+      summary: Get server
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Servers]
+      summary: Update server
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Server'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Servers]
+      summary: Delete server
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /integrations:
+    get:
+      tags: [Integrations]
+      summary: List integrations
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - in: query
+          name: source_app_id
+          schema:
+            type: string
+        - in: query
+          name: target_app_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List integrations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedIntegrations'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Integrations]
+      summary: Create integration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /integrations/{id}:
+    get:
+      tags: [Integrations]
+      summary: Get integration
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Integration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Integrations]
+      summary: Update integration
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Integrations]
+      summary: Delete integration
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /business-capabilities:
+    get:
+      tags: [BusinessCapabilities]
+      summary: List business capabilities
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: List business capabilities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBusinessCapabilities'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [BusinessCapabilities]
+      summary: Create business capability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessCapabilityCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessCapability'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /business-capabilities/{id}:
+    get:
+      tags: [BusinessCapabilities]
+      summary: Get business capability
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Business capability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessCapability'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [BusinessCapabilities]
+      summary: Update business capability
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessCapabilityUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessCapability'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [BusinessCapabilities]
+      summary: Delete business capability
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /relations:
+    get:
+      tags: [Relations]
+      summary: List relations
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - in: query
+          name: source_id
+          schema:
+            type: string
+        - in: query
+          name: target_id
+          schema:
+            type: string
+        - in: query
+          name: relation_type
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List relations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRelations'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Relations]
+      summary: Create relation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /relations/{id}:
+    get:
+      tags: [Relations]
+      summary: Get relation
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Relations]
+      summary: Update relation
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Relations]
+      summary: Delete relation
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /views:
+    get:
+      tags: [Views]
+      summary: List saved views
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: List views
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedViews'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Views]
+      summary: Create view
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /views/{id}:
+    get:
+      tags: [Views]
+      summary: Get view
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: View
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Views]
+      summary: Update view
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Views]
+      summary: Delete view
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /views/{id}/render:
+    get:
+      tags: [Views]
+      summary: Render a view to graph payload
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Graph payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Graph'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /imports:
+    post:
+      tags: [Imports]
+      summary: Create import job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportJobCreate'
+      responses:
+        '202':
+          description: Import job created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportJob'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /imports/{jobId}:
+    get:
+      tags: [Imports]
+      summary: Get import job status
+      parameters:
+        - $ref: '#/components/parameters/jobIdPath'
+      responses:
+        '200':
+          description: Import job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportJob'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /exports:
+    post:
+      tags: [Exports]
+      summary: Create export job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportJobCreate'
+      responses:
+        '202':
+          description: Export job created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportJob'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /exports/{jobId}:
+    get:
+      tags: [Exports]
+      summary: Get export job status
+      parameters:
+        - $ref: '#/components/parameters/jobIdPath'
+      responses:
+        '200':
+          description: Export job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportJob'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /webhooks:
+    get:
+      tags: [Webhooks]
+      summary: List webhooks
+      responses:
+        '200':
+          description: List webhooks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Webhook'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Webhooks]
+      summary: Create webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /webhooks/{id}:
+    patch:
+      tags: [Webhooks]
+      summary: Update webhook
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Webhooks]
+      summary: Delete webhook
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /webhooks/test:
+    post:
+      tags: [Webhooks]
+      summary: Send test event to a webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_id:
+                  type: string
+              required: [webhook_id]
+      responses:
+        '200':
+          description: Delivered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestWebhookResult'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.example.com/.well-known/openid-configuration
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+  parameters:
+    idPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    jobIdPath:
+      name: jobId
+      in: path
+      required: true
+      schema:
+        type: string
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: 1-based page number
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+      description: Page size
+    search:
+      name: search
+      in: query
+      schema:
+        type: string
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  schemas:
+    Lifecycle:
+      type: string
+      enum: [planned, active, deprecated, retired]
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: forbidden
+        message:
+          type: string
+          example: You do not have access to this resource
+        trace_id:
+          type: string
+          example: req-1234abcd
+      required: [code, message]
+      example:
+        code: forbidden
+        message: You do not have access to this resource
+        trace_id: req-1234abcd
+    ValidationError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: validation_error
+        message:
+          type: string
+          example: Request validation failed
+        trace_id:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+      required: [code, message, errors]
+      example:
+        code: validation_error
+        message: Request validation failed
+        trace_id: req-5678efgh
+        errors:
+          - field: name
+            message: Name is required
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        contacts:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, created_at, updated_at]
+      example:
+        id: org-123
+        name: Example Org
+        domains: [example.com]
+        contacts: [owner@example.com]
+        created_at: 2024-01-01T00:00:00Z
+        updated_at: 2024-01-02T00:00:00Z
+    OrganizationCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        contacts:
+          type: array
+          items:
+            type: string
+      required: [name]
+      example:
+        name: Example Org
+        domains: [example.com]
+        contacts: [owner@example.com]
+    OrganizationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        contacts:
+          type: array
+          items:
+            type: string
+      example:
+        name: Updated Org
+        domains: [example.org]
+        contacts: [new-owner@example.org]
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        lifecycle:
+          $ref: '#/components/schemas/Lifecycle'
+        capability_id:
+          type: string
+        data_classification:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, lifecycle, created_at, updated_at]
+      example:
+        id: app-123
+        name: Billing Service
+        owner: payments-team
+        lifecycle: active
+        capability_id: cap-1
+        data_classification: confidential
+        tags: [payments, pci]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ApplicationCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        owner:
+          type: string
+        lifecycle:
+          $ref: '#/components/schemas/Lifecycle'
+        capability_id:
+          type: string
+        data_classification:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required: [name, lifecycle]
+      example:
+        name: Billing Service
+        owner: payments-team
+        lifecycle: active
+        capability_id: cap-1
+        data_classification: confidential
+        tags: [payments, pci]
+    ApplicationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        owner:
+          type: string
+        lifecycle:
+          $ref: '#/components/schemas/Lifecycle'
+        capability_id:
+          type: string
+        data_classification:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        owner: payments-team
+        lifecycle: deprecated
+        tags: [payments, cleanup]
+    Server:
+      type: object
+      properties:
+        id:
+          type: string
+        hostname:
+          type: string
+        environment:
+          type: string
+        region:
+          type: string
+        platform:
+          type: string
+        criticality:
+          type: string
+        owning_team:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, hostname, created_at, updated_at]
+      example:
+        id: srv-123
+        hostname: srv-billing-01
+        environment: prod
+        region: eu-west-1
+        platform: linux
+        criticality: high
+        owning_team: payments
+        tags: [payments, pci]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ServerCreate:
+      type: object
+      properties:
+        hostname:
+          type: string
+        environment:
+          type: string
+        region:
+          type: string
+        platform:
+          type: string
+        criticality:
+          type: string
+        owning_team:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required: [hostname]
+      example:
+        hostname: srv-billing-01
+        environment: prod
+        region: eu-west-1
+        platform: linux
+        criticality: high
+        owning_team: payments
+        tags: [payments, pci]
+    ServerUpdate:
+      type: object
+      properties:
+        hostname:
+          type: string
+        environment:
+          type: string
+        region:
+          type: string
+        platform:
+          type: string
+        criticality:
+          type: string
+        owning_team:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        environment: staging
+        region: us-east-1
+        tags: [payments, blue]
+    Integration:
+      type: object
+      properties:
+        id:
+          type: string
+        source_app_id:
+          type: string
+        target_app_id:
+          type: string
+        protocol:
+          type: string
+        data_contract:
+          type: string
+        sla:
+          type: string
+        frequency:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, source_app_id, target_app_id, created_at, updated_at]
+      example:
+        id: int-123
+        source_app_id: app-123
+        target_app_id: app-456
+        protocol: https
+        data_contract: json-schema
+        sla: 99.9%
+        frequency: realtime
+        tags: [payments, webhook]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    IntegrationCreate:
+      type: object
+      properties:
+        source_app_id:
+          type: string
+        target_app_id:
+          type: string
+        protocol:
+          type: string
+        data_contract:
+          type: string
+        sla:
+          type: string
+        frequency:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required: [source_app_id, target_app_id]
+      example:
+        source_app_id: app-123
+        target_app_id: app-456
+        protocol: https
+        data_contract: json-schema
+        sla: 99.9%
+        frequency: realtime
+        tags: [payments, webhook]
+    IntegrationUpdate:
+      type: object
+      properties:
+        source_app_id:
+          type: string
+        target_app_id:
+          type: string
+        protocol:
+          type: string
+        data_contract:
+          type: string
+        sla:
+          type: string
+        frequency:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        protocol: kafka
+        frequency: hourly
+        tags: [payments, batch]
+    BusinessCapability:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        parent_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, created_at, updated_at]
+      example:
+        id: cap-1
+        name: Payments
+        parent_id: cap-root
+        created_at: 2024-01-01T00:00:00Z
+        updated_at: 2024-01-02T00:00:00Z
+    BusinessCapabilityCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        parent_id:
+          type: string
+      required: [name]
+      example:
+        name: Payments
+        parent_id: cap-root
+    BusinessCapabilityUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        parent_id:
+          type: string
+      example:
+        name: Payments Modernization
+    Relation:
+      type: object
+      properties:
+        id:
+          type: string
+        source_id:
+          type: string
+        target_id:
+          type: string
+        source_type:
+          type: string
+        target_type:
+          type: string
+        relation_type:
+          type: string
+        archimate_element:
+          type: string
+        archimate_relationship:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, source_id, target_id, relation_type, created_at, updated_at]
+      example:
+        id: rel-1
+        source_id: app-123
+        target_id: srv-123
+        source_type: application
+        target_type: server
+        relation_type: deployed_on
+        archimate_element: ApplicationComponent
+        archimate_relationship: Assignment
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    RelationCreate:
+      type: object
+      properties:
+        source_id:
+          type: string
+        target_id:
+          type: string
+        source_type:
+          type: string
+        target_type:
+          type: string
+        relation_type:
+          type: string
+        archimate_element:
+          type: string
+        archimate_relationship:
+          type: string
+      required: [source_id, target_id, relation_type]
+      example:
+        source_id: app-123
+        target_id: srv-123
+        source_type: application
+        target_type: server
+        relation_type: deployed_on
+        archimate_element: ApplicationComponent
+        archimate_relationship: Assignment
+    RelationUpdate:
+      type: object
+      properties:
+        source_id:
+          type: string
+        target_id:
+          type: string
+        source_type:
+          type: string
+        target_type:
+          type: string
+        relation_type:
+          type: string
+        archimate_element:
+          type: string
+        archimate_relationship:
+          type: string
+      example:
+        relation_type: communicates_with
+        archimate_relationship: Flow
+    View:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        filter:
+          type: object
+        layout:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, created_at, updated_at]
+      example:
+        id: view-1
+        name: Payments Landscape
+        description: Key services and servers
+        filter:
+          tags: [payments]
+        layout:
+          engine: dagre
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ViewCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        filter:
+          type: object
+        layout:
+          type: object
+      required: [name]
+      example:
+        name: Payments Landscape
+        description: Key services and servers
+        filter:
+          tags: [payments]
+        layout:
+          engine: dagre
+    ViewUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        filter:
+          type: object
+        layout:
+          type: object
+      example:
+        description: Updated to include batch flows
+    GraphNode:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        archimate_element:
+          type: string
+        label:
+          type: string
+        attrs:
+          type: object
+        data:
+          type: object
+    GraphEdge:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+        archimate_relationship:
+          type: string
+        relation_type:
+          type: string
+        label:
+          type: string
+        attrs:
+          type: object
+    Graph:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraphNode'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraphEdge'
+        layout:
+          type: object
+        filters:
+          type: object
+    ImportJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        input_type:
+          type: string
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        error:
+          type: string
+      required: [id, status, input_type, created_at, updated_at]
+      example:
+        id: imp-123
+        status: running
+        input_type: s3
+        created_by: user@example.com
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-05T10:05:00Z
+    ImportJobCreate:
+      type: object
+      properties:
+        input_type:
+          type: string
+        upload_url:
+          type: string
+        format:
+          type: string
+          enum: [csv, xlsx, json]
+      required: [input_type, format]
+      example:
+        input_type: s3
+        upload_url: https://s3.example.com/bucket/key
+        format: csv
+    ExportJob:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        filter:
+          type: object
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        download_url:
+          type: string
+        error:
+          type: string
+      required: [id, status, created_at, updated_at]
+      example:
+        id: exp-123
+        status: pending
+        filter:
+          capability_id: cap-1
+        created_by: user@example.com
+        created_at: 2024-01-05T11:00:00Z
+        updated_at: 2024-01-05T11:00:00Z
+    ExportJobCreate:
+      type: object
+      properties:
+        filter:
+          type: object
+      required: [filter]
+      example:
+        filter:
+          tags: [payments]
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        secret:
+          type: string
+        active:
+          type: boolean
+        events:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        last_failure_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, url, active, events, created_at, updated_at]
+      example:
+        id: wh-123
+        url: https://hooks.example.com/events
+        secret: whsec_abc123
+        active: true
+        events: [application.created, server.updated]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-05T10:30:00Z
+        last_failure_at: 2024-01-05T09:55:00Z
+    WebhookCreate:
+      type: object
+      properties:
+        url:
+          type: string
+        events:
+          type: array
+          items:
+            type: string
+        active:
+          type: boolean
+      required: [url, events]
+      example:
+        url: https://hooks.example.com/events
+        events: [application.created, server.updated]
+        active: true
+    WebhookUpdate:
+      type: object
+      properties:
+        url:
+          type: string
+        events:
+          type: array
+          items:
+            type: string
+        active:
+          type: boolean
+      example:
+        active: false
+        events: [application.updated]
+    TestWebhookResult:
+      type: object
+      properties:
+        delivered:
+          type: boolean
+        status:
+          type: string
+      example:
+        delivered: true
+        status: ok
+    PaginatedOrganizations:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedApplications:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedServers:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Server'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedIntegrations:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Integration'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedBusinessCapabilities:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessCapability'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedRelations:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Relation'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedViews:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/View'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
