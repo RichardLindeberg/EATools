@@ -38,6 +38,8 @@ security:
 tags:
   - name: Organizations
   - name: Applications
+  - name: ApplicationServices
+  - name: ApplicationInterfaces
   - name: Servers
   - name: Integrations
   - name: BusinessCapabilities
@@ -239,6 +241,214 @@ paths:
     delete:
       tags: [Applications]
       summary: Delete application
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-services:
+    get:
+      tags: [ApplicationServices]
+      summary: List application services
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+        - in: query
+          name: capability_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List application services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplicationServices'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [ApplicationServices]
+      summary: Create application service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationServiceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /application-services/{id}:
+    get:
+      tags: [ApplicationServices]
+      summary: Get application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Application service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [ApplicationServices]
+      summary: Update application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationServiceUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [ApplicationServices]
+      summary: Delete application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces:
+    get:
+      tags: [ApplicationInterfaces]
+      summary: List application interfaces
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+        - in: query
+          name: protocol
+          schema:
+            type: string
+        - in: query
+          name: exposed_by_app_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List application interfaces
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplicationInterfaces'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Create application interface
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationInterfaceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /application-interfaces/{id}:
+    get:
+      tags: [ApplicationInterfaces]
+      summary: Get application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Application interface
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [ApplicationInterfaces]
+      summary: Update application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationInterfaceUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [ApplicationInterfaces]
+      summary: Delete application interface
       parameters:
         - $ref: '#/components/parameters/idPath'
       responses:
@@ -1339,6 +1549,243 @@ components:
         owner: payments-team
         lifecycle: deprecated
         tags: [payments, cleanup]
+    ApplicationService:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        business_capability_id:
+          type: string
+        sla:
+          type: string
+        exposed_by_app_ids:
+          type: array
+          items:
+            type: string
+        consumers:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, created_at, updated_at]
+      example:
+        id: svc-1
+        name: Payment Processing
+        description: Handles credit card and ACH payments
+        business_capability_id: cap-1
+        sla: 99.95%
+        exposed_by_app_ids: [app-123]
+        consumers: [app-456, app-789]
+        tags: [payments, critical]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ApplicationServiceCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        business_capability_id:
+          type: string
+        sla:
+          type: string
+        exposed_by_app_ids:
+          type: array
+          items:
+            type: string
+        consumers:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required: [name]
+      example:
+        name: Payment Processing
+        description: Handles credit card and ACH payments
+        business_capability_id: cap-1
+        sla: 99.95%
+        exposed_by_app_ids: [app-123]
+        tags: [payments, critical]
+    ApplicationServiceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        business_capability_id:
+          type: string
+        sla:
+          type: string
+        exposed_by_app_ids:
+          type: array
+          items:
+            type: string
+        consumers:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        sla: 99.99%
+        consumers: [app-456, app-789, app-999]
+        tags: [payments, critical, pci]
+    ApplicationInterface:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+        specification_url:
+          type: string
+        version:
+          type: string
+        authentication_method:
+          type: string
+        exposed_by_app_id:
+          type: string
+        serves_service_ids:
+          type: array
+          items:
+            type: string
+        rate_limits:
+          type: object
+        status:
+          type: string
+          enum: [active, deprecated, retired]
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, protocol, exposed_by_app_id, status, created_at, updated_at]
+      example:
+        id: intf-1
+        name: Payment API v2
+        protocol: https
+        endpoint: https://api.example.com/v2/payments
+        specification_url: https://api.example.com/v2/openapi.yaml
+        version: 2.1.0
+        authentication_method: oauth2
+        exposed_by_app_id: app-123
+        serves_service_ids: [svc-1]
+        rate_limits:
+          requests_per_second: 100
+          burst: 200
+        status: active
+        tags: [rest, payments]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ApplicationInterfaceCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+        specification_url:
+          type: string
+        version:
+          type: string
+        authentication_method:
+          type: string
+        exposed_by_app_id:
+          type: string
+        serves_service_ids:
+          type: array
+          items:
+            type: string
+        rate_limits:
+          type: object
+        status:
+          type: string
+          enum: [active, deprecated, retired]
+        tags:
+          type: array
+          items:
+            type: string
+      required: [name, protocol, exposed_by_app_id, status]
+      example:
+        name: Payment API v2
+        protocol: https
+        endpoint: https://api.example.com/v2/payments
+        specification_url: https://api.example.com/v2/openapi.yaml
+        version: 2.1.0
+        authentication_method: oauth2
+        exposed_by_app_id: app-123
+        serves_service_ids: [svc-1]
+        status: active
+        tags: [rest, payments]
+    ApplicationInterfaceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+        specification_url:
+          type: string
+        version:
+          type: string
+        authentication_method:
+          type: string
+        exposed_by_app_id:
+          type: string
+        serves_service_ids:
+          type: array
+          items:
+            type: string
+        rate_limits:
+          type: object
+        status:
+          type: string
+          enum: [active, deprecated, retired]
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        version: 2.2.0
+        status: deprecated
+        tags: [rest, payments, legacy]
     Server:
       type: object
       properties:
@@ -1707,20 +2154,25 @@ components:
           type: string
         source_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
-          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to, exposes, uses]
           description: |
             Allowed pairs (source_type -> target_type):
               - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> application_service: realizes, uses
+              - application -> application_interface: exposes
               - application -> server: deployed_on, stores_data_on
               - application -> data_entity: reads, writes
               - application -> business_capability: supports
+              - application_service -> business_capability: realizes, supports
+              - application_interface -> application_service: serves
               - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - integration -> application_interface: calls, uses
               - server -> server: connected_to
               - organization -> application: owns
               - organization -> server: owns
@@ -1803,20 +2255,25 @@ components:
           type: string
         source_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
-          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to, exposes, uses]
           description: |
             Allowed pairs (source_type -> target_type):
               - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> application_service: realizes, uses
+              - application -> application_interface: exposes
               - application -> server: deployed_on, stores_data_on
               - application -> data_entity: reads, writes
               - application -> business_capability: supports
+              - application_service -> business_capability: realizes, supports
+              - application_interface -> application_service: serves
               - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - integration -> application_interface: calls, uses
               - server -> server: connected_to
               - organization -> application: owns
               - organization -> server: owns
@@ -1884,20 +2341,25 @@ components:
           type: string
         source_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
-          enum: [organization, application, server, integration, business_capability, data_entity, view]
+          enum: [organization, application, application_service, application_interface, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
-          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to, exposes, uses]
           description: |
             Allowed pairs (source_type -> target_type):
               - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> application_service: realizes, uses
+              - application -> application_interface: exposes
               - application -> server: deployed_on, stores_data_on
               - application -> data_entity: reads, writes
               - application -> business_capability: supports
+              - application_service -> business_capability: realizes, supports
+              - application_interface -> application_service: serves
               - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - integration -> application_interface: calls, uses
               - server -> server: connected_to
               - organization -> application: owns
               - organization -> server: owns
@@ -2320,6 +2782,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/View'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedApplicationServices:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationService'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedApplicationInterfaces:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationInterface'
         page:
           type: integer
         limit:

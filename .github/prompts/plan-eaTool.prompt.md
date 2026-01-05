@@ -21,17 +21,19 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 ### Initial Data Model
 - Organizations: id, name, domains, contacts.
 - Applications: id, name, owners, lifecycle (planned/active/retired), business capability mapping, deployment targets, data classifications.
+- ApplicationServices: id, name, description, business_capability_id; represents business services exposed by applications (ArchiMate ApplicationService); what capability is provided; exposed_by_app_ids, consumers, sla, tags.
+- ApplicationInterfaces: id, name, protocol, endpoint, specification_url, version, authentication_method; represents technical interfaces (ArchiMate ApplicationInterface); how/where services are accessed; exposed_by_app_id, serves_service_ids, rate_limits, status (active/deprecated/retired).
 - Servers/Hosts: id, hostname, environment, region, platform, criticality, owning team; relationships to applications (runs_on) and integrations (endpoints).
 - Integrations: id, source_app, target_app, protocol, data contracts, SLAs, frequency; optional link to CMDB/ITSM records.
 - BusinessCapabilities: id, name, parent_id; mapping to applications for coverage views.
 - DataEntities: id, name, domain, classification, retention, owner/steward, source_system, criticality, pii_flag, glossary_terms, lineage pointers.
-- Relations: generic typed edges (e.g., serves, depends_on, runs_on, implements, realizes, reads, writes); store ArchiMate element/type metadata for rendering.
+- Relations: generic typed edges (e.g., serves, depends_on, runs_on, implements, realizes, reads, writes, exposes, uses); store ArchiMate element/type metadata for rendering; supports application→realizes→service, application→exposes→interface, interface→serves→service patterns.
 - Auditing: timestamps, user, source (UI/API/import) for traceability.
 
 ### Initial API Contract (v1)
 - Auth: OpenID Connect (OIDC) for identity + JWT bearer on requests; API keys for partners/automation; authorization decisions enforced via Rego/OPA (centralized PDP or sidecar).
-- Resources (CRUD): /organizations, /applications, /servers, /integrations, /business-capabilities, /data-entities, /relations.
-- Filtering/pagination: standard query params (search, owner, lifecycle, environment, capability, tag); cursor or offset pagination.
+- Resources (CRUD): /organizations, /applications, /application-services, /application-interfaces, /servers, /integrations, /business-capabilities, /data-entities, /relations.
+- Filtering/pagination: standard query params (search, owner, lifecycle, environment, capability, tag, protocol, exposed_by_app_id); cursor or offset pagination.
 - Views: /views (CRUD) to save filters, element sets, and layout hints; /views/{id}/render returns a graph payload (nodes+edges+styling metadata) for any client.
 - Import/Export: /imports (upload CSV/Excel/JSON), /exports (on-demand snapshots by filter); async job IDs with status polling.
 - Events/Webhooks: /webhooks (register, rotate secret); events for application.updated, server.updated, integration.changed, relation.changed.
@@ -41,10 +43,12 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 ### OpenAPI Skeleton (v1)
 - Info: title, version, contact, terms; servers: prod, staging, local.
 - SecuritySchemes: oauth2 clientCredentials (tokenUrl), apiKey (header: X-Api-Key), bearerAuth (JWT).
-- Components/Schemas (representative): Organization, Application, Server, Integration, BusinessCapability, DataEntity, Relation, View, Graph (nodes, edges, styling), ImportJob, ExportJob, Webhook, Error.
+- Components/Schemas (representative): Organization, Application, ApplicationService, ApplicationInterface, Server, Integration, BusinessCapability, DataEntity, Relation, View, Graph (nodes, edges, styling), ImportJob, ExportJob, Webhook, Error.
 - Paths (examples):
 	- /organizations: get (list with filters), post; /organizations/{id}: get, patch, delete.
 	- /applications: get, post; /applications/{id}: get, patch, delete.
+	- /application-services: get (filter by capability_id), post; /application-services/{id}: get, patch, delete.
+	- /application-interfaces: get (filter by protocol, exposed_by_app_id), post; /application-interfaces/{id}: get, patch, delete.
 	- /servers: get, post; /servers/{id}: get, patch, delete.
 	- /integrations: get, post; /integrations/{id}: get, patch, delete.
 	- /business-capabilities: get, post; /business-capabilities/{id}: get, patch, delete.
@@ -60,13 +64,15 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 ### Database Schema (proposed)
 - organizations(id pk, name, domains jsonb, contacts jsonb, created_at, updated_at)
 - applications(id pk, name, owner, lifecycle, capability_id fk business_capabilities.id, data_classification, tags jsonb, created_at, updated_at)
+- application_services(id pk, name, description, business_capability_id fk business_capabilities.id, sla, exposed_by_app_ids jsonb, consumers jsonb, tags jsonb, created_at, updated_at)
+- application_interfaces(id pk, name, protocol, endpoint, specification_url, version, authentication_method, exposed_by_app_id fk applications.id, serves_service_ids jsonb, rate_limits jsonb, status enum(active,deprecated,retired), tags jsonb, created_at, updated_at)
 - servers(id pk, hostname, environment, region, platform, criticality, owning_team, tags jsonb, created_at, updated_at)
 - application_servers(app_id fk applications.id, server_id fk servers.id, primary key(app_id, server_id))
 - integrations(id pk, source_app_id fk applications.id, target_app_id fk applications.id, protocol, data_contract, sla, frequency, tags jsonb, created_at, updated_at)
 - business_capabilities(id pk, name, parent_id fk business_capabilities.id, created_at, updated_at)
 - data_entities(id pk, name, domain, classification, retention, owner, steward, source_system, criticality, pii_flag boolean, glossary_terms jsonb, created_at, updated_at)
 - application_data(app_id fk applications.id, data_id fk data_entities.id, usage enum(reads,writes,creates,deletes), primary key(app_id, data_id, usage))
-- relations(id pk, source_id, target_id, source_type, target_type, relation_type, archimate_element, archimate_relationship, created_at, updated_at)
+- relations(id pk, source_id, target_id, source_type enum(organization,application,application_service,application_interface,server,integration,business_capability,data_entity,view), target_type enum(organization,application,application_service,application_interface,server,integration,business_capability,data_entity,view), relation_type enum(depends_on,communicates_with,calls,publishes_event_to,consumes_event_from,deployed_on,stores_data_on,reads,writes,owns,supports,implements,realizes,serves,connected_to,exposes,uses), archimate_element, archimate_relationship, description, data_classification, criticality, confidence float, evidence_source, last_verified_at timestamp, effective_from timestamp, effective_to timestamp, label, color, style enum(solid,dashed), bidirectional boolean, created_at, updated_at)
 - views(id pk, name, description, filter jsonb, layout jsonb, created_at, updated_at)
 - imports(id pk, status, input_type, created_by, created_at, updated_at, error)
 - exports(id pk, status, filter jsonb, created_by, created_at, updated_at, download_url)
