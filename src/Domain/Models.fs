@@ -283,6 +283,12 @@ type CreateIntegrationRequest =
         Tags: string list option
     }
 
+type CreateBusinessCapabilityRequest =
+    {
+        Name: string
+        ParentId: string option
+    }
+
 type CreateDataEntityRequest =
     {
         Name: string

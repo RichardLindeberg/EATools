@@ -62,6 +62,13 @@ module Json =
                 Frequency = get.Optional.Field "frequency" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
+
+    let decodeCreateBusinessCapabilityRequest: Decoder<CreateBusinessCapabilityRequest> =
+        Decode.object (fun get ->
+            {
+                Name = get.Required.Field "name" Decode.string
+                ParentId = get.Optional.Field "parent_id" Decode.string
+            })
     
     // Encoders
     let encodeOrganization (org: Organization): JsonValue =
@@ -125,6 +132,15 @@ module Json =
             "tags", Encode.list (List.map Encode.string i.Tags)
             "created_at", Encode.string i.CreatedAt
             "updated_at", Encode.string i.UpdatedAt
+        ]
+
+    let encodeBusinessCapability (cap: BusinessCapability): JsonValue =
+        Encode.object [
+            "id", Encode.string cap.Id
+            "name", Encode.string cap.Name
+            "parent_id", (match cap.ParentId with | Some v -> Encode.string v | None -> Encode.nil)
+            "created_at", Encode.string cap.CreatedAt
+            "updated_at", Encode.string cap.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =
