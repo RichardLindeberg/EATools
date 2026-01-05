@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <assembly fullname="EATool">
+    <resource name="FSharpSignatureData.EATool" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedData.EATool" action="remove"></resource>
+    <resource name="FSharpSignatureDataB.EATool" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedDataB.EATool" action="remove"></resource>
+    <resource name="FSharpOptimizationData.EATool" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedData.EATool" action="remove"></resource>
+    <resource name="FSharpOptimizationDataB.EATool" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedDataB.EATool" action="remove"></resource>
+    <resource name="FSharpOptimizationInfo.EATool" action="remove"></resource>
+    <resource name="FSharpSignatureInfo.EATool" action="remove"></resource>
+  </assembly>
+</linker>
