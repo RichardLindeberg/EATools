@@ -27,8 +27,6 @@ let main args =
     |> ignore
     
     builder.Services.AddGiraffe() |> ignore
-    builder.Services.AddSwaggerGen() |> ignore
-    builder.Services.AddOpenApi() |> ignore
     
     // Initialize database
     let dbConfig = Database.createConfig environment
@@ -39,11 +37,6 @@ let main args =
     let app = builder.Build()
     
     // Configure middleware
-    if environment = "development" then
-        app.UseSwagger() |> ignore
-        app.UseSwaggerUI() |> ignore
-        app.MapOpenApi() |> ignore
-    
     app.UseHttpsRedirection() |> ignore
     app.UseCors() |> ignore
     

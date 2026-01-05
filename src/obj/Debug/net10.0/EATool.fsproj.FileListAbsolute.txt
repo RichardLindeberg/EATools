@@ -3,7 +3,6 @@
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.AssemblyInfoInputs.cache
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.AssemblyInfo.fs
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.fsproj.CoreCompileInputs.cache
-/home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.MvcApplicationPartsAssemblyInfo.fs
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.MvcApplicationPartsAssemblyInfo.cache
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.sourcelink.json
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/EATool.staticwebassets.endpoints.json
@@ -16,14 +15,9 @@
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/FSharp.Core.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/Giraffe.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/Giraffe.ViewEngine.dll
-/home/richard/Projects/EATool/src/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/Microsoft.IO.RecyclableMemoryStream.dll
-/home/richard/Projects/EATool/src/bin/Debug/net10.0/Microsoft.OpenApi.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/Newtonsoft.Json.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/Spectre.Console.dll
-/home/richard/Projects/EATool/src/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
-/home/richard/Projects/EATool/src/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
-/home/richard/Projects/EATool/src/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/System.Data.SqlClient.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/cs/FSharp.Core.resources.dll
 /home/richard/Projects/EATool/src/bin/Debug/net10.0/de/FSharp.Core.resources.dll

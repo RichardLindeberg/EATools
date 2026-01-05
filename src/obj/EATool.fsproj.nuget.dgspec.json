@@ -52,19 +52,9 @@
               "version": "[6.3.0, )",
               "generatePathProperty": true
             },
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[10.0.0, )",
-              "generatePathProperty": true
-            },
             "Spectre.Console": {
               "target": "Package",
               "version": "[0.49.0, )",
-              "generatePathProperty": true
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.4.0, )",
               "generatePathProperty": true
             },
             "System.Data.SqlClient": {
