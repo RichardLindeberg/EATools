@@ -50,6 +50,18 @@ module Json =
                 OwningTeam = get.Optional.Field "owning_team" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
+
+    let decodeCreateIntegrationRequest: Decoder<CreateIntegrationRequest> =
+        Decode.object (fun get ->
+            {
+                SourceAppId = get.Required.Field "source_app_id" Decode.string
+                TargetAppId = get.Required.Field "target_app_id" Decode.string
+                Protocol = get.Optional.Field "protocol" Decode.string
+                DataContract = get.Optional.Field "data_contract" Decode.string
+                Sla = get.Optional.Field "sla" Decode.string
+                Frequency = get.Optional.Field "frequency" Decode.string
+                Tags = get.Optional.Field "tags" (Decode.list Decode.string)
+            })
     
     // Encoders
     let encodeOrganization (org: Organization): JsonValue =
@@ -99,6 +111,20 @@ module Json =
             "tags", Encode.list (List.map Encode.string srv.Tags)
             "created_at", Encode.string srv.CreatedAt
             "updated_at", Encode.string srv.UpdatedAt
+        ]
+
+    let encodeIntegration (i: Integration): JsonValue =
+        Encode.object [
+            "id", Encode.string i.Id
+            "source_app_id", Encode.string i.SourceAppId
+            "target_app_id", Encode.string i.TargetAppId
+            "protocol", (match i.Protocol with | Some v -> Encode.string v | None -> Encode.nil)
+            "data_contract", (match i.DataContract with | Some v -> Encode.string v | None -> Encode.nil)
+            "sla", (match i.Sla with | Some v -> Encode.string v | None -> Encode.nil)
+            "frequency", (match i.Frequency with | Some v -> Encode.string v | None -> Encode.nil)
+            "tags", Encode.list (List.map Encode.string i.Tags)
+            "created_at", Encode.string i.CreatedAt
+            "updated_at", Encode.string i.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =

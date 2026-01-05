@@ -272,6 +272,17 @@ type CreateApplicationInterfaceRequest =
         Tags: string list option
     }
 
+type CreateIntegrationRequest =
+    {
+        SourceAppId: string
+        TargetAppId: string
+        Protocol: string option
+        DataContract: string option
+        Sla: string option
+        Frequency: string option
+        Tags: string list option
+    }
+
 type CreateDataEntityRequest =
     {
         Name: string
