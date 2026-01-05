@@ -21,19 +21,16 @@ module Json =
             "name", Encode.string org.Name
             "domains", Encode.list (List.map Encode.string org.Domains)
             "contacts", Encode.list (List.map Encode.string org.Contacts)
-            "createdAt", Encode.string org.CreatedAt
-            "updatedAt", Encode.string org.UpdatedAt
+            "created_at", Encode.string org.CreatedAt
+            "updated_at", Encode.string org.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =
         Encode.object [
-            "data", Encode.list (List.map encoder response.Items)
-            "pagination", Encode.object [
-                "page", Encode.int response.Page
-                "limit", Encode.int response.Limit
-                "total", Encode.int response.Total
-                "pages", Encode.int ((response.Total + response.Limit - 1) / response.Limit)
-            ]
+            "items", Encode.list (List.map encoder response.Items)
+            "page", Encode.int response.Page
+            "limit", Encode.int response.Limit
+            "total", Encode.int response.Total
         ]
     
     let encodeErrorResponse (code: string) (message: string): JsonValue =
