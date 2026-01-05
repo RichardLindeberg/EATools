@@ -28,6 +28,7 @@ type Application =
         Name: string
         Owner: string option
         Lifecycle: Lifecycle
+        LifecycleRaw: string
         CapabilityId: string option
         DataClassification: string option
         Tags: string list
@@ -230,6 +231,7 @@ type CreateApplicationRequest =
         Name: string
         Owner: string option
         Lifecycle: Lifecycle
+        LifecycleRaw: string
         CapabilityId: string option
         DataClassification: string option
         Tags: string list option

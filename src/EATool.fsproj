@@ -17,9 +17,11 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Models.fs" />
     <Compile Include="Infrastructure/Database.fs" />
+    <Compile Include="Infrastructure/ApplicationRepository.fs" />
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
     <Compile Include="Api/Endpoints.fs" />
+    <Compile Include="Api/ApplicationsEndpoints.fs" />
     <Compile Include="Api/OrganizationsEndpoints.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

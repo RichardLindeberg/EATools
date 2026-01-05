@@ -41,7 +41,7 @@ let main args =
     app.UseCors() |> ignore
     
     // Combine all routes and configure Giraffe
-    let allRoutes = Endpoints.routes @ OrganizationsEndpoints.routes
+    let allRoutes = Endpoints.routes @ ApplicationsEndpoints.routes @ OrganizationsEndpoints.routes
     let webApp = choose allRoutes
     
     app.UseGiraffe(webApp)
