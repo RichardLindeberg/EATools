@@ -41,6 +41,7 @@ tags:
   - name: Servers
   - name: Integrations
   - name: BusinessCapabilities
+  - name: DataEntities
   - name: Relations
   - name: Views
   - name: Imports
@@ -545,6 +546,116 @@ paths:
     delete:
       tags: [BusinessCapabilities]
       summary: Delete business capability
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /data-entities:
+    get:
+      tags: [DataEntities]
+      summary: List data entities
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+        - in: query
+          name: domain
+          schema:
+            type: string
+        - in: query
+          name: classification
+          schema:
+            type: string
+        - in: query
+          name: owner
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List data entities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDataEntities'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [DataEntities]
+      summary: Create data entity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataEntityCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEntity'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /data-entities/{id}:
+    get:
+      tags: [DataEntities]
+      summary: Get data entity
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Data entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEntity'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [DataEntities]
+      summary: Update data entity
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataEntityUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEntity'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [DataEntities]
+      summary: Delete data entity
       parameters:
         - $ref: '#/components/parameters/idPath'
       responses:
@@ -1454,6 +1565,135 @@ components:
           type: string
       example:
         name: Payments Modernization
+    DataEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domain:
+          type: string
+        classification:
+          type: string
+        retention:
+          type: string
+        owner:
+          type: string
+        steward:
+          type: string
+        source_system:
+          type: string
+        criticality:
+          type: string
+        pii_flag:
+          type: boolean
+        glossary_terms:
+          type: array
+          items:
+            type: string
+        lineage:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, classification, created_at, updated_at]
+      example:
+        id: data-1
+        name: Customer Profile
+        domain: customer
+        classification: confidential
+        retention: 2y
+        owner: data-platform
+        steward: data-governance
+        source_system: crm
+        criticality: high
+        pii_flag: true
+        glossary_terms: [customer, profile]
+        lineage: [crm-db, marketing-dwh]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    DataEntityCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        domain:
+          type: string
+        classification:
+          type: string
+        retention:
+          type: string
+        owner:
+          type: string
+        steward:
+          type: string
+        source_system:
+          type: string
+        criticality:
+          type: string
+        pii_flag:
+          type: boolean
+        glossary_terms:
+          type: array
+          items:
+            type: string
+        lineage:
+          type: array
+          items:
+            type: string
+      required: [name, classification]
+      example:
+        name: Customer Profile
+        domain: customer
+        classification: confidential
+        retention: 2y
+        owner: data-platform
+        steward: data-governance
+        source_system: crm
+        pii_flag: true
+        glossary_terms: [customer, profile]
+    DataEntityUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        domain:
+          type: string
+        classification:
+          type: string
+        retention:
+          type: string
+        owner:
+          type: string
+        steward:
+          type: string
+        source_system:
+          type: string
+        criticality:
+          type: string
+        pii_flag:
+          type: boolean
+        glossary_terms:
+          type: array
+          items:
+            type: string
+        lineage:
+          type: array
+          items:
+            type: string
+      example:
+        classification: restricted
+        retention: 1y
+        pii_flag: false
+        glossary_terms: [customer, pii]
     Relation:
       type: object
       properties:
@@ -1465,14 +1705,52 @@ components:
           type: string
         source_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
         archimate_element:
           type: string
         archimate_relationship:
           type: string
+          enum: [Assignment, Realization, Serving, Access, Flow, Triggering, Association, Composition, Aggregation, Specialization, Influence]
+        description:
+          type: string
+        data_classification:
+          type: string
+        criticality:
+          type: string
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        evidence_source:
+          type: string
+        last_verified_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_from:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_to:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        label:
+          type: string
+        color:
+          type: string
+        style:
+          type: string
+          enum: [solid, dashed]
+        bidirectional:
+          type: boolean
         created_at:
           type: string
           format: date-time
@@ -1481,7 +1759,7 @@ components:
           type: string
           format: date-time
           description: UTC ISO 8601 with Z
-      required: [id, source_id, target_id, relation_type, created_at, updated_at]
+      required: [id, source_id, target_id, source_type, target_type, relation_type, created_at, updated_at]
       example:
         id: rel-1
         source_id: app-123
@@ -1491,6 +1769,16 @@ components:
         relation_type: deployed_on
         archimate_element: ApplicationComponent
         archimate_relationship: Assignment
+        description: App deployed on server
+        data_classification: internal
+        criticality: high
+        confidence: 0.9
+        evidence_source: cmdb
+        last_verified_at: 2024-01-06T10:00:00Z
+        effective_from: 2024-01-01T00:00:00Z
+        label: Deploys to
+        style: solid
+        bidirectional: false
         created_at: 2024-01-05T10:00:00Z
         updated_at: 2024-01-06T10:00:00Z
     RelationCreate:
@@ -1502,15 +1790,53 @@ components:
           type: string
         source_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
         archimate_element:
           type: string
         archimate_relationship:
           type: string
-      required: [source_id, target_id, relation_type]
+          enum: [Assignment, Realization, Serving, Access, Flow, Triggering, Association, Composition, Aggregation, Specialization, Influence]
+        description:
+          type: string
+        data_classification:
+          type: string
+        criticality:
+          type: string
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        evidence_source:
+          type: string
+        last_verified_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_from:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_to:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        label:
+          type: string
+        color:
+          type: string
+        style:
+          type: string
+          enum: [solid, dashed]
+        bidirectional:
+          type: boolean
+      required: [source_id, target_id, source_type, target_type, relation_type]
       example:
         source_id: app-123
         target_id: srv-123
@@ -1519,6 +1845,12 @@ components:
         relation_type: deployed_on
         archimate_element: ApplicationComponent
         archimate_relationship: Assignment
+        description: App deployed on server
+        data_classification: internal
+        confidence: 0.9
+        evidence_source: cmdb
+        label: Deploys to
+        style: solid
     RelationUpdate:
       type: object
       properties:
@@ -1528,17 +1860,58 @@ components:
           type: string
         source_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         target_type:
           type: string
+          enum: [organization, application, server, integration, business_capability, data_entity, view]
         relation_type:
           type: string
+          enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
         archimate_element:
           type: string
         archimate_relationship:
           type: string
+          enum: [Assignment, Realization, Serving, Access, Flow, Triggering, Association, Composition, Aggregation, Specialization, Influence]
+        description:
+          type: string
+        data_classification:
+          type: string
+        criticality:
+          type: string
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        evidence_source:
+          type: string
+        last_verified_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_from:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        effective_to:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        label:
+          type: string
+        color:
+          type: string
+        style:
+          type: string
+          enum: [solid, dashed]
+        bidirectional:
+          type: boolean
       example:
         relation_type: communicates_with
         archimate_relationship: Flow
+        description: Bidirectional sync
+        confidence: 0.7
+        bidirectional: true
     View:
       type: object
       properties:
@@ -1821,6 +2194,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Organization'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedDataEntities:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataEntity'
         page:
           type: integer
         limit:
