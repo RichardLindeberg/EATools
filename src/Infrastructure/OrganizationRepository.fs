@@ -61,8 +61,8 @@ module OrganizationRepository =
             {
                 Id = id
                 Name = req.Name
-                Domains = req.Domains |> Option.defaultValue []
-                Contacts = req.Contacts |> Option.defaultValue []
+                Domains = req.Domains
+                Contacts = req.Contacts
                 CreatedAt = now
                 UpdatedAt = now
             }
@@ -79,8 +79,8 @@ module OrganizationRepository =
                 {
                     existing with
                         Name = req.Name
-                        Domains = req.Domains |> Option.defaultValue existing.Domains
-                        Contacts = req.Contacts |> Option.defaultValue existing.Contacts
+                        Domains = req.Domains
+                        Contacts = req.Contacts
                         UpdatedAt = now
                 }
             organizations.[id] <- updated

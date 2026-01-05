@@ -17,11 +17,6 @@
  API error response
 </summary>
 </member>
-<member name="T:EATool.Domain.Result`2">
-<summary>
- Common result type for operations
-</summary>
-</member>
 <member name="T:EATool.Domain.InterfaceStatus">
 <summary>
  Application interface status

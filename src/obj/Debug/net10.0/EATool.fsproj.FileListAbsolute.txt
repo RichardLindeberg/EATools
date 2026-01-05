@@ -53,3 +53,5 @@
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.pdb
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/EATool.genruntimeconfig.cache
 /home/richard/Projects/EATool/src/obj/Debug/net10.0/ref/EATool.dll
+/home/richard/Projects/EATool/src/bin/Debug/net10.0/Fable.Core.dll
+/home/richard/Projects/EATool/src/bin/Debug/net10.0/Thoth.Json.dll

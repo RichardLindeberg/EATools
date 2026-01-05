@@ -79,11 +79,6 @@ type InterfaceStatus =
     | Deprecated
     | Retired
 
-/// Common result type for operations
-type Result<'T, 'E> =
-    | Ok of 'T
-    | Error of 'E
-
 /// API error response
 type ApiError =
     {

@@ -5,4 +5,4 @@ requests==2.31.0
 httpx==0.25.1
 pydantic==2.5.0
 python-dateutil==2.8.2
-openapi-client-generator==0.11.0
+openapi-client-generator==1.0.13

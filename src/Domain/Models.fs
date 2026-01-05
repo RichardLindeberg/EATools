@@ -2,15 +2,22 @@
 namespace EATool.Domain
 
 open System
+open System.Text.Json.Serialization
 
 /// Organization entity
 type Organization =
     {
+        [<JsonPropertyName("id")>]
         Id: string
+        [<JsonPropertyName("name")>]
         Name: string
+        [<JsonPropertyName("domains")>]
         Domains: string list
+        [<JsonPropertyName("contacts")>]
         Contacts: string list
+        [<JsonPropertyName("createdAt")>]
         CreatedAt: UtcTimestamp
+        [<JsonPropertyName("updatedAt")>]
         UpdatedAt: UtcTimestamp
     }
 
@@ -210,9 +217,12 @@ type PaginatedResponse<'T> =
 /// Create request types (for POST operations)
 type CreateOrganizationRequest =
     {
+        [<JsonPropertyName("name")>]
         Name: string
-        Domains: string list option
-        Contacts: string list option
+        [<JsonPropertyName("domains")>]
+        Domains: string list
+        [<JsonPropertyName("contacts")>]
+        Contacts: string list
     }
 
 type CreateApplicationRequest =

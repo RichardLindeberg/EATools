@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("EATool")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+75e848c9dc128949c0b31a29b568072f5d248295")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6c8c2415b24b0b29690721494453e3b7647842b")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("EATool")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("EATool")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]

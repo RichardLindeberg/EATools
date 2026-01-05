@@ -2,6 +2,26 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "Fable.Core/4.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Fable.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Fable.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "contentFiles": {
+          "contentFiles/any/any/_._": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
       "FSharp.Core/10.0.100": {
         "type": "package",
         "compile": {
@@ -193,10 +213,45 @@
             "rid": "win"
           }
         }
+      },
+      "Thoth.Json/10.4.1": {
+        "type": "package",
+        "dependencies": {
+          "FSharp.Core": "5.0.2",
+          "Fable.Core": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Thoth.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Thoth.Json.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
   "libraries": {
+    "Fable.Core/4.1.0": {
+      "sha512": "NISAbAVGEcvH2s+vHLSOCzh98xMYx4aIadWacQdWPcQLploxpSQXLEe9SeszUBhbHa73KMiKREsH4/W3q4A4iA==",
+      "type": "package",
+      "path": "fable.core/4.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "content/CHANGELOG.md",
+        "contentFiles/any/netstandard2.0/CHANGELOG.md",
+        "fable.core.4.1.0.nupkg.sha512",
+        "fable.core.nuspec",
+        "fable_logo.png",
+        "lib/netstandard2.0/Fable.Core.dll",
+        "lib/netstandard2.0/Fable.Core.xml"
+      ]
+    },
     "FSharp.Core/10.0.100": {
       "sha512": "iVTheCwcjnODsBPegDpP4TvbZhaZm7z8S3WBoLDEK93GqP/TVrKc/78sDaxHENBRz5IWgJjmxjstv0YdfDX3Gg==",
       "type": "package",
@@ -496,6 +551,26 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Thoth.Json/10.4.1": {
+      "sha512": "hs76/uO+gHhvnlaxQDqbpUX2Y0L97ilEZ1Nx+LA4D6N7fuAYJmNwQWZB/KQLBE7wIeWK5oXMFHCuKdImSrF1Bg==",
+      "type": "package",
+      "path": "thoth.json/10.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "fable/Decode.fs",
+        "fable/Encode.fs",
+        "fable/Extra.fs",
+        "fable/Thoth.Json.fsproj",
+        "fable/Types.fs",
+        "lib/netstandard2.0/Thoth.Json.dll",
+        "lib/netstandard2.0/Thoth.Json.xml",
+        "thoth.json.10.4.1.nupkg.sha512",
+        "thoth.json.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -503,7 +578,8 @@
       "FSharp.Core >= 10.0.100",
       "Giraffe >= 6.3.0",
       "Spectre.Console >= 0.49.0",
-      "System.Data.SqlClient >= 4.8.6"
+      "System.Data.SqlClient >= 4.8.6",
+      "Thoth.Json >= 10.4.1"
     ]
   },
   "packageFolders": {
@@ -565,6 +641,11 @@
           "System.Data.SqlClient": {
             "target": "Package",
             "version": "[4.8.6, )",
+            "generatePathProperty": true
+          },
+          "Thoth.Json": {
+            "target": "Package",
+            "version": "[10.4.1, )",
             "generatePathProperty": true
           }
         },

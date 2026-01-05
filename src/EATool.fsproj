@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="6.3.0" />
+    <PackageReference Include="Thoth.Json" Version="10.4.1" />
     <PackageReference Include="Spectre.Console" Version="0.49.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
@@ -16,6 +17,7 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Models.fs" />
     <Compile Include="Infrastructure/Database.fs" />
+    <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
     <Compile Include="Api/Endpoints.fs" />
     <Compile Include="Api/OrganizationsEndpoints.fs" />
