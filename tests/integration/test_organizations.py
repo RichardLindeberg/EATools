@@ -55,7 +55,7 @@ class TestOrganizations:
         assert "id" in data
         assert data["name"] == payload["name"]
         
-        return data["id"]  # Return ID for cleanup tests
+        assert data["id"]  # Return ID for cleanup tests
 
     def test_create_organization_missing_required_field(self, client: APIClient):
         """POST /organizations without required 'name' should return 400 or 422."""
