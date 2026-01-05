@@ -3,6 +3,7 @@
 Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3.2 views for different audiences while keeping the UI swappable and integrable with other systems.
 
 ### Steps
+0. Contract-first integration test harness: generate a mock client (e.g., via OpenAPI generator or hand-coded TypeScript/Python) that covers all endpoints/operations in openapi.yaml; create an integration test suite that validates request/response contracts, pagination, error codes (400/403/404/422), and auth flows; this becomes the source of truth for API completeness and compatibility.
 1. Backend setup: API-first (contract-first OpenAPI) in F#/.NET 10 (ASP.NET Core minimal API or Giraffe), database (SQLite for dev, MSSQL for staging and prod), auth via OpenID Connect (OIDC) and API keys, versioned endpoints for clients/partners; granular authorization enforced via Rego/OPA.
 2. Test coverage: establish comprehensive unit tests (domain logic, validation, serialization) and integration tests (API endpoints, database operations, auth flows); target 80%+ code coverage; include contract testing against OpenAPI spec; mock external dependencies (OIDC, OPA).
 3. Frontend setup: React with component library (Material-UI/AntD) consuming the published API; keep UI optional so other clients can replace it.
