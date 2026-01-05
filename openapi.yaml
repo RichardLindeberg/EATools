@@ -700,6 +700,7 @@ paths:
     post:
       tags: [Relations]
       summary: Create relation
+      description: Unsupported source/target/relation_type combinations fail with 422 ValidationError.
       requestBody:
         required: true
         content:
@@ -739,6 +740,7 @@ paths:
     patch:
       tags: [Relations]
       summary: Update relation
+      description: Unsupported source/target/relation_type combinations fail with 422 ValidationError.
       parameters:
         - $ref: '#/components/parameters/idPath'
       requestBody:
@@ -1712,6 +1714,17 @@ components:
         relation_type:
           type: string
           enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          description: |
+            Allowed pairs (source_type -> target_type):
+              - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> server: deployed_on, stores_data_on
+              - application -> data_entity: reads, writes
+              - application -> business_capability: supports
+              - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - server -> server: connected_to
+              - organization -> application: owns
+              - organization -> server: owns
+              - business_capability -> application: realizes, implements, serves
         archimate_element:
           type: string
         archimate_relationship:
@@ -1797,6 +1810,17 @@ components:
         relation_type:
           type: string
           enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          description: |
+            Allowed pairs (source_type -> target_type):
+              - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> server: deployed_on, stores_data_on
+              - application -> data_entity: reads, writes
+              - application -> business_capability: supports
+              - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - server -> server: connected_to
+              - organization -> application: owns
+              - organization -> server: owns
+              - business_capability -> application: realizes, implements, serves
         archimate_element:
           type: string
         archimate_relationship:
@@ -1867,6 +1891,17 @@ components:
         relation_type:
           type: string
           enum: [depends_on, communicates_with, calls, publishes_event_to, consumes_event_from, deployed_on, stores_data_on, reads, writes, owns, supports, implements, realizes, serves, connected_to]
+          description: |
+            Allowed pairs (source_type -> target_type):
+              - application -> application: depends_on, communicates_with, calls, publishes_event_to, consumes_event_from
+              - application -> server: deployed_on, stores_data_on
+              - application -> data_entity: reads, writes
+              - application -> business_capability: supports
+              - integration -> application: communicates_with, publishes_event_to, consumes_event_from
+              - server -> server: connected_to
+              - organization -> application: owns
+              - organization -> server: owns
+              - business_capability -> application: realizes, implements, serves
         archimate_element:
           type: string
         archimate_relationship:
