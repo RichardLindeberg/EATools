@@ -4,12 +4,13 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 
 ### Steps
 1. Backend setup: API-first (contract-first OpenAPI) in F#/.NET 8 (ASP.NET Core minimal API or Giraffe), database (SQLite for dev, MSSQL for staging and prod), auth via OpenID Connect (OIDC) and API keys, versioned endpoints for clients/partners; granular authorization enforced via Rego/OPA.
-2. Frontend setup: React with component library (Material-UI/AntD) consuming the published API; keep UI optional so other clients can replace it.
-3. Design minimal data model: Organizations, Applications, Servers, Integrations, BusinessCapabilities, DataEntities, Relations with ArchiMate element/type metadata.
-4. Build CRUD API for core entities and relations; seed with sample data and auth; publish OpenAPI/SDK clients for integrations.
-5. Implement view definitions: saved filtered perspectives (by layer, audience, capability) that map to ArchiMate element styles.
-6. Add diagram rendering: client-side graph (e.g., Cytoscape/Dagre) with ArchiMate 3.2 shapes/colors; toggle layers and views.
-7. Package deployment (Docker) and basic CI to run lint/tests; expose API docs (Swagger/Redoc) for easy consumption.
+2. Test coverage: establish comprehensive unit tests (domain logic, validation, serialization) and integration tests (API endpoints, database operations, auth flows); target 80%+ code coverage; include contract testing against OpenAPI spec; mock external dependencies (OIDC, OPA).
+3. Frontend setup: React with component library (Material-UI/AntD) consuming the published API; keep UI optional so other clients can replace it.
+4. Design minimal data model: Organizations, Applications, Servers, Integrations, BusinessCapabilities, DataEntities, Relations with ArchiMate element/type metadata.
+5. Build CRUD API for core entities and relations; seed with sample data and auth; publish OpenAPI/SDK clients for integrations.
+6. Implement view definitions: saved filtered perspectives (by layer, audience, capability) that map to ArchiMate element styles.
+7. Add diagram rendering: client-side graph (e.g., Cytoscape/Dagre) with ArchiMate 3.2 shapes/colors; toggle layers and views.
+8. Package deployment (Docker) and basic CI to run lint/tests; expose API docs (Swagger/Redoc) for easy consumption.
 
 ### Further Considerations
 1. Backend stack: F#/.NET 8 (ASP.NET Core minimal API or Giraffe/Saturn), staging on MSSQL, production on MSSQL; OIDC provider for identity; OPA sidecar or centralized PDP for Rego-based authorization;
@@ -89,6 +90,7 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 - Environments: dev (SQLite), staging (Postgres), prod (MSSQL). Migrations via a tool that supports Postgres and MSSQL (e.g., Prisma/Alembic); seed scripts for demo data.
 - CI: lint, tests, type-check, OpenAPI diff guard, SDK generation, Docker build; fail on breaking API changes unless version bumped.
 - CD: build/publish API container and SDK packages; deploy via container platform; run migrations pre-start.
+- Documentation sync: **CRITICAL** - documentation (docs/, OpenAPI spec, code comments) must always be kept in sync with implementation; CI must validate OpenAPI contract matches code; automated checks for outdated examples; PRs that change behavior must update related docs; regular audits to catch drift.
 - Observability: request logging with correlation ids, metrics (latency, error rates), health/readiness endpoints, audit logging for mutating calls; ensure all logged timestamps are UTC.
 - Security: OpenID Connect for identity, Rego/OPA for authorization (RBAC/ABAC policies), API keys for partners/automation, rate limiting, secrets management, TLS everywhere.
 - Data protection: tag sensitive fields, encrypt secrets at rest, backup/restore plan.
