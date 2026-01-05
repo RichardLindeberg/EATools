@@ -38,6 +38,18 @@ module Json =
                 DataClassification = get.Optional.Field "data_classification" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
+
+    let decodeCreateServerRequest: Decoder<CreateServerRequest> =
+        Decode.object (fun get ->
+            {
+                Hostname = get.Required.Field "hostname" Decode.string
+                Environment = get.Optional.Field "environment" Decode.string
+                Region = get.Optional.Field "region" Decode.string
+                Platform = get.Optional.Field "platform" Decode.string
+                Criticality = get.Optional.Field "criticality" Decode.string
+                OwningTeam = get.Optional.Field "owning_team" Decode.string
+                Tags = get.Optional.Field "tags" (Decode.list Decode.string)
+            })
     
     // Encoders
     let encodeOrganization (org: Organization): JsonValue =
@@ -73,6 +85,20 @@ module Json =
             "tags", Encode.list (List.map Encode.string app.Tags)
             "created_at", Encode.string app.CreatedAt
             "updated_at", Encode.string app.UpdatedAt
+        ]
+
+    let encodeServer (srv: Server): JsonValue =
+        Encode.object [
+            "id", Encode.string srv.Id
+            "hostname", Encode.string srv.Hostname
+            "environment", (match srv.Environment with | Some v -> Encode.string v | None -> Encode.nil)
+            "region", (match srv.Region with | Some v -> Encode.string v | None -> Encode.nil)
+            "platform", (match srv.Platform with | Some v -> Encode.string v | None -> Encode.nil)
+            "criticality", (match srv.Criticality with | Some v -> Encode.string v | None -> Encode.nil)
+            "owning_team", (match srv.OwningTeam with | Some v -> Encode.string v | None -> Encode.nil)
+            "tags", Encode.list (List.map Encode.string srv.Tags)
+            "created_at", Encode.string srv.CreatedAt
+            "updated_at", Encode.string srv.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =

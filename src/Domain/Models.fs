@@ -237,6 +237,17 @@ type CreateApplicationRequest =
         Tags: string list option
     }
 
+type CreateServerRequest =
+    {
+        Hostname: string
+        Environment: string option
+        Region: string option
+        Platform: string option
+        Criticality: string option
+        OwningTeam: string option
+        Tags: string list option
+    }
+
 type CreateApplicationServiceRequest =
     {
         Name: string
