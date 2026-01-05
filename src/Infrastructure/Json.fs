@@ -69,6 +69,32 @@ module Json =
                 Name = get.Required.Field "name" Decode.string
                 ParentId = get.Optional.Field "parent_id" Decode.string
             })
+
+    let private decodeDataClassification: Decoder<DataClassification> =
+        Decode.string
+        |> Decode.andThen (fun s ->
+            match s.ToLowerInvariant() with
+            | "public" -> Decode.succeed DataClassification.Public
+            | "internal" -> Decode.succeed DataClassification.Internal
+            | "confidential" -> Decode.succeed DataClassification.Confidential
+            | "restricted" -> Decode.succeed DataClassification.Restricted
+            | other -> Decode.fail ($"Invalid data classification: {other}"))
+
+    let decodeCreateDataEntityRequest: Decoder<CreateDataEntityRequest> =
+        Decode.object (fun get ->
+            {
+                Name = get.Required.Field "name" Decode.string
+                Domain = get.Optional.Field "domain" Decode.string
+                Classification = get.Required.Field "classification" decodeDataClassification
+                Retention = get.Optional.Field "retention" Decode.string
+                Owner = get.Optional.Field "owner" Decode.string
+                Steward = get.Optional.Field "steward" Decode.string
+                SourceSystem = get.Optional.Field "source_system" Decode.string
+                Criticality = get.Optional.Field "criticality" Decode.string
+                PiiFlag = get.Optional.Field "pii_flag" Decode.bool
+                GlossaryTerms = get.Optional.Field "glossary_terms" (Decode.list Decode.string)
+                Lineage = get.Optional.Field "lineage" (Decode.list Decode.string)
+            })
     
     // Encoders
     let encodeOrganization (org: Organization): JsonValue =
@@ -141,6 +167,29 @@ module Json =
             "parent_id", (match cap.ParentId with | Some v -> Encode.string v | None -> Encode.nil)
             "created_at", Encode.string cap.CreatedAt
             "updated_at", Encode.string cap.UpdatedAt
+        ]
+
+    let encodeDataEntity (entity: DataEntity): JsonValue =
+        Encode.object [
+            "id", Encode.string entity.Id
+            "name", Encode.string entity.Name
+            "domain", (match entity.Domain with | Some v -> Encode.string v | None -> Encode.nil)
+            "classification",
+                (match entity.Classification with
+                 | DataClassification.Public -> Encode.string "public"
+                 | DataClassification.Internal -> Encode.string "internal"
+                 | DataClassification.Confidential -> Encode.string "confidential"
+                 | DataClassification.Restricted -> Encode.string "restricted")
+            "retention", (match entity.Retention with | Some v -> Encode.string v | None -> Encode.nil)
+            "owner", (match entity.Owner with | Some v -> Encode.string v | None -> Encode.nil)
+            "steward", (match entity.Steward with | Some v -> Encode.string v | None -> Encode.nil)
+            "source_system", (match entity.SourceSystem with | Some v -> Encode.string v | None -> Encode.nil)
+            "criticality", (match entity.Criticality with | Some v -> Encode.string v | None -> Encode.nil)
+            "pii_flag", Encode.bool entity.PiiFlag
+            "glossary_terms", Encode.list (List.map Encode.string entity.GlossaryTerms)
+            "lineage", Encode.list (List.map Encode.string entity.Lineage)
+            "created_at", Encode.string entity.CreatedAt
+            "updated_at", Encode.string entity.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =

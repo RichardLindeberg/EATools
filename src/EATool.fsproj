@@ -21,12 +21,14 @@
     <Compile Include="Infrastructure/ServerRepository.fs" />
     <Compile Include="Infrastructure/IntegrationRepository.fs" />
     <Compile Include="Infrastructure/BusinessCapabilityRepository.fs" />
+    <Compile Include="Infrastructure/DataEntityRepository.fs" />
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
     <Compile Include="Api/Endpoints.fs" />
     <Compile Include="Api/ApplicationsEndpoints.fs" />
     <Compile Include="Api/IntegrationsEndpoints.fs" />
     <Compile Include="Api/BusinessCapabilitiesEndpoints.fs" />
+    <Compile Include="Api/DataEntitiesEndpoints.fs" />
     <Compile Include="Api/ServersEndpoints.fs" />
     <Compile Include="Api/OrganizationsEndpoints.fs" />
     <Compile Include="Program.fs" />
