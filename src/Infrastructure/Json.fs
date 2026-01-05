@@ -1,7 +1,7 @@
-/// JSON serialization/deserialization using Thoth.Json
+/// JSON serialization/deserialization using Thoth.Json.Net
 namespace EATool.Infrastructure
 
-open Thoth.Json
+open Thoth.Json.Net
 open EATool.Domain
 
 module Json =

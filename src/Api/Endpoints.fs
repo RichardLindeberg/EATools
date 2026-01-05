@@ -2,7 +2,7 @@
 namespace EATool.Api
 
 open Giraffe
-open Thoth.Json
+open Thoth.Json.Net
 open EATool.Infrastructure
 
 /// Register basic/health endpoints
@@ -14,7 +14,7 @@ module Endpoints =
                 let json = Encode.object [
                     "status", Encode.string "healthy"
                 ]
-                return! (Giraffe.Core.json (Encode.toString 0 json)) next ctx
+                return! (Giraffe.Core.json json) next ctx
             }
             
             GET >=> route "/metadata" >=> fun next ctx -> task {
@@ -27,6 +27,6 @@ module Endpoints =
                     "Version", Encode.string "1.0.0"
                     "Environment", Encode.string env
                 ]
-                return! (Giraffe.Core.json (Encode.toString 0 json)) next ctx
+                return! (Giraffe.Core.json json) next ctx
             }
         ]

@@ -1,0 +1,57 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ee]xt/
+[Ll]og/
+[Ll]ogs/
+
+# .NET
+bin/
+obj/
+*.csproj.user
+*.vbproj.user
+*.sln.user
+.vs/
+packages/
+.nuget/
+*.nupkg
+*.snupkg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.user
+*.suo
+*.sln.iml
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+src/bin/Debug/net10.0/EATool.dll
+server.log

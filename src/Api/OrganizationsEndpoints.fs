@@ -3,7 +3,7 @@ namespace EATool.Api
 
 open System
 open Giraffe
-open Thoth.Json
+open Thoth.Json.Net
 open EATool.Domain
 open EATool.Infrastructure
 
@@ -23,7 +23,7 @@ module OrganizationsEndpoints =
                 
                 let result = OrganizationRepository.getAll pageParam limitParam search
                 let json = Json.encodePaginatedResponse Json.encodeOrganization result
-                return! (Giraffe.Core.json (Encode.toString 0 json)) next ctx
+                return! (Giraffe.Core.json json) next ctx
             }
             
             // POST /organizations - Create
@@ -34,17 +34,17 @@ module OrganizationsEndpoints =
                     if String.IsNullOrWhiteSpace(req.Name) then
                         ctx.SetStatusCode 400
                         let errorJson = Json.encodeErrorResponse "validation_error" "Request validation failed"
-                        return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                        return! (Giraffe.Core.json errorJson) next ctx
                     else
                         let org = OrganizationRepository.create req
                         ctx.SetStatusCode 201
                         ctx.SetHttpHeader ("Location", $"/organizations/{org.Id}")
                         let responseJson = Json.encodeOrganization org
-                        return! (Giraffe.Core.json (Encode.toString 0 responseJson)) next ctx
+                        return! (Giraffe.Core.json responseJson) next ctx
                 | Error err ->
                     ctx.SetStatusCode 400
                     let errorJson = Json.encodeErrorResponse "validation_error" $"JSON parse error: {err}"
-                    return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                    return! (Giraffe.Core.json errorJson) next ctx
             }
             
             // GET /organizations/{id} - Get by ID
@@ -52,11 +52,11 @@ module OrganizationsEndpoints =
                 match OrganizationRepository.getById id with
                 | Some org -> 
                     let json = Json.encodeOrganization org
-                    return! (Giraffe.Core.json (Encode.toString 0 json)) next ctx
+                    return! (Giraffe.Core.json json) next ctx
                 | None ->
                     ctx.SetStatusCode 404
                     let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
-                    return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                    return! (Giraffe.Core.json errorJson) next ctx
             })
             
             // PATCH /organizations/{id} - Update
@@ -67,20 +67,20 @@ module OrganizationsEndpoints =
                     if String.IsNullOrWhiteSpace(req.Name) then
                         ctx.SetStatusCode 400
                         let errorJson = Json.encodeErrorResponse "validation_error" "Request validation failed"
-                        return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                        return! (Giraffe.Core.json errorJson) next ctx
                     else
                         match OrganizationRepository.update id req with
                         | Some org -> 
                             let json = Json.encodeOrganization org
-                            return! (Giraffe.Core.json (Encode.toString 0 json)) next ctx
+                            return! (Giraffe.Core.json json) next ctx
                         | None ->
                             ctx.SetStatusCode 404
                             let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
-                            return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                            return! (Giraffe.Core.json errorJson) next ctx
                 | Error err ->
                     ctx.SetStatusCode 400
                     let errorJson = Json.encodeErrorResponse "validation_error" $"JSON parse error: {err}"
-                    return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                    return! (Giraffe.Core.json errorJson) next ctx
             })
             
             // DELETE /organizations/{id} - Delete
@@ -91,6 +91,6 @@ module OrganizationsEndpoints =
                 else
                     ctx.SetStatusCode 404
                     let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
-                    return! (Giraffe.Core.json (Encode.toString 0 errorJson)) next ctx
+                    return! (Giraffe.Core.json errorJson) next ctx
             })
         ]
