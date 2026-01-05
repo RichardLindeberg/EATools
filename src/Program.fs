@@ -31,7 +31,10 @@ let main args =
     // Initialize database
     let dbConfig = Database.createConfig environment
     match Database.initializeSchema dbConfig with
-    | Ok () -> printfn "[%s] Database initialized successfully" environment
+    | Ok () ->
+        match Migrations.run dbConfig with
+        | Ok () -> printfn "[%s] Database migrations applied" environment
+        | Error err -> printfn "[%s] Database migration failed: %s" environment err
     | Error err -> printfn "[%s] Database initialization failed: %s" environment err
     
     let app = builder.Build()

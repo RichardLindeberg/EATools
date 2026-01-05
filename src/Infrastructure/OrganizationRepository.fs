@@ -1,96 +1,159 @@
-/// Organization repository and database operations
+/// Organization repository backed by SQLite
 namespace EATool.Infrastructure
 
 open System
+open System.Text.Json
+open Microsoft.Data.Sqlite
 open EATool.Domain
 
-/// In-memory storage for development/testing
-/// TODO: Replace with actual database implementation
 module OrganizationRepository =
-    
-    let private organizations = System.Collections.Generic.Dictionary<string, Organization>()
-    
-    /// Generate a unique ID for organizations
-    let private generateId () = 
+
+    let private generateId () =
         let guid = Guid.NewGuid().ToString("N")
         "org-" + guid.Substring(0, 8)
-    
-    /// Get current UTC timestamp in ISO 8601 format
+
     let private getUtcTimestamp () = DateTime.UtcNow.ToString("O")
-    
-    /// Get all organizations with pagination and optional search
+
+    let private serializeList (items: string list) = JsonSerializer.Serialize(items)
+    let private deserializeList (payload: string) =
+        try JsonSerializer.Deserialize<string list>(payload) with _ -> []
+
+    let private mapOrganization (reader: SqliteDataReader) : Organization =
+        let idIdx = reader.GetOrdinal("id")
+        let nameIdx = reader.GetOrdinal("name")
+        let domainsIdx = reader.GetOrdinal("domains")
+        let contactsIdx = reader.GetOrdinal("contacts")
+        let createdIdx = reader.GetOrdinal("created_at")
+        let updatedIdx = reader.GetOrdinal("updated_at")
+
+        {
+            Id = reader.GetString(idIdx)
+            Name = reader.GetString(nameIdx)
+            Domains = reader.GetString(domainsIdx) |> deserializeList
+            Contacts = reader.GetString(contactsIdx) |> deserializeList
+            CreatedAt = reader.GetString(createdIdx)
+            UpdatedAt = reader.GetString(updatedIdx)
+        }
+
+    let private buildFilters (search: string option) =
+        let clauses = System.Collections.Generic.List<string>()
+        let parameters = System.Collections.Generic.List<SqliteParameter>()
+
+        match search with
+        | Some term when not (String.IsNullOrWhiteSpace term) ->
+            clauses.Add("name LIKE $search")
+            parameters.Add(new SqliteParameter("$search", "%" + term + "%"))
+        | _ -> ()
+
+        let whereClause = if clauses.Count = 0 then "" else " WHERE " + String.Join(" AND ", clauses)
+        whereClause, parameters
+
     let getAll (page: int) (limit: int) (search: string option) : PaginatedResponse<Organization> =
         let page = if page < 1 then 1 else page
         let limit = if limit < 1 || limit > 200 then 50 else limit
-        
-        let filtered =
-            organizations.Values
-            |> Seq.toList
-            |> match search with
-               | Some searchTerm ->
-                   List.filter (fun org ->
-                       org.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-               | None -> id
-        
-        let total = List.length filtered
-        let items =
-            filtered
-            |> List.skip ((page - 1) * limit)
-            |> List.truncate limit
-        
-        {
-            Items = items
-            Page = page
-            Limit = limit
-            Total = total
-        }
-    
-    /// Get organization by ID
+        let offset = (page - 1) * limit
+
+        use conn = Database.getConnection ()
+        let whereClause, parameters = buildFilters search
+
+        use listCmd = conn.CreateCommand()
+        listCmd.CommandText <- sprintf "SELECT id, name, domains, contacts, created_at, updated_at FROM organizations%s ORDER BY datetime(created_at) DESC LIMIT $limit OFFSET $offset" whereClause
+        parameters |> Seq.iter (fun p -> listCmd.Parameters.Add(p) |> ignore)
+        listCmd.Parameters.AddWithValue("$limit", limit) |> ignore
+        listCmd.Parameters.AddWithValue("$offset", offset) |> ignore
+
+        use reader = listCmd.ExecuteReader()
+        let items = [ while reader.Read() do mapOrganization reader ]
+
+        use countCmd = conn.CreateCommand()
+        countCmd.CommandText <- sprintf "SELECT COUNT(1) FROM organizations%s" whereClause
+        parameters |> Seq.iter (fun p -> countCmd.Parameters.Add(new SqliteParameter(p.ParameterName, p.Value)) |> ignore)
+        let total = countCmd.ExecuteScalar() :?> int64 |> int
+
+        { Items = items; Page = page; Limit = limit; Total = total }
+
     let getById (id: string) : Organization option =
-        if organizations.ContainsKey(id) then
-            Some organizations.[id]
-        else
-            None
-    
-    /// Create a new organization
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        cmd.CommandText <- "SELECT id, name, domains, contacts, created_at, updated_at FROM organizations WHERE id = $id"
+        cmd.Parameters.AddWithValue("$id", id) |> ignore
+
+        use reader = cmd.ExecuteReader()
+        if reader.Read() then Some (mapOrganization reader) else None
+
     let create (req: CreateOrganizationRequest) : Organization =
         let id = generateId ()
         let now = getUtcTimestamp ()
-        
-        let org =
-            {
-                Id = id
-                Name = req.Name
-                Domains = req.Domains
-                Contacts = req.Contacts
-                CreatedAt = now
-                UpdatedAt = now
-            }
-        
-        organizations.[id] <- org
-        org
-    
-    /// Update an organization
+        let domains = req.Domains
+        let contacts = req.Contacts
+
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        cmd.CommandText <-
+            """
+            INSERT INTO organizations (id, name, domains, contacts, created_at, updated_at)
+            VALUES ($id, $name, $domains, $contacts, $created_at, $updated_at)
+            """
+        cmd.Parameters.AddWithValue("$id", id) |> ignore
+        cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
+        cmd.Parameters.AddWithValue("$domains", serializeList domains) |> ignore
+        cmd.Parameters.AddWithValue("$contacts", serializeList contacts) |> ignore
+        cmd.Parameters.AddWithValue("$created_at", now) |> ignore
+        cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+
+        cmd.ExecuteNonQuery() |> ignore
+
+        { Id = id
+          Name = req.Name
+          Domains = domains
+          Contacts = contacts
+          CreatedAt = now
+          UpdatedAt = now }
+
     let update (id: string) (req: CreateOrganizationRequest) : Organization option =
         match getById id with
         | Some existing ->
             let now = getUtcTimestamp ()
-            let updated =
-                {
-                    existing with
+            let domains = req.Domains
+            let contacts = req.Contacts
+
+            use conn = Database.getConnection ()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <-
+                """
+                UPDATE organizations
+                SET name = $name,
+                    domains = $domains,
+                    contacts = $contacts,
+                    updated_at = $updated_at
+                WHERE id = $id
+                """
+            cmd.Parameters.AddWithValue("$id", id) |> ignore
+            cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
+            cmd.Parameters.AddWithValue("$domains", serializeList domains) |> ignore
+            cmd.Parameters.AddWithValue("$contacts", serializeList contacts) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+
+            let rows = cmd.ExecuteNonQuery()
+            if rows > 0 then
+                Some
+                    { existing with
                         Name = req.Name
-                        Domains = req.Domains
-                        Contacts = req.Contacts
-                        UpdatedAt = now
-                }
-            organizations.[id] <- updated
-            Some updated
+                        Domains = domains
+                        Contacts = contacts
+                        UpdatedAt = now }
+            else None
         | None -> None
-    
-    /// Delete an organization
+
     let delete (id: string) : bool =
-        organizations.Remove(id)
-    
-    /// Clear all organizations (for testing)
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        cmd.CommandText <- "DELETE FROM organizations WHERE id = $id"
+        cmd.Parameters.AddWithValue("$id", id) |> ignore
+        cmd.ExecuteNonQuery() > 0
+
     let clear () =
-        organizations.Clear()
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        cmd.CommandText <- "DELETE FROM organizations"
+        cmd.ExecuteNonQuery() |> ignore
