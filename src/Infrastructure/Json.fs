@@ -95,6 +95,85 @@ module Json =
                 GlossaryTerms = get.Optional.Field "glossary_terms" (Decode.list Decode.string)
                 Lineage = get.Optional.Field "lineage" (Decode.list Decode.string)
             })
+
+    let private decodeEntityType: Decoder<EntityType> =
+        Decode.string
+        |> Decode.andThen (fun s ->
+            match s.ToLowerInvariant() with
+            | "organization" -> Decode.succeed EntityType.Organization
+            | "application" -> Decode.succeed EntityType.Application
+            | "application_service" -> Decode.succeed EntityType.ApplicationService
+            | "application_interface" -> Decode.succeed EntityType.ApplicationInterface
+            | "server" -> Decode.succeed EntityType.Server
+            | "integration" -> Decode.succeed EntityType.Integration
+            | "business_capability" -> Decode.succeed EntityType.BusinessCapability
+            | "data_entity" -> Decode.succeed EntityType.DataEntity
+            | "view" -> Decode.succeed EntityType.View
+            | other -> Decode.fail ($"Invalid entity type: {other}"))
+
+    let private decodeRelationType: Decoder<RelationType> =
+        Decode.string
+        |> Decode.andThen (fun s ->
+            match s.ToLowerInvariant() with
+            | "depends_on" -> Decode.succeed RelationType.DependsOn
+            | "communicates_with" -> Decode.succeed RelationType.CommunicatesWith
+            | "calls" -> Decode.succeed RelationType.Calls
+            | "publishes_event_to" -> Decode.succeed RelationType.PublishesEventTo
+            | "consumes_event_from" -> Decode.succeed RelationType.ConsumesEventFrom
+            | "deployed_on" -> Decode.succeed RelationType.DeployedOn
+            | "stores_data_on" -> Decode.succeed RelationType.StoresDataOn
+            | "reads" -> Decode.succeed RelationType.Reads
+            | "writes" -> Decode.succeed RelationType.Writes
+            | "owns" -> Decode.succeed RelationType.Owns
+            | "supports" -> Decode.succeed RelationType.Supports
+            | "implements" -> Decode.succeed RelationType.Implements
+            | "realizes" -> Decode.succeed RelationType.Realizes
+            | "serves" -> Decode.succeed RelationType.Serves
+            | "connected_to" -> Decode.succeed RelationType.ConnectedTo
+            | "exposes" -> Decode.succeed RelationType.Exposes
+            | "uses" -> Decode.succeed RelationType.Uses
+            | other -> Decode.fail ($"Invalid relation type: {other}"))
+
+    let private decodeArchiMateRelationship: Decoder<ArchiMateRelationship> =
+        Decode.string
+        |> Decode.andThen (fun s ->
+            match s.ToLowerInvariant() with
+            | "assignment" -> Decode.succeed ArchiMateRelationship.Assignment
+            | "realization" -> Decode.succeed ArchiMateRelationship.Realization
+            | "serving" -> Decode.succeed ArchiMateRelationship.Serving
+            | "access" -> Decode.succeed ArchiMateRelationship.Access
+            | "flow" -> Decode.succeed ArchiMateRelationship.Flow
+            | "triggering" -> Decode.succeed ArchiMateRelationship.Triggering
+            | "association" -> Decode.succeed ArchiMateRelationship.Association
+            | "composition" -> Decode.succeed ArchiMateRelationship.Composition
+            | "aggregation" -> Decode.succeed ArchiMateRelationship.Aggregation
+            | "specialization" -> Decode.succeed ArchiMateRelationship.Specialization
+            | "influence" -> Decode.succeed ArchiMateRelationship.Influence
+            | other -> Decode.fail ($"Invalid ArchiMate relationship: {other}"))
+
+    let decodeCreateRelationRequest: Decoder<CreateRelationRequest> =
+        Decode.object (fun get ->
+            {
+                SourceId = get.Required.Field "source_id" Decode.string
+                TargetId = get.Required.Field "target_id" Decode.string
+                SourceType = get.Required.Field "source_type" decodeEntityType
+                TargetType = get.Required.Field "target_type" decodeEntityType
+                RelationType = get.Required.Field "relation_type" decodeRelationType
+                ArchiMateElement = get.Optional.Field "archimate_element" Decode.string
+                ArchiMateRelationship = get.Optional.Field "archimate_relationship" decodeArchiMateRelationship
+                Description = get.Optional.Field "description" Decode.string
+                DataClassification = get.Optional.Field "data_classification" Decode.string
+                Criticality = get.Optional.Field "criticality" Decode.string
+                Confidence = get.Optional.Field "confidence" Decode.float
+                EvidenceSource = get.Optional.Field "evidence_source" Decode.string
+                LastVerifiedAt = get.Optional.Field "last_verified_at" Decode.string
+                EffectiveFrom = get.Optional.Field "effective_from" Decode.string
+                EffectiveTo = get.Optional.Field "effective_to" Decode.string
+                Label = get.Optional.Field "label" Decode.string
+                Color = get.Optional.Field "color" Decode.string
+                Style = get.Optional.Field "style" Decode.string
+                Bidirectional = get.Optional.Field "bidirectional" Decode.bool
+            })
     
     // Encoders
     let encodeOrganization (org: Organization): JsonValue =
@@ -190,6 +269,84 @@ module Json =
             "lineage", Encode.list (List.map Encode.string entity.Lineage)
             "created_at", Encode.string entity.CreatedAt
             "updated_at", Encode.string entity.UpdatedAt
+        ]
+
+    let private encodeEntityType (et: EntityType): JsonValue =
+        let s =
+            match et with
+            | EntityType.Organization -> "organization"
+            | EntityType.Application -> "application"
+            | EntityType.ApplicationService -> "application_service"
+            | EntityType.ApplicationInterface -> "application_interface"
+            | EntityType.Server -> "server"
+            | EntityType.Integration -> "integration"
+            | EntityType.BusinessCapability -> "business_capability"
+            | EntityType.DataEntity -> "data_entity"
+            | EntityType.View -> "view"
+        Encode.string s
+
+    let private encodeRelationType (rt: RelationType): JsonValue =
+        let s =
+            match rt with
+            | RelationType.DependsOn -> "depends_on"
+            | RelationType.CommunicatesWith -> "communicates_with"
+            | RelationType.Calls -> "calls"
+            | RelationType.PublishesEventTo -> "publishes_event_to"
+            | RelationType.ConsumesEventFrom -> "consumes_event_from"
+            | RelationType.DeployedOn -> "deployed_on"
+            | RelationType.StoresDataOn -> "stores_data_on"
+            | RelationType.Reads -> "reads"
+            | RelationType.Writes -> "writes"
+            | RelationType.Owns -> "owns"
+            | RelationType.Supports -> "supports"
+            | RelationType.Implements -> "implements"
+            | RelationType.Realizes -> "realizes"
+            | RelationType.Serves -> "serves"
+            | RelationType.ConnectedTo -> "connected_to"
+            | RelationType.Exposes -> "exposes"
+            | RelationType.Uses -> "uses"
+        Encode.string s
+
+    let private encodeArchiMateRelationship (rel: ArchiMateRelationship): JsonValue =
+        let s =
+            match rel with
+            | ArchiMateRelationship.Assignment -> "assignment"
+            | ArchiMateRelationship.Realization -> "realization"
+            | ArchiMateRelationship.Serving -> "serving"
+            | ArchiMateRelationship.Access -> "access"
+            | ArchiMateRelationship.Flow -> "flow"
+            | ArchiMateRelationship.Triggering -> "triggering"
+            | ArchiMateRelationship.Association -> "association"
+            | ArchiMateRelationship.Composition -> "composition"
+            | ArchiMateRelationship.Aggregation -> "aggregation"
+            | ArchiMateRelationship.Specialization -> "specialization"
+            | ArchiMateRelationship.Influence -> "influence"
+        Encode.string s
+
+    let encodeRelation (rel: Relation): JsonValue =
+        Encode.object [
+            "id", Encode.string rel.Id
+            "source_id", Encode.string rel.SourceId
+            "target_id", Encode.string rel.TargetId
+            "source_type", encodeEntityType rel.SourceType
+            "target_type", encodeEntityType rel.TargetType
+            "relation_type", encodeRelationType rel.RelationType
+            "archimate_element", (match rel.ArchiMateElement with | Some v -> Encode.string v | None -> Encode.nil)
+            "archimate_relationship", (match rel.ArchiMateRelationship with | Some v -> encodeArchiMateRelationship v | None -> Encode.nil)
+            "description", (match rel.Description with | Some v -> Encode.string v | None -> Encode.nil)
+            "data_classification", (match rel.DataClassification with | Some v -> Encode.string v | None -> Encode.nil)
+            "criticality", (match rel.Criticality with | Some v -> Encode.string v | None -> Encode.nil)
+            "confidence", (match rel.Confidence with | Some v -> Encode.float v | None -> Encode.nil)
+            "evidence_source", (match rel.EvidenceSource with | Some v -> Encode.string v | None -> Encode.nil)
+            "last_verified_at", (match rel.LastVerifiedAt with | Some v -> Encode.string v | None -> Encode.nil)
+            "effective_from", (match rel.EffectiveFrom with | Some v -> Encode.string v | None -> Encode.nil)
+            "effective_to", (match rel.EffectiveTo with | Some v -> Encode.string v | None -> Encode.nil)
+            "label", (match rel.Label with | Some v -> Encode.string v | None -> Encode.nil)
+            "color", (match rel.Color with | Some v -> Encode.string v | None -> Encode.nil)
+            "style", (match rel.Style with | Some v -> Encode.string v | None -> Encode.nil)
+            "bidirectional", Encode.bool rel.Bidirectional
+            "created_at", Encode.string rel.CreatedAt
+            "updated_at", Encode.string rel.UpdatedAt
         ]
     
     let encodePaginatedResponse<'T> (encoder: 'T -> JsonValue) (response: PaginatedResponse<'T>): JsonValue =

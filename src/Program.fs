@@ -49,6 +49,7 @@ let main args =
         @ OrganizationsEndpoints.routes
         @ BusinessCapabilitiesEndpoints.routes
         @ DataEntitiesEndpoints.routes
+        @ RelationsEndpoints.routes
     let webApp = choose allRoutes
     
     app.UseGiraffe(webApp)

@@ -55,3 +55,5 @@ env/
 ehthumbs.db
 src/bin/Debug/net10.0/EATool.dll
 server.log
+
+.fake
