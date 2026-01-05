@@ -3,7 +3,7 @@
 Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3.2 views for different audiences while keeping the UI swappable and integrable with other systems.
 
 ### Steps
-1. Backend setup: API-first (contract-first OpenAPI) in F#/.NET 8 (ASP.NET Core minimal API or Giraffe), database (SQLite for dev, MSSQL for staging and prod), auth via OpenID Connect (OIDC) and API keys, versioned endpoints for clients/partners; granular authorization enforced via Rego/OPA.
+1. Backend setup: API-first (contract-first OpenAPI) in F#/.NET 10 (ASP.NET Core minimal API or Giraffe), database (SQLite for dev, MSSQL for staging and prod), auth via OpenID Connect (OIDC) and API keys, versioned endpoints for clients/partners; granular authorization enforced via Rego/OPA.
 2. Test coverage: establish comprehensive unit tests (domain logic, validation, serialization) and integration tests (API endpoints, database operations, auth flows); target 80%+ code coverage; include contract testing against OpenAPI spec; mock external dependencies (OIDC, OPA).
 3. Frontend setup: React with component library (Material-UI/AntD) consuming the published API; keep UI optional so other clients can replace it.
 4. Design minimal data model: Organizations, Applications, Servers, Integrations, BusinessCapabilities, DataEntities, Relations with ArchiMate element/type metadata.
@@ -13,7 +13,7 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 8. Package deployment (Docker) and basic CI to run lint/tests; expose API docs (Swagger/Redoc) for easy consumption.
 
 ### Further Considerations
-1. Backend stack: F#/.NET 8 (ASP.NET Core minimal API or Giraffe/Saturn), staging on MSSQL, production on MSSQL; OIDC provider for identity; OPA sidecar or centralized PDP for Rego-based authorization;
+1. Backend stack: F#/.NET 10 (ASP.NET Core minimal API or Giraffe/Saturn), staging on MSSQL, production on MSSQL; OIDC provider for identity; OPA sidecar or centralized PDP for Rego-based authorization;
 2. Hosting constraints on-prem, and SSO needs
 3. Need import/export (CSV/Excel) or integration with CMDB (ServiceNow)?
 4. SDK generation: use OpenAPI generators to emit TypeScript/Java/Python SDKs; version and publish to internal registries; auto-regenerate on API contract changes via CI.
@@ -87,7 +87,7 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 - Export: support PNG/SVG/PDF render via headless client; include data timestamp and filters in metadata.
 
 ### Delivery, Ops, and NFRs
-- Environments: dev (SQLite), staging (Postgres), prod (MSSQL). Migrations via a tool that supports Postgres and MSSQL (e.g., Prisma/Alembic); seed scripts for demo data.
+- Environments: dev (SQLite), staging (MSSQL), prod (MSSQL). Migrations via a tool that supports SQLite and MSSQL; seed scripts for demo data.
 - CI: lint, tests, type-check, OpenAPI diff guard, SDK generation, Docker build; fail on breaking API changes unless version bumped.
 - CD: build/publish API container and SDK packages; deploy via container platform; run migrations pre-start.
 - Documentation sync: **CRITICAL** - documentation (docs/, OpenAPI spec, code comments) must always be kept in sync with implementation; CI must validate OpenAPI contract matches code; automated checks for outdated examples; PRs that change behavior must update related docs; regular audits to catch drift.

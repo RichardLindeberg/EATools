@@ -30,11 +30,11 @@ The EA Tool is an API-first enterprise architecture management platform designed
 ## Technology Stack
 
 ### Backend
-- **Language**: F# on .NET 8
+- **Language**: F# on .NET 10
 - **Framework**: ASP.NET Core minimal API or Giraffe/Saturn
 - **Database**: 
   - SQLite (development)
-  - PostgreSQL (staging)
+  - MSSQL (staging)
   - MSSQL (production)
 - **Auth**: OpenID Connect (OIDC) + JWT bearer tokens
 - **Authorization**: Open Policy Agent (OPA) with Rego policies
@@ -67,7 +67,7 @@ The EA Tool is an API-first enterprise architecture management platform designed
          │
          ▼
 ┌─────────────────────────────────────────┐
-│      EA Tool API (F#/.NET 8)            │
+│      EA Tool API (F#/.NET 10)           │
 │  ┌──────────────┐  ┌─────────────────┐ │
 │  │  Controllers │  │  Authorization  │ │
 │  │  (Endpoints) │◄─┤  (OPA/Rego)     │ │
@@ -116,7 +116,7 @@ The EA Tool is an API-first enterprise architecture management platform designed
 | Environment | Database  | OIDC Provider | OPA Mode    | Purpose                    |
 |-------------|-----------|---------------|-------------|----------------------------|
 | Development | SQLite    | Mock/Local    | Embedded    | Local development          |
-| Staging     | PostgreSQL| Staging IdP   | Sidecar     | Pre-production testing     |
+| Staging     | MSSQL     | Staging IdP   | Sidecar     | Pre-production testing     |
 | Production  | MSSQL     | Production IdP| Centralized | Live operations            |
 
 ## Time Handling
