@@ -21,7 +21,7 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 5. Integration patterns: webhooks for change events (app/server lifecycle), outbound connectors for CMDB/ITSM, CSV/Excel bulk import/export, and scheduled sync jobs; provide API keys and OAuth client creds for partners.
 
 ### Initial Data Model
-- Organizations: id, name, domains, contacts.
+- Organizations: id, name, parent_id (self-referencing FK for hierarchical structure), domains, contacts.
 - Applications: id, name, owners, lifecycle (planned/active/retired), business capability mapping, deployment targets, data classifications.
 - ApplicationServices: id, name, description, business_capability_id; represents business services exposed by applications (ArchiMate ApplicationService); what capability is provided; exposed_by_app_ids, consumers, sla, tags.
 - ApplicationInterfaces: id, name, protocol, endpoint, specification_url, version, authentication_method; represents technical interfaces (ArchiMate ApplicationInterface); how/where services are accessed; exposed_by_app_id, serves_service_ids, rate_limits, status (active/deprecated/retired).
@@ -64,7 +64,7 @@ Drafting an API-first EA tool that catalogs servers/apps and renders ArchiMate 3
 - Errors: standard problem+json with trace id and code.
 
 ### Database Schema (proposed)
-- organizations(id pk, name, domains jsonb, contacts jsonb, created_at, updated_at)
+- organizations(id pk, name, parent_id fk organizations.id, domains jsonb, contacts jsonb, created_at, updated_at)
 - applications(id pk, name, owner, lifecycle, capability_id fk business_capabilities.id, data_classification, tags jsonb, created_at, updated_at)
 - application_services(id pk, name, description, business_capability_id fk business_capabilities.id, sla, exposed_by_app_ids jsonb, consumers jsonb, tags jsonb, created_at, updated_at)
 - application_interfaces(id pk, name, protocol, endpoint, specification_url, version, authentication_method, exposed_by_app_id fk applications.id, serves_service_ids jsonb, rate_limits jsonb, status enum(active,deprecated,retired), tags jsonb, created_at, updated_at)

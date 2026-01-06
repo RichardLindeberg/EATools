@@ -13,25 +13,48 @@ This guide describes all domain entities in the EA Tool, their purpose, key attr
 **Key Attributes**:
 - `id`: Unique identifier
 - `name`: Organization name
+- `parent_id`: FK to parent organization (for hierarchical structures like departments within divisions)
 - `domains`: DNS domains owned (e.g., `["example.com", "example.org"]`)
 - `contacts`: Email addresses of organization contacts
 - `created_at`, `updated_at`: Audit timestamps (UTC)
 
 **Usage**:
-- Model organizational structure and ownership
+- Model organizational hierarchies (e.g., departments → divisions → enterprise)
 - Link applications and servers to their owning organization via `owns` relations
 - Track which teams or departments are responsible for specific IT assets
+- Query organizational structures using `parent_id` for reporting and hierarchy views
 
 **Example**:
 ```json
 {
   "id": "org-123",
   "name": "Payments Team",
+  "parent_id": "org-100",
   "domains": ["payments.example.com"],
   "contacts": ["payments-lead@example.com"],
   "created_at": "2024-01-05T10:00:00Z",
   "updated_at": "2024-01-05T10:00:00Z"
 }
+```
+
+**Hierarchical Example**:
+```json
+[
+  {
+    "id": "org-100",
+    "name": "Engineering Division",
+    "parent_id": null,
+    "domains": ["engineering.example.com"],
+    "contacts": ["eng-vp@example.com"]
+  },
+  {
+    "id": "org-123",
+    "name": "Payments Team",
+    "parent_id": "org-100",
+    "domains": ["payments.example.com"],
+    "contacts": ["payments-lead@example.com"]
+  }
+]
 ```
 
 ---

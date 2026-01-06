@@ -11,6 +11,72 @@ Relations are typed, directed edges that connect two entities with specific sema
 - **Governance Metadata**: Confidence, evidence, verification timestamps
 - **Rendering Hints**: Label, color, style for visualization
 
+## Relationship Model Diagram
+
+The following diagram illustrates the key relationship types and how different entities connect:
+
+```mermaid
+graph TB
+    subgraph "Business Layer"
+        BC[Business Capability]
+        ORG1[Organization Parent]
+        ORG2[Organization Child]
+    end
+    
+    subgraph "Application Layer"
+        APP1[Application A]
+        APP2[Application B]
+        SVC[Application Service]
+        INTF[Application Interface]
+        INT[Integration]
+    end
+    
+    subgraph "Data Layer"
+        DE[Data Entity]
+    end
+    
+    subgraph "Infrastructure Layer"
+        SRV1[Server]
+        SRV2[Server]
+    end
+    
+    %% Business Layer Relations
+    ORG2 -->|part_of| ORG1
+    ORG2 -->|owns| APP1
+    ORG1 -->|owns| SRV1
+    APP1 -->|supports| BC
+    SVC -->|realizes| BC
+    
+    %% Application Relations
+    APP1 -->|depends_on| APP2
+    APP1 -->|calls| INTF
+    APP2 -->|publishes_event_to| APP1
+    APP1 -->|realizes| SVC
+    APP1 -->|exposes| INTF
+    INTF -->|serves| SVC
+    INT -->|communicates_with| APP2
+    
+    %% Data Relations
+    APP1 -->|writes| DE
+    APP2 -->|reads| DE
+    
+    %% Infrastructure Relations
+    APP1 -->|deployed_on| SRV1
+    APP2 -->|stores_data_on| SRV2
+    SRV1 -->|connected_to| SRV2
+    
+    %% Styling
+    classDef businessStyle fill:#FFB74D,stroke:#E65100,stroke-width:2px,color:#000
+    classDef appStyle fill:#4FC3F7,stroke:#01579B,stroke-width:2px,color:#000
+    classDef dataStyle fill:#81C784,stroke:#1B5E20,stroke-width:2px,color:#000
+    classDef infraStyle fill:#BA68C8,stroke:#4A148C,stroke-width:2px,color:#000
+    
+    class BC,ORG1,ORG2 businessStyle
+    class APP1,APP2,SVC,INTF,INT appStyle
+    class DE dataStyle
+    class SRV1,SRV2 infraStyle
+```
+
 ## Relation Types
 
 ### Application Layer Relations
@@ -296,6 +362,30 @@ Relations are typed, directed edges that connect two entities with specific sema
 }
 ```
 
+### Organizational Relations
+
+#### `part_of`
+**Meaning**: Organization is part of a parent organization (hierarchical structure).
+
+**Valid Pairs**: organization → organization
+
+**ArchiMate**: `Aggregation` or `Composition`
+
+**Example**: Payments team is part of Engineering division
+```json
+{
+  "source_id": "org-payments-team",
+  "target_id": "org-engineering-div",
+  "source_type": "organization",
+  "target_type": "organization",
+  "relation_type": "part_of",
+  "archimate_relationship": "Aggregation",
+  "description": "Payments team reports to Engineering division"
+}
+```
+
+**Note**: The `parent_id` field on the Organization entity provides the same hierarchical relationship. Use `part_of` relations when you need additional metadata (confidence, effective dates, custom labels) or want to model the hierarchy explicitly in the relations graph. Use `parent_id` for simple, efficient hierarchy queries.
+
 ## Validation Rules
 
 The system enforces valid relation type and entity type combinations. Invalid combinations return `422 ValidationError`.
@@ -315,6 +405,7 @@ The system enforces valid relation type and entity type combinations. Invalid co
 | integration | application | communicates_with, publishes_event_to, consumes_event_from |
 | integration | application_interface | calls, uses |
 | server | server | connected_to |
+| organization | organization | part_of |
 | organization | application | owns |
 | organization | server | owns |
 | business_capability | application | realizes, implements, serves |
