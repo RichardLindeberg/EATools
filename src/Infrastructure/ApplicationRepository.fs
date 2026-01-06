@@ -52,7 +52,6 @@ module ApplicationRepository =
         let nameOrdinal = reader.GetOrdinal("name")
         let ownerOrdinal = reader.GetOrdinal("owner")
         let lifecycleOrdinal = reader.GetOrdinal("lifecycle")
-        let lifecycleRawOrdinal = reader.GetOrdinal("lifecycle_raw")
         let capabilityOrdinal = reader.GetOrdinal("capability_id")
         let dataClassificationOrdinal = reader.GetOrdinal("data_classification")
         let tagsOrdinal = reader.GetOrdinal("tags")
@@ -64,7 +63,6 @@ module ApplicationRepository =
             Name = reader.GetString(nameOrdinal)
             Owner = getStringOption reader ownerOrdinal
             Lifecycle = reader.GetString(lifecycleOrdinal) |> lifecycleFromString
-            LifecycleRaw = reader.GetString(lifecycleRawOrdinal)
             CapabilityId = getStringOption reader capabilityOrdinal
             DataClassification = getStringOption reader dataClassificationOrdinal
             Tags = reader.GetString(tagsOrdinal) |> deserializeTags
@@ -145,14 +143,13 @@ module ApplicationRepository =
         use cmd = conn.CreateCommand()
         cmd.CommandText <-
             """
-            INSERT INTO applications (id, name, owner, lifecycle, lifecycle_raw, capability_id, data_classification, tags, created_at, updated_at)
-            VALUES ($id, $name, $owner, $lifecycle, $lifecycle_raw, $capability_id, $data_classification, $tags, $created_at, $updated_at)
+            INSERT INTO applications (id, name, owner, lifecycle, capability_id, data_classification, tags, created_at, updated_at)
+            VALUES ($id, $name, $owner, $lifecycle, $capability_id, $data_classification, $tags, $created_at, $updated_at)
             """
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
         addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
         cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
-        cmd.Parameters.AddWithValue("$lifecycle_raw", req.LifecycleRaw) |> ignore
         addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
         addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
         cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
@@ -165,7 +162,6 @@ module ApplicationRepository =
           Name = req.Name
           Owner = req.Owner
           Lifecycle = req.Lifecycle
-          LifecycleRaw = req.LifecycleRaw
           CapabilityId = req.CapabilityId
           DataClassification = req.DataClassification
           Tags = tags
@@ -187,7 +183,6 @@ module ApplicationRepository =
                 SET name = $name,
                     owner = $owner,
                     lifecycle = $lifecycle,
-                    lifecycle_raw = $lifecycle_raw,
                     capability_id = $capability_id,
                     data_classification = $data_classification,
                     tags = $tags,
@@ -198,7 +193,6 @@ module ApplicationRepository =
             cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
             addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
             cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
-            cmd.Parameters.AddWithValue("$lifecycle_raw", req.LifecycleRaw) |> ignore
             addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
             addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
             cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
@@ -211,7 +205,6 @@ module ApplicationRepository =
                         Name = req.Name
                         Owner = req.Owner
                         Lifecycle = req.Lifecycle
-                        LifecycleRaw = req.LifecycleRaw
                         CapabilityId = req.CapabilityId
                         DataClassification = req.DataClassification
                         Tags = tags

@@ -29,12 +29,10 @@ module Json =
 
     let decodeCreateApplicationRequest: Decoder<CreateApplicationRequest> =
         Decode.object (fun get ->
-            let lifecycleRaw = get.Required.Field "lifecycle" Decode.string
             {
                 Name = get.Required.Field "name" Decode.string
                 Owner = get.Optional.Field "owner" Decode.string
                 Lifecycle = get.Required.Field "lifecycle" decodeLifecycle
-                LifecycleRaw = lifecycleRaw
                 CapabilityId = get.Optional.Field "capability_id" Decode.string
                 DataClassification = get.Optional.Field "data_classification" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
@@ -198,14 +196,11 @@ module Json =
         Encode.string s
 
     let encodeApplication (app: Application): JsonValue =
-        let lifecycleValue =
-            if String.IsNullOrWhiteSpace app.LifecycleRaw then encodeLifecycle app.Lifecycle else Encode.string app.LifecycleRaw
-
         Encode.object [
             "id", Encode.string app.Id
             "name", Encode.string app.Name
             "owner", (match app.Owner with | Some o -> Encode.string o | None -> Encode.nil)
-            "lifecycle", lifecycleValue
+            "lifecycle", encodeLifecycle app.Lifecycle
             "capability_id", (match app.CapabilityId with | Some v -> Encode.string v | None -> Encode.nil)
             "data_classification", (match app.DataClassification with | Some v -> Encode.string v | None -> Encode.nil)
             "tags", Encode.list (List.map Encode.string app.Tags)
