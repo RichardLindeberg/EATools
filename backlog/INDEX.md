@@ -5,6 +5,8 @@
 > **Progress:** 10/46 complete (22%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
+**In Progress:** Item-031 (Application Commands)
+
 ---
 
 ## Quick Navigation
@@ -41,7 +43,7 @@
 | 009 | Create Authentication Specification | 🟢 Ready | [Item-009-Prio-P1-🟢 Ready.md](Item-009-Prio-P1-🟢%20Ready.md) |
 | 010 | Create Error Handling Specification | 🟢 Ready | [Item-010-Prio-P1-🟢 Ready.md](Item-010-Prio-P1-🟢%20Ready.md) |
 | 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
-| 031 | Migrate Application Endpoints to Commands | 🟢 Ready | [Item-031-Prio-P1-🟢 Ready.md](Item-031-Prio-P1-🟢%20Ready.md) |
+| 031 | Migrate Application Endpoints to Commands | � In Progress | [Item-031-Prio-P1-🟡 In Progress.md](Item-031-Prio-P1-🟡%20In%20Progress.md) |
 | 032 | Migrate Organization Endpoints to Commands | 🟢 Ready | [Item-032-Prio-P1-🟢 Ready.md](Item-032-Prio-P1-🟢%20Ready.md) |
 | 033 | Migrate BusinessCapability Endpoints to Commands | 🟢 Ready | [Item-033-Prio-P1-🟢 Ready.md](Item-033-Prio-P1-🟢%20Ready.md) |
 | 034 | Migrate Relation Endpoints to Commands | 🟢 Ready | [Item-034-Prio-P1-🟢 Ready.md](Item-034-Prio-P1-🟢%20Ready.md) |
