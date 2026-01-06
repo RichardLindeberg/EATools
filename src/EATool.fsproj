@@ -25,6 +25,7 @@
     <Compile Include="Infrastructure/Database.fs" />
     <Compile Include="Infrastructure/Migrations.fs" />
     <Compile Include="Infrastructure/EventStore.fs" />
+    <Compile Include="Infrastructure/EventJson.fs" />
     <Compile Include="Infrastructure/ApplicationRepository.fs" />
     <Compile Include="Infrastructure/ServerRepository.fs" />
     <Compile Include="Infrastructure/IntegrationRepository.fs" />

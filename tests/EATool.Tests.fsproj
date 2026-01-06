@@ -7,6 +7,7 @@
     <Compile Include="CommandFrameworkTests.fs" />
     <Compile Include="EventStoreTests.fs" />
     <Compile Include="EventStoreSqlTests.fs" />
+    <Compile Include="EventJsonStoreTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
