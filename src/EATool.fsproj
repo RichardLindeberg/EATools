@@ -28,6 +28,7 @@
     <Compile Include="Infrastructure/Migrations.fs" />
     <Compile Include="Infrastructure/EventStore.fs" />
     <Compile Include="Infrastructure/EventJson.fs" />
+    <Compile Include="Infrastructure/ApplicationEventJson.fs" />
     <Compile Include="Infrastructure/ProjectionTracker.fs" />
     <Compile Include="Infrastructure/ProjectionEngine.fs" />
     <Compile Include="Infrastructure/Projections/ApplicationProjection.fs" />

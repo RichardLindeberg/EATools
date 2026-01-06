@@ -48,6 +48,12 @@ module Database =
             conn
         | None -> invalidOp "Database not configured. Call Database.initializeSchema first."
 
+    /// Get the connection string from the active configuration
+    let getConnectionString () : string =
+        match currentConfig with
+        | Some cfg -> cfg.ConnectionString
+        | None -> invalidOp "Database not configured. Call Database.initializeSchema first."
+
     /// Initialize database schema (creates tables if they don't exist)
     let initializeSchema (config: DatabaseConfig) : Result<unit, string> =
         try

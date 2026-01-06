@@ -37,22 +37,22 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 
 | Priority | Count | Status |
 |----------|-------|--------|
-| P0 - Critical | 7 | 5/7 complete |
-| P1 - High | 13 | 2/13 complete |
+| P0 - Critical | 7 | 7/7 complete |
+| P1 - High | 13 | 3/13 complete |
 | P2 - Medium | 20 | 1/20 complete |
 | P3 - Low | 6 | 0/6 complete |
-| **Total** | **46** | **8/46 complete** |
+| **Total** | **46** | **11/46 complete** |
 
 ---
 
 ## 🎯 Recommended Next Actions
 
 1. **Read** [backlog/INDEX.md](backlog/INDEX.md) for complete overview
-2. **Start with P0 items:**
-   - [Item-028](backlog/Item-028-Prio-P0-🟢%20Ready.md): Event Store Infrastructure
-   - [Item-029](backlog/Item-029-Prio-P0-✅%20Done.md): Command Framework and Base Types
-   - [Item-030](backlog/Item-030-Prio-P0-🟢%20Ready.md): CQRS Projection Framework
-3. **Then tackle P1 items** for foundational specifications
+2. **Focus on P1 specs next:**
+   - [Item-007](backlog/Item-007-Prio-P1-🟢%20Ready.md): Authorization Model Specification
+   - [Item-008](backlog/Item-008-Prio-P1-🟢%20Ready.md): Data Architecture Specification
+   - [Item-009](backlog/Item-009-Prio-P1-🟢%20Ready.md): Authentication Specification
+3. **Continue with P1 patterns** (Items 010-011) to round out the specification set
 
 ---
 
