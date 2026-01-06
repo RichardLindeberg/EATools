@@ -7,43 +7,14 @@ open Microsoft.Data.Sqlite
 open EATool.Domain
 open EATool.Infrastructure
 
-/// Application domain events
-type ApplicationEvent =
-    | ApplicationCreated of ApplicationCreatedData
-    | ApplicationUpdated of ApplicationUpdatedData
-    | ApplicationDeleted of ApplicationDeletedData
-
-and ApplicationCreatedData =
-    {
-        Id: string
-        Name: string
-        Owner: string option
-        Lifecycle: string
-        CapabilityId: string option
-        DataClassification: string option
-        Tags: string list
-    }
-
-and ApplicationUpdatedData =
-    {
-        Id: string
-        Name: string option
-        Owner: string option
-        Lifecycle: string option
-        CapabilityId: string option
-        DataClassification: string option
-        Tags: string list option
-    }
-
-and ApplicationDeletedData =
-    {
-        Id: string
-    }
-
 module ApplicationProjection =
     
     let private serializeTags (tags: string list) =
         JsonSerializer.Serialize(tags)
+    
+    let private deserializeTags (json: string) =
+        try JsonSerializer.Deserialize<string list>(json)
+        with _ -> []
 
     let private getUtcTimestamp () = DateTime.UtcNow.ToString("O")
 
@@ -52,6 +23,18 @@ module ApplicationProjection =
         p.ParameterName <- name
         p.Value <- value |> Option.defaultValue (box DBNull.Value)
         cmd.Parameters.Add(p) |> ignore
+    
+    let private getTags (connString: string) (id: string) : string list =
+        use conn = new SqliteConnection(connString)
+        conn.Open()
+        use cmd = conn.CreateCommand()
+        cmd.CommandText <- "SELECT tags FROM applications WHERE id = $id"
+        cmd.Parameters.AddWithValue("$id", id) |> ignore
+        use reader = cmd.ExecuteReader()
+        if reader.Read() && not (reader.IsDBNull(0)) then
+            deserializeTags (reader.GetString(0))
+        else
+            []
 
     let private handleCreated (data: ApplicationCreatedData) (connString: string) : Result<unit, string> =
         try
@@ -80,41 +63,146 @@ module ApplicationProjection =
             Ok ()
         with ex ->
             Error $"Failed to handle ApplicationCreated: {ex.Message}"
-
-    let private handleUpdated (data: ApplicationUpdatedData) (connString: string) : Result<unit, string> =
+    
+    let private handleDataClassificationChanged (data: DataClassificationChangedData) (connString: string) : Result<unit, string> =
         try
             let now = getUtcTimestamp ()
             use conn = new SqliteConnection(connString)
             conn.Open()
-
-            // Build dynamic update based on provided fields
-            let updates = ResizeArray<string>()
-            let addUpdate field = updates.Add(field)
-
-            data.Name |> Option.iter (fun _ -> addUpdate "name = $name")
-            data.Owner |> Option.iter (fun _ -> addUpdate "owner = $owner")
-            data.Lifecycle |> Option.iter (fun _ -> addUpdate "lifecycle = $lifecycle")
-            data.CapabilityId |> Option.iter (fun _ -> addUpdate "capability_id = $capability_id")
-            data.DataClassification |> Option.iter (fun _ -> addUpdate "data_classification = $data_classification")
-            data.Tags |> Option.iter (fun _ -> addUpdate "tags = $tags")
-            addUpdate "updated_at = $updated_at"
-
-            if updates.Count > 0 then
-                use cmd = conn.CreateCommand()
-                cmd.CommandText <- sprintf "UPDATE applications SET %s WHERE id = $id" (String.Join(", ", updates))
-                cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
-                data.Name |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$name", v) |> ignore)
-                data.Owner |> Option.iter (fun v -> addOptionalParam cmd "$owner" (Some (box v)))
-                data.Lifecycle |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$lifecycle", v) |> ignore)
-                data.CapabilityId |> Option.iter (fun v -> addOptionalParam cmd "$capability_id" (Some (box v)))
-                data.DataClassification |> Option.iter (fun v -> addOptionalParam cmd "$data_classification" (Some (box v)))
-                data.Tags |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$tags", serializeTags v) |> ignore)
-                cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
-
-                cmd.ExecuteNonQuery() |> ignore
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET data_classification = $classification, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$classification", data.NewClassification) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
             Ok ()
         with ex ->
-            Error $"Failed to handle ApplicationUpdated: {ex.Message}"
+            Error $"Failed to handle DataClassificationChanged: {ex.Message}"
+    
+    let private handleLifecycleTransitioned (data: LifecycleTransitionedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET lifecycle = $lifecycle, lifecycle_raw = $lifecycle, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$lifecycle", data.ToLifecycle) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle LifecycleTransitioned: {ex.Message}"
+    
+    let private handleOwnerSet (data: OwnerSetData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET owner = $owner, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$owner", data.NewOwner) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle OwnerSet: {ex.Message}"
+    
+    let private handleCapabilityAssigned (data: CapabilityAssignedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET capability_id = $capability_id, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$capability_id", data.CapabilityId) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle CapabilityAssigned: {ex.Message}"
+    
+    let private handleCapabilityRemoved (data: CapabilityRemovedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET capability_id = NULL, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle CapabilityRemoved: {ex.Message}"
+    
+    let private handleTagsAdded (data: TagsAddedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            let currentTags = getTags connString data.Id
+            let newTags = (currentTags @ data.AddedTags) |> List.distinct
+            
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET tags = $tags, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$tags", serializeTags newTags) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle TagsAdded: {ex.Message}"
+    
+    let private handleTagsRemoved (data: TagsRemovedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            let currentTags = getTags connString data.Id
+            let newTags = currentTags |> List.filter (fun t -> not (List.contains t data.RemovedTags))
+            
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE applications SET tags = $tags, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$tags", serializeTags newTags) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle TagsRemoved: {ex.Message}"
+    
+    let private handleCriticalitySet (data: CriticalitySetData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            // Note: criticality column may not exist yet - this is for future schema
+            cmd.CommandText <- "UPDATE applications SET updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle CriticalitySet: {ex.Message}"
+    
+    let private handleDescriptionUpdated (data: DescriptionUpdatedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            // Note: description column may not exist yet - this is for future schema
+            cmd.CommandText <- "UPDATE applications SET updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle DescriptionUpdated: {ex.Message}"
 
     let private handleDeleted (data: ApplicationDeletedData) (connString: string) : Result<unit, string> =
         try
@@ -136,11 +224,29 @@ module ApplicationProjection =
             
             member _.CanHandle(eventType: string) =
                 match eventType with
-                | "ApplicationCreated" | "ApplicationUpdated" | "ApplicationDeleted" -> true
+                | "ApplicationCreated" 
+                | "DataClassificationChanged"
+                | "LifecycleTransitioned"
+                | "OwnerSet"
+                | "CapabilityAssigned"
+                | "CapabilityRemoved"
+                | "TagsAdded"
+                | "TagsRemoved"
+                | "CriticalitySet"
+                | "DescriptionUpdated"
+                | "ApplicationDeleted" -> true
                 | _ -> false
 
             member _.Handle(envelope: EventEnvelope<ApplicationEvent>) =
                 match envelope.Data with
                 | ApplicationCreated data -> handleCreated data connString
-                | ApplicationUpdated data -> handleUpdated data connString
+                | DataClassificationChanged data -> handleDataClassificationChanged data connString
+                | LifecycleTransitioned data -> handleLifecycleTransitioned data connString
+                | OwnerSet data -> handleOwnerSet data connString
+                | CapabilityAssigned data -> handleCapabilityAssigned data connString
+                | CapabilityRemoved data -> handleCapabilityRemoved data connString
+                | TagsAdded data -> handleTagsAdded data connString
+                | TagsRemoved data -> handleTagsRemoved data connString
+                | CriticalitySet data -> handleCriticalitySet data connString
+                | DescriptionUpdated data -> handleDescriptionUpdated data connString
                 | ApplicationDeleted data -> handleDeleted data connString

@@ -37,7 +37,9 @@ let ``application projection handles created event`` () =
                     Lifecycle = "active"
                     CapabilityId = None
                     DataClassification = Some "internal"
+                    Criticality = Some "medium"
                     Tags = ["test"; "demo"]
+                    Description = Some "Test application"
                 }
                 Metadata = None
             }
@@ -57,7 +59,7 @@ let ``application projection handles created event`` () =
             Assert.Equal("test-owner", reader.GetString(1))
 
 [<Fact>]
-let ``application projection handles updated event`` () =
+let ``application projection handles lifecycle transition`` () =
     let tmp = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString() + ".db")
     let connString = $"Data Source={tmp};Cache=Shared;Mode=ReadWriteCreate"
     let cfg = { DatabaseConfig.ConnectionString = connString; Environment = "test" }
@@ -82,24 +84,26 @@ let ``application projection handles updated event`` () =
                 ActorType = ActorType.User
                 Source = Source.API
                 Data = ApplicationCreated {
-                    Id = "app-update-test"
-                    Name = "Original Name"
-                    Owner = Some "original-owner"
+                    Id = "app-lifecycle-test"
+                    Name = "Lifecycle Test App"
+                    Owner = Some "owner"
                     Lifecycle = "planned"
                     CapabilityId = None
                     DataClassification = None
+                    Criticality = None
                     Tags = []
+                    Description = None
                 }
                 Metadata = None
             }
         
         handler.Handle(createEvt) |> ignore
         
-        // Update the app
-        let updateEvt : EventEnvelope<ApplicationEvent> =
+        // Transition lifecycle
+        let transitionEvt : EventEnvelope<ApplicationEvent> =
             {
                 EventId = Guid.NewGuid()
-                EventType = "ApplicationUpdated"
+                EventType = "LifecycleTransitioned"
                 EventVersion = 1
                 EventTimestamp = DateTime.UtcNow
                 AggregateId = Guid.NewGuid()
@@ -110,31 +114,26 @@ let ``application projection handles updated event`` () =
                 Actor = "test-user"
                 ActorType = ActorType.User
                 Source = Source.API
-                Data = ApplicationUpdated {
-                    Id = "app-update-test"
-                    Name = Some "Updated Name"
-                    Owner = Some "new-owner"
-                    Lifecycle = Some "active"
-                    CapabilityId = None
-                    DataClassification = None
-                    Tags = None
+                Data = LifecycleTransitioned {
+                    Id = "app-lifecycle-test"
+                    FromLifecycle = "planned"
+                    ToLifecycle = "active"
+                    SunsetDate = None
                 }
                 Metadata = None
             }
         
-        match handler.Handle(updateEvt) with
+        match handler.Handle(transitionEvt) with
         | Error e -> Assert.True(false, e)
         | Ok () ->
             use conn = new Microsoft.Data.Sqlite.SqliteConnection(connString)
             conn.Open()
             use cmd = conn.CreateCommand()
-            cmd.CommandText <- "SELECT name, owner, lifecycle FROM applications WHERE id = $id"
-            cmd.Parameters.AddWithValue("$id", "app-update-test") |> ignore
+            cmd.CommandText <- "SELECT lifecycle FROM applications WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", "app-lifecycle-test") |> ignore
             use reader = cmd.ExecuteReader()
             Assert.True(reader.Read())
-            Assert.Equal("Updated Name", reader.GetString(0))
-            Assert.Equal("new-owner", reader.GetString(1))
-            Assert.Equal("active", reader.GetString(2))
+            Assert.Equal("active", reader.GetString(0))
 
 [<Fact>]
 let ``organization projection handles created event`` () =
@@ -213,7 +212,9 @@ let ``application projection is idempotent`` () =
                     Lifecycle = "active"
                     CapabilityId = None
                     DataClassification = None
+                    Criticality = None
                     Tags = []
+                    Description = None
                 }
                 Metadata = None
             }
