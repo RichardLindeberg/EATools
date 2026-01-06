@@ -17,11 +17,12 @@ module OrganizationsEndpoints =
                 let page = ctx.TryGetQueryStringValue "page" |> Option.bind (fun s -> try Some (int s) with _ -> None) |> Option.defaultValue 1
                 let limit = ctx.TryGetQueryStringValue "limit" |> Option.bind (fun s -> try Some (int s) with _ -> None) |> Option.defaultValue 50
                 let search = ctx.TryGetQueryStringValue "search" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
+                let parentId = ctx.TryGetQueryStringValue "parent_id" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 
                 let pageParam = if page < 1 then 1 else page
                 let limitParam = if limit < 1 || limit > 200 then 50 else limit
                 
-                let result = OrganizationRepository.getAll pageParam limitParam search
+                let result = OrganizationRepository.getAll pageParam limitParam search parentId
                 let json = Json.encodePaginatedResponse Json.encodeOrganization result
                 return! (Giraffe.Core.json json) next ctx
             }
@@ -36,11 +37,30 @@ module OrganizationsEndpoints =
                         let errorJson = Json.encodeErrorResponse "validation_error" "Request validation failed"
                         return! (Giraffe.Core.json errorJson) next ctx
                     else
-                        let org = OrganizationRepository.create req
-                        ctx.SetStatusCode 201
-                        ctx.SetHttpHeader ("Location", $"/organizations/{org.Id}")
-                        let responseJson = Json.encodeOrganization org
-                        return! (Giraffe.Core.json responseJson) next ctx
+                        // Validate parent exists if specified
+                        match req.ParentId with
+                        | Some parentId when String.IsNullOrWhiteSpace(parentId) ->
+                            ctx.SetStatusCode 400
+                            let errorJson = Json.encodeErrorResponse "validation_error" "parent_id cannot be empty string"
+                            return! (Giraffe.Core.json errorJson) next ctx
+                        | Some parentId ->
+                            match OrganizationRepository.getById parentId with
+                            | Some _ ->
+                                let org = OrganizationRepository.create req
+                                ctx.SetStatusCode 201
+                                ctx.SetHttpHeader ("Location", $"/organizations/{org.Id}")
+                                let responseJson = Json.encodeOrganization org
+                                return! (Giraffe.Core.json responseJson) next ctx
+                            | None ->
+                                ctx.SetStatusCode 400
+                                let errorJson = Json.encodeErrorResponse "validation_error" "parent_id does not reference an existing organization"
+                                return! (Giraffe.Core.json errorJson) next ctx
+                        | None ->
+                            let org = OrganizationRepository.create req
+                            ctx.SetStatusCode 201
+                            ctx.SetHttpHeader ("Location", $"/organizations/{org.Id}")
+                            let responseJson = Json.encodeOrganization org
+                            return! (Giraffe.Core.json responseJson) next ctx
                 | Error err ->
                     ctx.SetStatusCode 400
                     let errorJson = Json.encodeErrorResponse "validation_error" $"JSON parse error: {err}"
@@ -69,14 +89,40 @@ module OrganizationsEndpoints =
                         let errorJson = Json.encodeErrorResponse "validation_error" "Request validation failed"
                         return! (Giraffe.Core.json errorJson) next ctx
                     else
-                        match OrganizationRepository.update id req with
-                        | Some org -> 
-                            let json = Json.encodeOrganization org
-                            return! (Giraffe.Core.json json) next ctx
-                        | None ->
-                            ctx.SetStatusCode 404
-                            let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
+                        // Validate parent exists if specified
+                        match req.ParentId with
+                        | Some parentId when String.IsNullOrWhiteSpace(parentId) ->
+                            ctx.SetStatusCode 400
+                            let errorJson = Json.encodeErrorResponse "validation_error" "parent_id cannot be empty string"
                             return! (Giraffe.Core.json errorJson) next ctx
+                        | Some parentId when parentId = id ->
+                            ctx.SetStatusCode 400
+                            let errorJson = Json.encodeErrorResponse "validation_error" "organization cannot be its own parent"
+                            return! (Giraffe.Core.json errorJson) next ctx
+                        | Some parentId ->
+                            match OrganizationRepository.getById parentId with
+                            | Some _ ->
+                                match OrganizationRepository.update id req with
+                                | Some org -> 
+                                    let json = Json.encodeOrganization org
+                                    return! (Giraffe.Core.json json) next ctx
+                                | None ->
+                                    ctx.SetStatusCode 404
+                                    let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
+                                    return! (Giraffe.Core.json errorJson) next ctx
+                            | None ->
+                                ctx.SetStatusCode 400
+                                let errorJson = Json.encodeErrorResponse "validation_error" "parent_id does not reference an existing organization"
+                                return! (Giraffe.Core.json errorJson) next ctx
+                        | None ->
+                            match OrganizationRepository.update id req with
+                            | Some org -> 
+                                let json = Json.encodeOrganization org
+                                return! (Giraffe.Core.json json) next ctx
+                            | None ->
+                                ctx.SetStatusCode 404
+                                let errorJson = Json.encodeErrorResponse "not_found" "Organization not found"
+                                return! (Giraffe.Core.json errorJson) next ctx
                 | Error err ->
                     ctx.SetStatusCode 400
                     let errorJson = Json.encodeErrorResponse "validation_error" $"JSON parse error: {err}"

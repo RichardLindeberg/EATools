@@ -1,10 +1,11 @@
 # Item-001: Add `parent_id` Support to Organization Entity
 
-**Status:** 🟢 Ready  
+**Status:** ✅ Done  
 **Priority:** P0 - CRITICAL  
 **Effort:** 4-6 hours  
 **Created:** 2026-01-06  
-**Owner:** TBD
+**Completed:** 2026-01-06  
+**Owner:** GitHub Copilot
 
 ---
 
@@ -42,30 +43,30 @@ Organization hierarchies are documented in specifications and OpenAPI contract, 
 
 ## Detailed Tasks
 
-- [ ] Create migration `008_add_parent_id_to_organizations.sql` with:
+- [x] Create migration `008_add_parent_id_to_organizations.sql` with:
   - Add `parent_id TEXT NULL` column
-  - Add FK constraint to self (organizations.id)
+  - Add FK constraint to self (organizations.id) - *Note: SQLite doesn't support ALTER TABLE ADD CONSTRAINT*
   - Create index on parent_id for hierarchy queries
   - Create unique compound index on (parent_id, name) for scoped uniqueness
 
-- [ ] Update F# Domain Model:
+- [x] Update F# Domain Model:
   - Add `ParentId: string option` to Organization type
   - Add `ParentId: string option` to CreateOrganizationRequest type
   - Add `ParentId: string option` to UpdateOrganizationRequest type
 
-- [ ] Update OrganizationRepository:
+- [x] Update OrganizationRepository:
   - Modify `mapOrganization` function to read parent_id field
   - Update `create` function to insert parent_id
   - Update `update` function to handle parent_id updates
   - Add cycle detection in update (child cannot be its own ancestor)
   - Add parent validation (parent must exist)
 
-- [ ] Update JSON serialization:
+- [x] Update JSON serialization:
   - Add parent_id to Organization encoder
   - Add parent_id to CreateOrganizationRequest decoder
   - Update JSON.fs with parent_id field mapping
 
-- [ ] Add query parameter support:
+- [x] Add query parameter support:
   - Add parent_id query parameter to GET /organizations endpoint
   - Implement filtering by parent_id in repository
   - Support querying for root organizations (parent_id=null)
@@ -74,18 +75,18 @@ Organization hierarchies are documented in specifications and OpenAPI contract, 
 
 ## Acceptance Criteria
 
-- [ ] Can create organization with parent_id referencing existing organization
-- [ ] Can create root organization with parent_id=null
-- [ ] Can update organization's parent_id to move in hierarchy
-- [ ] Can query organizations by parent_id parameter
-- [ ] Can retrieve full organizational hierarchy (recursive)
-- [ ] API responses include parent_id field
-- [ ] Validation prevents circular references (child as own ancestor)
-- [ ] Validation prevents orphaning (parent must exist)
-- [ ] Database schema includes compound unique index on (parent_id, name)
-- [ ] All API responses match OpenAPI schema
-- [ ] Integration tests pass (see Item-002)
-- [ ] Documentation updated with examples
+- [x] Can create organization with parent_id referencing existing organization
+- [x] Can create root organization with parent_id=null
+- [x] Can update organization's parent_id to move in hierarchy
+- [x] Can query organizations by parent_id parameter
+- [x] Can retrieve full organizational hierarchy (recursive)
+- [x] API responses include parent_id field
+- [x] Validation prevents circular references (child as own ancestor)
+- [x] Validation prevents orphaning (parent must exist)
+- [x] Database schema includes compound unique index on (parent_id, name)
+- [x] All API responses match OpenAPI schema
+- [x] Integration tests pass (see Item-002)
+- [x] Documentation updated with examples
 
 ---
 

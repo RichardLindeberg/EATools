@@ -11,6 +11,8 @@ type Organization =
         Id: string
         [<JsonPropertyName("name")>]
         Name: string
+        [<JsonPropertyName("parent_id")>]
+        ParentId: string option
         [<JsonPropertyName("domains")>]
         Domains: string list
         [<JsonPropertyName("contacts")>]
@@ -220,6 +222,8 @@ type CreateOrganizationRequest =
     {
         [<JsonPropertyName("name")>]
         Name: string
+        [<JsonPropertyName("parent_id")>]
+        ParentId: string option
         [<JsonPropertyName("domains")>]
         Domains: string list
         [<JsonPropertyName("contacts")>]

@@ -11,6 +11,7 @@ module Json =
         Decode.object (fun get ->
             {
                 Name = get.Required.Field "name" Decode.string
+                ParentId = get.Optional.Field "parent_id" Decode.string
                 Domains = get.Optional.Field "domains" (Decode.list Decode.string) |> Option.defaultValue []
                 Contacts = get.Optional.Field "contacts" (Decode.list Decode.string) |> Option.defaultValue []
             })
@@ -180,6 +181,7 @@ module Json =
         Encode.object [
             "id", Encode.string org.Id
             "name", Encode.string org.Name
+            "parent_id", (match org.ParentId with Some id -> Encode.string id | None -> Encode.nil)
             "domains", Encode.list (List.map Encode.string org.Domains)
             "contacts", Encode.list (List.map Encode.string org.Contacts)
             "created_at", Encode.string org.CreatedAt
