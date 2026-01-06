@@ -197,5 +197,4 @@ let (<*>) f1 f2 =
 ## References
 
 - [spec-architecture-event-sourcing.md](../spec/spec-architecture-event-sourcing.md) - Requirements
-- MediatR: https://github.com/jbogard/MediatR
 - F# Result type: https://fsharpforfunandprofit.com/posts/recipe-part2/

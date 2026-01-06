@@ -6,6 +6,20 @@ open System
 /// ISO 8601 UTC timestamp format
 type UtcTimestamp = string
 
+/// Actor that issued a command or caused an event
+type ActorType =
+    | User
+    | Service
+    | System
+
+/// Source channel of a command or event
+type Source =
+    | UI
+    | API
+    | Import
+    | Webhook
+    | System
+
 /// Entity types in the system
 type EntityType =
     | Organization
