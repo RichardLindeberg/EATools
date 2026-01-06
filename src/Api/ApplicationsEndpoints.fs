@@ -46,36 +46,42 @@ module ApplicationsEndpoints =
                 let! bodyStr = ctx.ReadBodyFromRequestAsync()
                 match Decode.fromString Json.decodeCreateApplicationRequest bodyStr with
                 | Ok req ->
-                    let cmd : CreateApplicationData = {
-                        Id = generateId ()
-                        Name = req.Name
-                        Owner = req.Owner
-                        Lifecycle = req.Lifecycle |> function
-                            | Lifecycle.Planned -> "planned"
-                            | Lifecycle.Active -> "active"
-                            | Lifecycle.Deprecated -> "deprecated"
-                            | Lifecycle.Retired -> "retired"
-                        CapabilityId = req.CapabilityId
-                        DataClassification = req.DataClassification
-                        Criticality = None // Not in current schema
-                        Tags = req.Tags |> Option.defaultValue []
-                        Description = None // Not in current schema
-                    }
-                    
-                    let state = ApplicationAggregate.Initial
-                    match ApplicationCommandHandler.handleCreateApplication state cmd with
-                    | Error err ->
-                        ctx.SetStatusCode 400
-                        let errJson = Json.encodeErrorResponse "validation_error" err
+                    try
+                        // Validate using command handler
+                        let tempCmd : CreateApplicationData = {
+                            Id = "temp-id" // Temporary ID for validation
+                            Name = req.Name
+                            Owner = req.Owner
+                            Lifecycle = req.Lifecycle |> function
+                                | Lifecycle.Planned -> "planned"
+                                | Lifecycle.Active -> "active"
+                                | Lifecycle.Deprecated -> "deprecated"
+                                | Lifecycle.Retired -> "retired"
+                            CapabilityId = req.CapabilityId
+                            DataClassification = req.DataClassification
+                            Criticality = None // Not in current schema
+                            Tags = req.Tags |> Option.defaultValue []
+                            Description = None // Not in current schema
+                        }
+                        
+                        let state = ApplicationAggregate.Initial
+                        match ApplicationCommandHandler.handleCreateApplication state tempCmd with
+                        | Error err ->
+                            ctx.SetStatusCode 400
+                            let errJson = Json.encodeErrorResponse "validation_error" err
+                            return! (Giraffe.Core.json errJson) next ctx
+                        | Ok events ->
+                            // TODO: Persist events to event store and dispatch to projections
+                            // For now, use repository to maintain compatibility (it generates its own ID)
+                            let app = ApplicationRepository.create req
+                            ctx.SetStatusCode 201
+                            ctx.SetHttpHeader ("Location", $"/applications/{app.Id}")
+                            let json = Json.encodeApplication app
+                            return! (Giraffe.Core.json json) next ctx
+                    with ex ->
+                        ctx.SetStatusCode 500
+                        let errJson = Json.encodeErrorResponse "internal_error" ex.Message
                         return! (Giraffe.Core.json errJson) next ctx
-                    | Ok events ->
-                        // TODO: Persist events to event store and dispatch to projections
-                        // For now, use repository to maintain compatibility
-                        let app = ApplicationRepository.create req
-                        ctx.SetStatusCode 201
-                        ctx.SetHttpHeader ("Location", $"/applications/{app.Id}")
-                        let json = Json.encodeApplication app
-                        return! (Giraffe.Core.json json) next ctx
                 | Error err ->
                     ctx.SetStatusCode 400
                     let errJson = Json.encodeErrorResponse "validation_error" $"JSON parse error: {err}"

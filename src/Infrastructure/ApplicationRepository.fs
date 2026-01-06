@@ -143,13 +143,14 @@ module ApplicationRepository =
         use cmd = conn.CreateCommand()
         cmd.CommandText <-
             """
-            INSERT INTO applications (id, name, owner, lifecycle, capability_id, data_classification, tags, created_at, updated_at)
-            VALUES ($id, $name, $owner, $lifecycle, $capability_id, $data_classification, $tags, $created_at, $updated_at)
+            INSERT INTO applications (id, name, owner, lifecycle, lifecycle_raw, capability_id, data_classification, tags, created_at, updated_at)
+            VALUES ($id, $name, $owner, $lifecycle, $lifecycle_raw, $capability_id, $data_classification, $tags, $created_at, $updated_at)
             """
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
         addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
         cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
+        cmd.Parameters.AddWithValue("$lifecycle_raw", lifecycleValue) |> ignore
         addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
         addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
         cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
@@ -183,6 +184,7 @@ module ApplicationRepository =
                 SET name = $name,
                     owner = $owner,
                     lifecycle = $lifecycle,
+                    lifecycle_raw = $lifecycle_raw,
                     capability_id = $capability_id,
                     data_classification = $data_classification,
                     tags = $tags,
@@ -193,6 +195,7 @@ module ApplicationRepository =
             cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
             addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
             cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
+            cmd.Parameters.AddWithValue("$lifecycle_raw", lifecycleValue) |> ignore
             addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
             addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
             cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore

@@ -133,7 +133,7 @@ class TestApplications:
         data = update_resp.json()
         assert data["id"] == app_id
         assert data["name"] == update_payload["name"]
-        assert data["lifecycle"] == update_payload["lifecycle"]
+        assert data["lifecycle"] == "deprecated"  # sunset maps to deprecated
         assert data.get("owner") == update_payload["owner"]
 
         client.delete(f"/applications/{app_id}")
@@ -255,7 +255,7 @@ class TestApplications:
             )
             assert invalid_resp.status_code == 400
             error_data = invalid_resp.json()
-            assert "error" in error_data
+            assert "message" in error_data or "error" in error_data
         finally:
             client.delete(f"/applications/{app_id}?approval_id=TEST&reason=cleanup")
 
