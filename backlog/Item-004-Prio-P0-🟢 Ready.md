@@ -82,6 +82,10 @@ OpenAPI specification exists (openapi.yaml) but lacks a formal specification doc
   - API key format
   - JWT claims structure
 
+- [ ] Expose openapi.yaml and the api specification document available from the backend
+  - /API should give the api specification document with a link to /OpenApiSpecification
+  - /OpenApiSpecification should expose the openapi.yaml with approriate viewer
+
 ---
 
 ## Acceptance Criteria
