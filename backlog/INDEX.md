@@ -26,7 +26,7 @@
 | 004 | Create API Contract Specification | ✅ Done | [Item-004-Prio-P0-✅ Done.md](Item-004-Prio-P0-✅%20Done.md) |
 | 028 | Design and Implement Event Store Infrastructure | ✅ Done | [Item-028-Prio-P0-✅ Done.md](Item-028-Prio-P0-✅%20Done.md) |
 | 029 | Create Command Framework and Base Types | ✅ Done | [Item-029-Prio-P0-✅ Done.md](Item-029-Prio-P0-✅%20Done.md) |
-| 030 | Implement CQRS Projection Framework | 🟢 Ready | [Item-030-Prio-P0-🟢 Ready.md](Item-030-Prio-P0-🟢%20Ready.md) |
+| 030 | Implement CQRS Projection Framework | � In Progress | [Item-030-Prio-P0-🟡 In Progress.md](Item-030-Prio-P0-🟡%20In%20Progress.md) |
 
 ---
 
@@ -99,9 +99,9 @@
 - **P3 (Low):** 0/6 complete (0%)
 
 ### By Status
-- 🟢 Ready: 37
+- 🟢 Ready: 36
 - 🔴 Blocked: 0
-- 🟡 In Progress: 0
+- 🟡 In Progress: 1
 - ✅ Done: 9
 
 ---
