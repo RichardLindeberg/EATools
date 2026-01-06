@@ -151,8 +151,8 @@ ALTER TABLE organizations
 
 ## Related Items
 
-- [Item-002-Prio-P0.md](Item-002-Prio-P0.md) - Integration tests
-- [Item-012-Prio-P2.md](Item-012-Prio-P2.md) - Query filtering
+- [Item-002-Prio-P0-✅ Done.md](Item-002-Prio-P0-✅%20Done.md) - Integration tests
+- [Item-012-Prio-P2-✅ Done.md](Item-012-Prio-P2-✅%20Done.md) - Query filtering
 - [spec-schema-entities-business.md](../../spec/spec-schema-entities-business.md)
 
 ---

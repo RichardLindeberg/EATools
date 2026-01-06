@@ -17,6 +17,11 @@
   <ItemGroup>
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Models.fs" />
+    <Compile Include="Domain/Validation.fs" />
+    <Compile Include="Domain/Commands.fs" />
+    <Compile Include="Domain/Events.fs" />
+    <Compile Include="Domain/CommandHandler.fs" />
+    <Compile Include="Domain/CommandDispatcher.fs" />
     <Compile Include="Infrastructure/Database.fs" />
     <Compile Include="Infrastructure/Migrations.fs" />
     <Compile Include="Infrastructure/ApplicationRepository.fs" />
