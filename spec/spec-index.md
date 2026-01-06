@@ -32,7 +32,7 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 
 ### API & Contracts
 
-- **[API Contract](spec-tool-api-contract.md)** *(planned)* - REST API endpoints, authentication, pagination, error handling
+- **[API Contract](spec-tool-api-contract.md)** - REST API endpoints, request/response patterns, error handling, pagination
 - **[API Versioning](spec-tool-api-versioning.md)** *(planned)* - Versioning strategy, deprecation policy, breaking changes
 
 ### Architecture & Design
@@ -64,19 +64,19 @@ Start with:
 
 ### For API Consumers
 Start with:
-1. [API Contract](spec-tool-api-contract.md) - Endpoints and request/response formats
+1. [API Contract](spec-tool-api-contract.md) - Endpoints, request/response patterns, authentication
 2. [Schema Examples](spec-schema-examples.md) - Working examples
 3. [Authorization Model](spec-process-authorization.md) - Access control patterns
 
 ### For Frontend Developers
 Start with:
-1. [API Contract](spec-tool-api-contract.md) - REST API usage
+1. [API Contract](spec-tool-api-contract.md) - REST API usage, error handling, pagination
 2. [Schema Examples](spec-schema-examples.md) - Request/response patterns
 3. [Application Layer Entities](spec-schema-entities-application.md) - Data structures
 
 ### For Integration Partners
 Start with:
-1. [API Contract](spec-tool-api-contract.md) - Integration points
+1. [API Contract](spec-tool-api-contract.md) - Integration points, authentication methods
 2. [Authentication](spec-process-authentication.md) - API key management
 3. [Webhook Events](spec-process-webhooks.md) - Event subscriptions
 
