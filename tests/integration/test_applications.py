@@ -139,7 +139,7 @@ class TestApplications:
         client.delete(f"/applications/{app_id}")
 
     def test_delete_application(self, client: APIClient):
-        """DELETE /applications/{id} should delete the application."""
+        """DELETE /applications/{id} should require approval_id and reason."""
         create_resp = client.post(
             "/applications",
             json={
@@ -150,9 +150,150 @@ class TestApplications:
         assert create_resp.status_code in [200, 201]
         app_id = create_resp.json()["id"]
 
+        # Test delete without approval_id and reason should fail
         delete_resp = client.delete(f"/applications/{app_id}")
+        assert delete_resp.status_code == 400
+
+        # Test delete with approval_id and reason should succeed
+        delete_resp = client.delete(
+            f"/applications/{app_id}?approval_id=APPR-12345&reason=End+of+life"
+        )
         assert delete_resp.status_code in [200, 202, 204]
 
         # verify gone
         get_resp = client.get(f"/applications/{app_id}")
         assert get_resp.status_code == 404
+
+    def test_set_classification_command(self, client: APIClient):
+        """POST /applications/{id}/commands/set-classification should update data classification."""
+        create_resp = client.post(
+            "/applications",
+            json={
+                "name": "Customer Portal",
+                "lifecycle": "active",
+            },
+        )
+        assert create_resp.status_code in [200, 201]
+        app_id = create_resp.json()["id"]
+
+        try:
+            # Set classification with reason
+            cmd_resp = client.post(
+                f"/applications/{app_id}/commands/set-classification",
+                json={
+                    "classification": "confidential",
+                    "reason": "Contains customer PII",
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["data_classification"] == "confidential"
+
+            # Test invalid classification
+            invalid_resp = client.post(
+                f"/applications/{app_id}/commands/set-classification",
+                json={
+                    "classification": "invalid",
+                    "reason": "Testing",
+                },
+            )
+            assert invalid_resp.status_code == 400
+
+            # Test missing reason
+            no_reason_resp = client.post(
+                f"/applications/{app_id}/commands/set-classification",
+                json={
+                    "classification": "public",
+                },
+            )
+            assert no_reason_resp.status_code == 400
+        finally:
+            client.delete(f"/applications/{app_id}?approval_id=TEST&reason=cleanup")
+
+    def test_transition_lifecycle_command(self, client: APIClient):
+        """POST /applications/{id}/commands/transition-lifecycle should validate state machine."""
+        create_resp = client.post(
+            "/applications",
+            json={
+                "name": "New Service",
+                "lifecycle": "planned",
+            },
+        )
+        assert create_resp.status_code in [200, 201]
+        app_id = create_resp.json()["id"]
+
+        try:
+            # Valid transition: planned → active
+            cmd_resp = client.post(
+                f"/applications/{app_id}/commands/transition-lifecycle",
+                json={
+                    "target_lifecycle": "active",
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["lifecycle"] == "active"
+
+            # Valid transition: active → deprecated
+            cmd_resp = client.post(
+                f"/applications/{app_id}/commands/transition-lifecycle",
+                json={
+                    "target_lifecycle": "deprecated",
+                    "sunset_date": "2025-12-31",
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["lifecycle"] == "deprecated"
+
+            # Invalid transition: deprecated → planned should fail
+            invalid_resp = client.post(
+                f"/applications/{app_id}/commands/transition-lifecycle",
+                json={
+                    "target_lifecycle": "planned",
+                },
+            )
+            assert invalid_resp.status_code == 400
+            error_data = invalid_resp.json()
+            assert "error" in error_data
+        finally:
+            client.delete(f"/applications/{app_id}?approval_id=TEST&reason=cleanup")
+
+    def test_set_owner_command(self, client: APIClient):
+        """POST /applications/{id}/commands/set-owner should update owner."""
+        create_resp = client.post(
+            "/applications",
+            json={
+                "name": "Team App",
+                "lifecycle": "active",
+            },
+        )
+        assert create_resp.status_code in [200, 201]
+        app_id = create_resp.json()["id"]
+
+        try:
+            # Set owner
+            cmd_resp = client.post(
+                f"/applications/{app_id}/commands/set-owner",
+                json={
+                    "owner": "platform-team",
+                    "reason": "Team restructuring",
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data.get("owner") == "platform-team"
+
+            # Set owner without reason (optional)
+            cmd_resp = client.post(
+                f"/applications/{app_id}/commands/set-owner",
+                json={
+                    "owner": "devops-team",
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data.get("owner") == "devops-team"
+        finally:
+            client.delete(f"/applications/{app_id}?approval_id=TEST&reason=cleanup")
+

@@ -240,15 +240,137 @@ paths:
           $ref: '#/components/responses/NotFound'
     delete:
       tags: [Applications]
-      summary: Delete application
+      summary: Delete application (requires approval)
       parameters:
         - $ref: '#/components/parameters/idPath'
+        - in: query
+          name: approval_id
+          required: true
+          schema:
+            type: string
+          description: Approval ID required for deletion
+        - in: query
+          name: reason
+          required: true
+          schema:
+            type: string
+          description: Reason for deletion
       responses:
         '204':
           description: Deleted
         '400':
           $ref: '#/components/responses/ValidationError'
         '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /applications/{id}/commands/set-classification:
+    post:
+      tags: [Applications]
+      summary: Set application data classification
+      description: Updates the data classification with required justification
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - classification
+                - reason
+              properties:
+                classification:
+                  type: string
+                  enum: [public, internal, confidential, restricted]
+                reason:
+                  type: string
+                  description: Justification for the classification change
+      responses:
+        '200':
+          description: Classification updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /applications/{id}/commands/transition-lifecycle:
+    post:
+      tags: [Applications]
+      summary: Transition application lifecycle state
+      description: Moves application through lifecycle state machine (planned→active→deprecated→retired)
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - target_lifecycle
+              properties:
+                target_lifecycle:
+                  type: string
+                  enum: [planned, active, deprecated, retired]
+                sunset_date:
+                  type: string
+                  format: date
+                  description: Optional sunset date when transitioning to deprecated
+      responses:
+        '200':
+          description: Lifecycle transitioned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          description: Invalid lifecycle transition or business rule violation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /applications/{id}/commands/set-owner:
+    post:
+      tags: [Applications]
+      summary: Set application owner
+      description: Updates the responsible owner for the application
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - owner
+              properties:
+                owner:
+                  type: string
+                reason:
+                  type: string
+                  description: Optional reason for ownership change
+      responses:
+        '200':
+          description: Owner updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'
