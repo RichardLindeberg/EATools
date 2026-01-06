@@ -14,7 +14,8 @@ let ``sql event store append enforces version`` () =
     match Migrations.run cfg with
     | Error e -> Assert.True(false, e)
     | Ok () ->
-        let store = new SqlEventStore<string>(connString) :> EventStore.IEventStore<string>
+        // For string payloads, JSON serializer is identity
+        let store = new SqlEventStore<string>(connString, id, id) :> EventStore.IEventStore<string>
         let aggId = Guid.NewGuid()
         let mkEvt ver data : EATool.Domain.EventEnvelope<string> =
             {

@@ -62,7 +62,7 @@ module EventStore =
             member _.RecordCommandProcessed(cmdId) = processed.Add(cmdId) |> ignore
 
     // Skeleton SQL-backed event store (implementation to be completed)
-    type SqlEventStore<'TEvent>(connectionString: string) =
+    type SqlEventStore<'TEvent>(connectionString: string, serialize: 'TEvent -> string, deserialize: string -> 'TEvent) =
         let openConn () =
             let c = new SqliteConnection(connectionString)
             c.Open()
@@ -99,8 +99,8 @@ module EventStore =
                         cmd.Parameters.AddWithValue("$source", e.Source.ToString()) |> ignore
                         cmd.Parameters.AddWithValue("$cau", (match e.CausationId with Some v -> box (v.ToString()) | None -> box DBNull.Value)) |> ignore
                         cmd.Parameters.AddWithValue("$cor", (match e.CorrelationId with Some v -> box (v.ToString()) | None -> box DBNull.Value)) |> ignore
-                        // For now, store event data as string via ToString; callers should provide serialized data
-                        cmd.Parameters.AddWithValue("$data", (match box e.Data with | :? string as s -> s | _ -> e.Data.ToString())) |> ignore
+                        // Store event data as JSON string via provided serializer
+                        cmd.Parameters.AddWithValue("$data", serialize e.Data) |> ignore
                         cmd.Parameters.AddWithValue("$meta", box DBNull.Value) |> ignore
                         cmd.ExecuteNonQuery() |> ignore
 
@@ -133,8 +133,7 @@ module EventStore =
                     let causation = optGuid 10
                     let correlation = optGuid 11
                     let dataStr = reader.GetString(12)
-                    // Data conversion: caller must supply 'TEvent' that matches stored string
-                    let data = unbox<'TEvent> (box dataStr)
+                    let data = deserialize dataStr
                     let actorType =
                         match actorTypeStr with
                         | "User" -> ActorType.User
@@ -174,7 +173,7 @@ module EventStore =
                     let causation = optGuid 10
                     let correlation = optGuid 11
                     let dataStr = reader.GetString(12)
-                    let data = unbox<'TEvent> (box dataStr)
+                    let data = deserialize dataStr
                     let actorType = match actorTypeStr with | "User" -> ActorType.User | "Service" -> ActorType.Service | _ -> ActorType.System
                     let source = match sourceStr with | "UI" -> Source.UI | "API" -> Source.API | "Import" -> Source.Import | "Webhook" -> Source.Webhook | _ -> Source.System
                     res.Add({ EventId = eventId; EventType = eType; EventVersion = eVer; EventTimestamp = eTs; AggregateId = aggId; AggregateType = aggType; AggregateVersion = aggVer; CausationId = causation; CorrelationId = correlation; Actor = actor; ActorType = actorType; Source = source; Data = data; Metadata = None })
