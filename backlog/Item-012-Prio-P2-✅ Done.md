@@ -1,10 +1,11 @@
 # Item-012: Add `parent_id` Filter to Organizations Endpoint
 
-**Status:** 🔴 Blocked  
+**Status:** ✅ Done  
 **Priority:** P2 - MEDIUM  
 **Effort:** 2 hours  
 **Created:** 2026-01-06  
-**Owner:** TBD
+**Completed:** 2026-01-06  
+**Owner:** GitHub Copilot
 
 ---
 
@@ -13,6 +14,8 @@
 Organizations support hierarchies but lack query parameter to filter by parent_id, making it difficult for users to retrieve organizational structure and navigate hierarchies.
 
 **Impact:** Users must fetch all organizations and filter client-side; poor UX for large organizations.
+
+**Resolution:** Implemented as part of Item-001. The GET /organizations endpoint now supports parent_id query parameter with full filtering capability.
 
 ---
 
@@ -100,14 +103,14 @@ let buildFilters (search: string option) (parentId: string option) =
 **Blocks:** None
 
 **Depends On:**
-- Item-001: Organization parent_id implementation (must be done first)
+- Item-001: Organization parent_id implementation ✅ Complete (included filtering)
 
 ---
 
 ## Related Items
 
-- [Item-001-Prio-P0.md](Item-001-Prio-P0.md) - Must complete first
-- [Item-011-Prio-P1.md](Item-011-Prio-P1.md) - Query patterns spec
+- [Item-001-Prio-P0-✅ Done.md](Item-001-Prio-P0-✅%20Done.md) - ✅ Complete
+- [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) - Query patterns spec
 
 ---
 
