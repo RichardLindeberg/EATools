@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-06  
-> **Total Items:** 26  
-> **Progress:** 5/26 complete (19%)  
+> **Total Items:** 27  
+> **Progress:** 7/27 complete (26%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 ---
@@ -11,7 +11,7 @@
 
 - **[P0 - Critical](#p0---critical-4-items)** (4 items) - Immediate action required
 - **[P1 - High](#p1---high-7-items)** (7 items) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-11-items)** (11 items) - Should be planned
+- **[P2 - Medium](#p2---medium-12-items)** (12 items) - Should be planned
 - **[P3 - Low](#p3---low-4-items)** (4 items) - Nice to have
 
 ---
@@ -31,8 +31,8 @@
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | 🟢 Ready | [Item-005-Prio-P1-🟢 Ready.md](Item-005-Prio-P1-🟢%20Ready.md) |
-| 006 | Review and Simplify Lifecycle Storage Strategy | 🟢 Ready | [Item-006-Prio-P1-🟢 Ready.md](Item-006-Prio-P1-🟢%20Ready.md) |
+| 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | ✅ Done | [Item-005-Prio-P1-✅ Done.md](Item-005-Prio-P1-✅%20Done.md) |
+| 006 | Review and Simplify Lifecycle Storage Strategy | ✅ Done | [Item-006-Prio-P1-✅ Done.md](Item-006-Prio-P1-✅%20Done.md) |
 | 007 | Create Authorization Model Specification | 🟢 Ready | [Item-007-Prio-P1-🟢 Ready.md](Item-007-Prio-P1-🟢%20Ready.md) |
 | 008 | Create Data Architecture Specification | 🟢 Ready | [Item-008-Prio-P1-🟢 Ready.md](Item-008-Prio-P1-🟢%20Ready.md) |
 | 009 | Create Authentication Specification | 🟢 Ready | [Item-009-Prio-P1-🟢 Ready.md](Item-009-Prio-P1-🟢%20Ready.md) |
@@ -41,7 +41,7 @@
 
 ---
 
-## P2 - Medium (11 items)
+## P2 - Medium (12 items)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -56,6 +56,7 @@
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
+| 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 
 ---
 
@@ -74,15 +75,15 @@
 
 ### By Priority
 - **P0 (Critical):** 4/4 complete (100%) ✅
-- **P1 (High):** 0/7 complete (0%)
-- **P2 (Medium):** 1/11 complete (9%)
+- **P1 (High):** 2/7 complete (29%)
+- **P2 (Medium):** 1/12 complete (8%)
 - **P3 (Low):** 0/4 complete (0%)
 
 ### By Status
 - 🟢 Ready: 18
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 5
+- ✅ Done: 7
 
 ---
 
