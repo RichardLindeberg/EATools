@@ -20,6 +20,8 @@
     <Compile Include="Domain/Validation.fs" />
     <Compile Include="Domain/Commands.fs" />
     <Compile Include="Domain/Events.fs" />
+    <Compile Include="Domain/ApplicationCommands.fs" />
+    <Compile Include="Domain/ApplicationCommandHandler.fs" />
     <Compile Include="Domain/CommandHandler.fs" />
     <Compile Include="Domain/CommandDispatcher.fs" />
     <Compile Include="Infrastructure/Database.fs" />
