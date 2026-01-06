@@ -1,22 +1,22 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-06  
-> **Total Items:** 27  
-> **Progress:** 7/27 complete (26%)  
+> **Total Items:** 46  
+> **Progress:** 7/46 complete (15%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 ---
 
 ## Quick Navigation
 
-- **[P0 - Critical](#p0---critical-4-items)** (4 items) - Immediate action required
-- **[P1 - High](#p1---high-7-items)** (7 items) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-12-items)** (12 items) - Should be planned
-- **[P3 - Low](#p3---low-4-items)** (4 items) - Nice to have
+- **[P0 - Critical](#p0---critical-7-items)** (7 items) - Immediate action required
+- **[P1 - High](#p1---high-13-items)** (13 items) - Should be done this sprint
+- **[P2 - Medium](#p2---medium-20-items)** (20 items) - Should be planned
+- **[P3 - Low](#p3---low-6-items)** (6 items) - Nice to have
 
 ---
 
-## P0 - Critical (4 items)
+## P0 - Critical (7 items)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -24,10 +24,13 @@
 | 002 | Add Integration Tests for Organization Hierarchy | ✅ Done | [Item-002-Prio-P0-✅ Done.md](Item-002-Prio-P0-✅%20Done.md) |
 | 003 | Document Implementation Gaps from Specifications | ✅ Done | [Item-003-Prio-P0-✅ Done.md](Item-003-Prio-P0-✅%20Done.md) |
 | 004 | Create API Contract Specification | ✅ Done | [Item-004-Prio-P0-✅ Done.md](Item-004-Prio-P0-✅%20Done.md) |
+| 028 | Design and Implement Event Store Infrastructure | 🟢 Ready | [Item-028-Prio-P0-🟢 Ready.md](Item-028-Prio-P0-🟢%20Ready.md) |
+| 029 | Create Command Framework and Base Types | 🟢 Ready | [Item-029-Prio-P0-🟢 Ready.md](Item-029-Prio-P0-🟢%20Ready.md) |
+| 030 | Implement CQRS Projection Framework | 🟢 Ready | [Item-030-Prio-P0-🟢 Ready.md](Item-030-Prio-P0-🟢%20Ready.md) |
 
 ---
 
-## P1 - High (7 items)
+## P1 - High (13 items)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -38,10 +41,16 @@
 | 009 | Create Authentication Specification | 🟢 Ready | [Item-009-Prio-P1-🟢 Ready.md](Item-009-Prio-P1-🟢%20Ready.md) |
 | 010 | Create Error Handling Specification | 🟢 Ready | [Item-010-Prio-P1-🟢 Ready.md](Item-010-Prio-P1-🟢%20Ready.md) |
 | 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
+| 031 | Migrate Application Endpoints to Commands | 🟢 Ready | [Item-031-Prio-P1-🟢 Ready.md](Item-031-Prio-P1-🟢%20Ready.md) |
+| 032 | Migrate Organization Endpoints to Commands | 🟢 Ready | [Item-032-Prio-P1-🟢 Ready.md](Item-032-Prio-P1-🟢%20Ready.md) |
+| 033 | Migrate BusinessCapability Endpoints to Commands | 🟢 Ready | [Item-033-Prio-P1-🟢 Ready.md](Item-033-Prio-P1-🟢%20Ready.md) |
+| 034 | Migrate Relation Endpoints to Commands | 🟢 Ready | [Item-034-Prio-P1-🟢 Ready.md](Item-034-Prio-P1-🟢%20Ready.md) |
+| 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
+| 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
 
 ---
 
-## P2 - Medium (12 items)
+## P2 - Medium (20 items)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -57,10 +66,18 @@
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
+| 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
+| 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
+| 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
+| 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
+| 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
+| 042 | Implement Compensation Events | 🟢 Ready | [Item-042-Prio-P2-🟢 Ready.md](Item-042-Prio-P2-🟢%20Ready.md) |
+| 043 | Create Data Migration Strategy from CRUD to Event-Sourced | 🟢 Ready | [Item-043-Prio-P2-🟢 Ready.md](Item-043-Prio-P2-🟢%20Ready.md) |
+| 044 | Create Event Sourcing Test Suite | 🟢 Ready | [Item-044-Prio-P2-🟢 Ready.md](Item-044-Prio-P2-🟢%20Ready.md) |
 
 ---
 
-## P3 - Low (4 items)
+## P3 - Low (6 items)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -68,19 +85,21 @@
 | 024 | Document Dual Database Environment Strategy | 🟢 Ready | [Item-024-Prio-P3-🟢 Ready.md](Item-024-Prio-P3-🟢%20Ready.md) |
 | 025 | Create Architecture Decision Records (ADRs) | 🟢 Ready | [Item-025-Prio-P3-🟢 Ready.md](Item-025-Prio-P3-🟢%20Ready.md) |
 | 026 | Create Backlog Item Template | 🟢 Ready | [Item-026-Prio-P3-🟢 Ready.md](Item-026-Prio-P3-🟢%20Ready.md) |
+| 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
+| 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
 
 ---
 
 ## 📊 Progress Tracking
 
 ### By Priority
-- **P0 (Critical):** 4/4 complete (100%) ✅
-- **P1 (High):** 2/7 complete (29%)
-- **P2 (Medium):** 1/12 complete (8%)
-- **P3 (Low):** 0/4 complete (0%)
+- **P0 (Critical):** 4/7 complete (57%) ✅
+- **P1 (High):** 2/13 complete (15%)
+- **P2 (Medium):** 1/20 complete (5%)
+- **P3 (Low):** 0/6 complete (0%)
 
 ### By Status
-- 🟢 Ready: 18
+- 🟢 Ready: 39
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
 - ✅ Done: 7
@@ -90,12 +109,11 @@
 ## 🎯 Next Steps
 
 ### Recommended First Sprint (P0 Items)
-1. **Item-001** - Add parent_id to Organization
-2. **Item-003** - Document implementation gaps
-3. **Item-004** - Create API Contract spec
-4. **Item-007** - Create Authorization spec
+1. **Item-028** - Design and Implement Event Store Infrastructure
+2. **Item-029** - Create Command Framework and Base Types
+3. **Item-030** - Implement CQRS Projection Framework
 
-**Estimated Effort:** 12-16 hours
+**Estimated Effort:** 40-56 hours
 
 ---
 
@@ -116,9 +134,11 @@ Examples:
 
 ### File ID Ranges
 - **001-004:** P0 Critical (core data model fixes)
+- **028-030:** P0 Critical (event sourcing foundations)
 - **005-011:** P1 High (specifications and patterns)
-- **012-022:** P2 Medium (enhancements and documentation)
-- **023-026:** P3 Low (tooling and future work)
+- **031-036:** P1 High (command migrations & projections)
+- **012-022, 027, 037-044:** P2 Medium (enhancements, migrations, testing)
+- **023-026, 045-046:** P3 Low (tooling, docs, integrations)
 
 ---
 
@@ -141,7 +161,7 @@ Examples:
 5. Mark as ✅ Done when finished
 
 ### For Project Managers
-1. Check progress at a glance (0/26 complete)
+1. Check progress at a glance (7/46 complete)
 2. Identify blocked items (dependencies)
 3. Plan sprints by priority
 4. Track effort estimates
