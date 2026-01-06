@@ -37,6 +37,7 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 
 ### Architecture & Design
 
+- **[Event Sourcing & Command-Based Architecture](spec-architecture-event-sourcing.md)** - Command design, event store, CQRS, audit requirements, prevention of fat events
 - **[System Architecture](spec-architecture-system-design.md)** *(planned)* - Component design, deployment, infrastructure
 - **[Data Architecture](spec-architecture-data.md)** *(planned)* - Database schema, migrations, indexing strategy
 - **[Integration Architecture](spec-architecture-integration.md)** *(planned)* - External systems, webhooks, SDK generation
