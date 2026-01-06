@@ -20,6 +20,7 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 ### Domain & Data Model
 
 - **[Domain Model Overview](spec-schema-domain-overview.md)** - High-level domain model, requirements, constraints, guidelines, and rationale
+- **[Implementation Status](spec-implementation-status.md)** - Spec vs code alignment tracker, gap analysis, and priorities
 - **[Business Layer Entities](spec-schema-entities-business.md)** - Organization and BusinessCapability schemas
 - **[Application Layer Entities](spec-schema-entities-application.md)** - Application, ApplicationService, and ApplicationInterface schemas
 - **[Infrastructure Entities](spec-schema-entities-infrastructure.md)** - Server and Integration schemas
@@ -57,8 +58,9 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 ### For Backend Developers
 Start with:
 1. [Domain Model Overview](spec-schema-domain-overview.md) - Understand requirements and constraints
-2. [Entity Schemas](spec-schema-entities-application.md) - Core entity definitions
-3. [Validation Rules](spec-schema-validation.md) - Business rules and validation matrix
+2. [Implementation Status](spec-implementation-status.md) - See what's implemented vs specified
+3. [Entity Schemas](spec-schema-entities-application.md) - Core entity definitions
+4. [Validation Rules](spec-schema-validation.md) - Business rules and validation matrix
 
 ### For API Consumers
 Start with:
