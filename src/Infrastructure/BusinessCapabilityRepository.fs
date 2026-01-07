@@ -25,6 +25,7 @@ module BusinessCapabilityRepository =
         let idIdx = reader.GetOrdinal("id")
         let nameIdx = reader.GetOrdinal("name")
         let parentIdx = reader.GetOrdinal("parent_id")
+        let descIdx = reader.GetOrdinal("description")
         let createdIdx = reader.GetOrdinal("created_at")
         let updatedIdx = reader.GetOrdinal("updated_at")
 
@@ -32,6 +33,7 @@ module BusinessCapabilityRepository =
             Id = reader.GetString(idIdx)
             Name = reader.GetString(nameIdx)
             ParentId = getStringOption reader parentIdx
+            Description = getStringOption reader descIdx
             CreatedAt = reader.GetString(createdIdx)
             UpdatedAt = reader.GetString(updatedIdx)
         }
@@ -64,7 +66,7 @@ module BusinessCapabilityRepository =
         let whereClause, parameters = buildFilters search parentId
 
         use listCmd = conn.CreateCommand()
-        listCmd.CommandText <- sprintf "SELECT id, name, parent_id, created_at, updated_at FROM business_capabilities%s ORDER BY datetime(created_at) DESC LIMIT $limit OFFSET $offset" whereClause
+        listCmd.CommandText <- sprintf "SELECT id, name, parent_id, description, created_at, updated_at FROM business_capabilities%s ORDER BY datetime(created_at) DESC LIMIT $limit OFFSET $offset" whereClause
         parameters |> Seq.iter (fun p -> listCmd.Parameters.Add(p) |> ignore)
         listCmd.Parameters.AddWithValue("$limit", limit) |> ignore
         listCmd.Parameters.AddWithValue("$offset", offset) |> ignore
@@ -82,7 +84,7 @@ module BusinessCapabilityRepository =
     let getById (id: string) : BusinessCapability option =
         use conn = Database.getConnection ()
         use cmd = conn.CreateCommand()
-        cmd.CommandText <- "SELECT id, name, parent_id, created_at, updated_at FROM business_capabilities WHERE id = $id"
+        cmd.CommandText <- "SELECT id, name, parent_id, description, created_at, updated_at FROM business_capabilities WHERE id = $id"
         cmd.Parameters.AddWithValue("$id", id) |> ignore
 
         use reader = cmd.ExecuteReader()
@@ -96,12 +98,13 @@ module BusinessCapabilityRepository =
         use cmd = conn.CreateCommand()
         cmd.CommandText <-
             """
-            INSERT INTO business_capabilities (id, name, parent_id, created_at, updated_at)
-            VALUES ($id, $name, $parent_id, $created_at, $updated_at)
+            INSERT INTO business_capabilities (id, name, parent_id, description, created_at, updated_at)
+            VALUES ($id, $name, $parent_id, $description, $created_at, $updated_at)
             """
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
         addOptionalParam cmd "$parent_id" (req.ParentId |> Option.map box)
+        addOptionalParam cmd "$description" (req.Description |> Option.map box)
         cmd.Parameters.AddWithValue("$created_at", now) |> ignore
         cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
 
@@ -110,6 +113,7 @@ module BusinessCapabilityRepository =
         { Id = id
           Name = req.Name
           ParentId = req.ParentId
+          Description = req.Description
           CreatedAt = now
           UpdatedAt = now }
 
@@ -123,19 +127,19 @@ module BusinessCapabilityRepository =
             cmd.CommandText <-
                 """
                 UPDATE business_capabilities
-                SET name = $name,
-                    parent_id = $parent_id,
+                SET description = $description,
                     updated_at = $updated_at
                 WHERE id = $id
                 """
             cmd.Parameters.AddWithValue("$id", id) |> ignore
             cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
             addOptionalParam cmd "$parent_id" (req.ParentId |> Option.map box)
+            addOptionalParam cmd "$description" (req.Description |> Option.map box)
             cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
 
             let rows = cmd.ExecuteNonQuery()
             if rows > 0 then
-                Some { existing with Name = req.Name; ParentId = req.ParentId; UpdatedAt = now }
+                Some { existing with Name = req.Name; ParentId = req.ParentId; Description = req.Description; UpdatedAt = now }
             else None
         | None -> None
 

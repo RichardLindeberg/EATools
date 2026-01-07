@@ -67,6 +67,7 @@ module Json =
             {
                 Name = get.Required.Field "name" Decode.string
                 ParentId = get.Optional.Field "parent_id" Decode.string
+                Description = get.Optional.Field "description" Decode.string
             })
 
     let private decodeDataClassification: Decoder<DataClassification> =
