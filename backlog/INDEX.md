@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-07  
-> **Total Items:** 46 (34 Active, 12 Complete)  
-> **Progress:** 12/46 complete (26%)  
+> **Total Items:** 47 (35 Active, 12 Complete)  
+> **Progress:** 12/47 complete (26%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -13,7 +13,7 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-9-active)** (9 active) - Should be done this sprint
+- **[P1 - High](#p1---high-10-active)** (10 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-19-active)** (19 active) - Should be planned
 - **[P3 - Low](#p3---low-6-active)** (6 active) - Nice to have
 
@@ -28,7 +28,7 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (9 active)
+## P1 - High (10 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -39,6 +39,7 @@ All P0 items complete! ✅
 | 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
+| 047 | Implement ApplicationService & ApplicationInterface CRUD Endpoints | 🟢 Ready | [Item-047-Prio-P1-🟢 Ready.md](Item-047-Prio-P1-🟢%20Ready.md) |
 
 ---
 
@@ -85,7 +86,7 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 4/13 complete (31%)
+- **P1 (High):** 4/14 complete (29%)
 - **P2 (Medium):** 1/20 complete (5%)
 - **P3 (Low):** 0/6 complete (0%)
 
