@@ -38,10 +38,10 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 | Priority | Count | Status |
 |----------|-------|--------|
 | P0 - Critical | 7 | 7/7 complete |
-| P1 - High | 13 | 3/13 complete |
+| P1 - High | 13 | 4/13 complete |
 | P2 - Medium | 20 | 1/20 complete |
 | P3 - Low | 6 | 0/6 complete |
-| **Total** | **46** | **11/46 complete** |
+| **Total** | **46** | **12/46 complete** |
 
 ---
 

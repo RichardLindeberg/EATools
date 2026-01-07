@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
-> **Last Updated:** 2026-01-06  
+> **Last Updated:** 2026-01-07  
 > **Total Items:** 46  
-> **Progress:** 11/46 complete (24%)  
+> **Progress:** 12/46 complete (26%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -44,7 +44,7 @@
 | 010 | Create Error Handling Specification | 🟢 Ready | [Item-010-Prio-P1-🟢 Ready.md](Item-010-Prio-P1-🟢%20Ready.md) |
 | 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
 | 031 | Migrate Application Endpoints to Commands | ✅ Done | [Item-031-Prio-P1-✅ Done.md](Item-031-Prio-P1-✅%20Done.md) |
-| 032 | Migrate Organization Endpoints to Commands | 🟢 Ready | [Item-032-Prio-P1-🟢 Ready.md](Item-032-Prio-P1-🟢%20Ready.md) |
+| 032 | Migrate Organization Endpoints to Commands | ✅ Done | [Item-032-Prio-P1-✅ Done.md](Item-032-Prio-P1-✅%20Done.md) |
 | 033 | Migrate BusinessCapability Endpoints to Commands | 🟢 Ready | [Item-033-Prio-P1-🟢 Ready.md](Item-033-Prio-P1-🟢%20Ready.md) |
 | 034 | Migrate Relation Endpoints to Commands | 🟢 Ready | [Item-034-Prio-P1-🟢 Ready.md](Item-034-Prio-P1-🟢%20Ready.md) |
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
@@ -96,15 +96,15 @@
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 3/13 complete (23%)
+- **P1 (High):** 4/13 complete (31%)
 - **P2 (Medium):** 1/20 complete (5%)
 - **P3 (Low):** 0/6 complete (0%)
 
 ### By Status
-- 🟢 Ready: 35
+- 🟢 Ready: 34
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 11
+- ✅ Done: 12
 
 ---
 

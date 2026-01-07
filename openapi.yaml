@@ -38,8 +38,6 @@ security:
 tags:
   - name: Organizations
   - name: Applications
-  - name: ApplicationServices
-  - name: ApplicationInterfaces
   - name: Servers
   - name: Integrations
   - name: BusinessCapabilities
@@ -108,7 +106,12 @@ paths:
           $ref: '#/components/responses/NotFound'
     patch:
       tags: [Organizations]
-      summary: Update organization
+      summary: Update organization (dispatches to commands)
+      description: |
+        Updates organization by dispatching to appropriate commands based on changed fields.
+        - Parent changes → SetParent or RemoveParent command
+        - Name/domains/contacts changes → direct repository update (TODO: migrate to commands)
+        For explicit command control, use /organizations/{id}/commands/* endpoints.
       parameters:
         - $ref: '#/components/parameters/idPath'
       requestBody:
@@ -135,14 +138,82 @@ paths:
     delete:
       tags: [Organizations]
       summary: Delete organization
+      description: Deletes organization with event sourcing
       parameters:
         - $ref: '#/components/parameters/idPath'
+        - in: query
+          name: reason
+          schema:
+            type: string
+            default: User requested deletion
+          description: Reason for deletion
       responses:
         '204':
           description: Deleted
         '400':
           $ref: '#/components/responses/ValidationError'
         '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /organizations/{id}/commands/set-parent:
+    post:
+      tags: [Organizations]
+      summary: Set organization parent with cycle detection
+      description: |
+        Assigns a parent organization to this organization.
+        Validates that no cycles are created in the hierarchy (A→B→C→A).
+        Uses event sourcing with ParentAssigned event.
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - parent_id
+              properties:
+                parent_id:
+                  type: string
+                  description: ID of the parent organization
+      responses:
+        '200':
+          description: Parent assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          description: Validation error or cycle detected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /organizations/{id}/commands/remove-parent:
+    post:
+      tags: [Organizations]
+      summary: Remove organization parent
+      description: |
+        Makes this organization a root organization by removing its parent.
+        Uses event sourcing with ParentRemoved event.
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Parent removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'
@@ -176,6 +247,10 @@ paths:
     post:
       tags: [Applications]
       summary: Create application
+      description: |
+        Creates a new application using CreateApplication command.
+        Uses event sourcing with ApplicationCreated event.
+        Validates lifecycle, data classification, and criticality values.
       requestBody:
         required: true
         content:
@@ -214,7 +289,13 @@ paths:
           $ref: '#/components/responses/NotFound'
     patch:
       tags: [Applications]
-      summary: Update application
+      summary: Update application (legacy - use commands)
+      description: |
+        Legacy update endpoint. Prefer using specific command endpoints:
+        - /applications/{id}/commands/set-classification
+        - /applications/{id}/commands/transition-lifecycle
+        - /applications/{id}/commands/set-owner
+        This endpoint is maintained for backward compatibility.
       parameters:
         - $ref: '#/components/parameters/idPath'
       requestBody:
@@ -241,6 +322,10 @@ paths:
     delete:
       tags: [Applications]
       summary: Delete application (requires approval)
+      description: |
+        Deletes application using DeleteApplication command.
+        Uses event sourcing with ApplicationDeleted event.
+        Requires approval_id and deletion reason for audit trail.
       parameters:
         - $ref: '#/components/parameters/idPath'
         - in: query
@@ -371,214 +456,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Application'
         '400':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /application-services:
-    get:
-      tags: [ApplicationServices]
-      summary: List application services
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/search'
-        - in: query
-          name: capability_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List application services
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedApplicationServices'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-    post:
-      tags: [ApplicationServices]
-      summary: Create application service
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationServiceCreate'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationService'
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-  /application-services/{id}:
-    get:
-      tags: [ApplicationServices]
-      summary: Get application service
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      responses:
-        '200':
-          description: Application service
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationService'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    patch:
-      tags: [ApplicationServices]
-      summary: Update application service
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationServiceUpdate'
-      responses:
-        '200':
-          description: Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationService'
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    delete:
-      tags: [ApplicationServices]
-      summary: Delete application service
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      responses:
-        '204':
-          description: Deleted
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /application-interfaces:
-    get:
-      tags: [ApplicationInterfaces]
-      summary: List application interfaces
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/search'
-        - in: query
-          name: protocol
-          schema:
-            type: string
-        - in: query
-          name: exposed_by_app_id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List application interfaces
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedApplicationInterfaces'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-    post:
-      tags: [ApplicationInterfaces]
-      summary: Create application interface
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationInterfaceCreate'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationInterface'
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-  /application-interfaces/{id}:
-    get:
-      tags: [ApplicationInterfaces]
-      summary: Get application interface
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      responses:
-        '200':
-          description: Application interface
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationInterface'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    patch:
-      tags: [ApplicationInterfaces]
-      summary: Update application interface
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationInterfaceUpdate'
-      responses:
-        '200':
-          description: Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationInterface'
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
-          $ref: '#/components/responses/ValidationError'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    delete:
-      tags: [ApplicationInterfaces]
-      summary: Delete application interface
-      parameters:
-        - $ref: '#/components/parameters/idPath'
-      responses:
-        '204':
-          description: Deleted
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'
@@ -1686,243 +1563,6 @@ components:
         owner: payments-team
         lifecycle: deprecated
         tags: [payments, cleanup]
-    ApplicationService:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        business_capability_id:
-          type: string
-        sla:
-          type: string
-        exposed_by_app_ids:
-          type: array
-          items:
-            type: string
-        consumers:
-          type: array
-          items:
-            type: string
-        tags:
-          type: array
-          items:
-            type: string
-        created_at:
-          type: string
-          format: date-time
-          description: UTC ISO 8601 with Z
-        updated_at:
-          type: string
-          format: date-time
-          description: UTC ISO 8601 with Z
-      required: [id, name, created_at, updated_at]
-      example:
-        id: svc-1
-        name: Payment Processing
-        description: Handles credit card and ACH payments
-        business_capability_id: cap-1
-        sla: 99.95%
-        exposed_by_app_ids: [app-123]
-        consumers: [app-456, app-789]
-        tags: [payments, critical]
-        created_at: 2024-01-05T10:00:00Z
-        updated_at: 2024-01-06T10:00:00Z
-    ApplicationServiceCreate:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        business_capability_id:
-          type: string
-        sla:
-          type: string
-        exposed_by_app_ids:
-          type: array
-          items:
-            type: string
-        consumers:
-          type: array
-          items:
-            type: string
-        tags:
-          type: array
-          items:
-            type: string
-      required: [name]
-      example:
-        name: Payment Processing
-        description: Handles credit card and ACH payments
-        business_capability_id: cap-1
-        sla: 99.95%
-        exposed_by_app_ids: [app-123]
-        tags: [payments, critical]
-    ApplicationServiceUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        business_capability_id:
-          type: string
-        sla:
-          type: string
-        exposed_by_app_ids:
-          type: array
-          items:
-            type: string
-        consumers:
-          type: array
-          items:
-            type: string
-        tags:
-          type: array
-          items:
-            type: string
-      example:
-        sla: 99.99%
-        consumers: [app-456, app-789, app-999]
-        tags: [payments, critical, pci]
-    ApplicationInterface:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        protocol:
-          type: string
-        endpoint:
-          type: string
-        specification_url:
-          type: string
-        version:
-          type: string
-        authentication_method:
-          type: string
-        exposed_by_app_id:
-          type: string
-        serves_service_ids:
-          type: array
-          items:
-            type: string
-        rate_limits:
-          type: object
-        status:
-          type: string
-          enum: [active, deprecated, retired]
-        tags:
-          type: array
-          items:
-            type: string
-        created_at:
-          type: string
-          format: date-time
-          description: UTC ISO 8601 with Z
-        updated_at:
-          type: string
-          format: date-time
-          description: UTC ISO 8601 with Z
-      required: [id, name, protocol, exposed_by_app_id, status, created_at, updated_at]
-      example:
-        id: intf-1
-        name: Payment API v2
-        protocol: https
-        endpoint: https://api.example.com/v2/payments
-        specification_url: https://api.example.com/v2/openapi.yaml
-        version: 2.1.0
-        authentication_method: oauth2
-        exposed_by_app_id: app-123
-        serves_service_ids: [svc-1]
-        rate_limits:
-          requests_per_second: 100
-          burst: 200
-        status: active
-        tags: [rest, payments]
-        created_at: 2024-01-05T10:00:00Z
-        updated_at: 2024-01-06T10:00:00Z
-    ApplicationInterfaceCreate:
-      type: object
-      properties:
-        name:
-          type: string
-        protocol:
-          type: string
-        endpoint:
-          type: string
-        specification_url:
-          type: string
-        version:
-          type: string
-        authentication_method:
-          type: string
-        exposed_by_app_id:
-          type: string
-        serves_service_ids:
-          type: array
-          items:
-            type: string
-        rate_limits:
-          type: object
-        status:
-          type: string
-          enum: [active, deprecated, retired]
-        tags:
-          type: array
-          items:
-            type: string
-      required: [name, protocol, exposed_by_app_id, status]
-      example:
-        name: Payment API v2
-        protocol: https
-        endpoint: https://api.example.com/v2/payments
-        specification_url: https://api.example.com/v2/openapi.yaml
-        version: 2.1.0
-        authentication_method: oauth2
-        exposed_by_app_id: app-123
-        serves_service_ids: [svc-1]
-        status: active
-        tags: [rest, payments]
-    ApplicationInterfaceUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-        protocol:
-          type: string
-        endpoint:
-          type: string
-        specification_url:
-          type: string
-        version:
-          type: string
-        authentication_method:
-          type: string
-        exposed_by_app_id:
-          type: string
-        serves_service_ids:
-          type: array
-          items:
-            type: string
-        rate_limits:
-          type: object
-        status:
-          type: string
-          enum: [active, deprecated, retired]
-        tags:
-          type: array
-          items:
-            type: string
-      example:
-        version: 2.2.0
-        status: deprecated
-        tags: [rest, payments, legacy]
     Server:
       type: object
       properties:
@@ -2922,32 +2562,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/View'
-        page:
-          type: integer
-        limit:
-          type: integer
-        total:
-          type: integer
-    PaginatedApplicationServices:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationService'
-        page:
-          type: integer
-        limit:
-          type: integer
-        total:
-          type: integer
-    PaginatedApplicationInterfaces:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationInterface'
         page:
           type: integer
         limit:

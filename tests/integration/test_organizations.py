@@ -400,3 +400,169 @@ class TestOrganizations:
                 assert "id" in item
                 assert "name" in item
                 assert "parent_id" in item  # Field should always be present
+
+    def test_set_parent_command(self, client: APIClient):
+        """POST /organizations/{id}/commands/set-parent should update parent with cycle detection."""
+        # Create parent organization
+        parent_resp = client.post(
+            "/organizations",
+            json={"name": "Parent Org"},
+        )
+        assert parent_resp.status_code in [200, 201]
+        parent_id = parent_resp.json()["id"]
+
+        # Create child organization
+        child_resp = client.post(
+            "/organizations",
+            json={"name": "Child Org"},
+        )
+        assert child_resp.status_code in [200, 201]
+        child_id = child_resp.json()["id"]
+
+        try:
+            # Set parent using command endpoint
+            cmd_resp = client.post(
+                f"/organizations/{child_id}/commands/set-parent",
+                json={
+                    "parent_id": parent_id,
+                },
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["parent_id"] == parent_id
+
+            # Verify parent is set
+            get_resp = client.get(f"/organizations/{child_id}")
+            assert get_resp.status_code == 200
+            assert get_resp.json()["parent_id"] == parent_id
+
+            # Test cycle detection: try to set child as parent's parent (would create cycle)
+            cycle_resp = client.post(
+                f"/organizations/{parent_id}/commands/set-parent",
+                json={
+                    "parent_id": child_id,
+                },
+            )
+            assert cycle_resp.status_code == 400
+            error_data = cycle_resp.json()
+            assert "cycle" in str(error_data).lower() or "circular" in str(error_data).lower()
+
+            # Test nonexistent parent
+            invalid_resp = client.post(
+                f"/organizations/{child_id}/commands/set-parent",
+                json={
+                    "parent_id": "org-nonexistent",
+                },
+            )
+            assert invalid_resp.status_code == 400
+
+            # Test self-reference
+            self_ref_resp = client.post(
+                f"/organizations/{child_id}/commands/set-parent",
+                json={
+                    "parent_id": child_id,
+                },
+            )
+            assert self_ref_resp.status_code == 400
+        finally:
+            client.delete(f"/organizations/{child_id}?reason=cleanup")
+            client.delete(f"/organizations/{parent_id}?reason=cleanup")
+
+    def test_remove_parent_command(self, client: APIClient):
+        """POST /organizations/{id}/commands/remove-parent should remove parent relationship."""
+        # Create parent organization
+        parent_resp = client.post(
+            "/organizations",
+            json={"name": "Parent Corp"},
+        )
+        assert parent_resp.status_code in [200, 201]
+        parent_id = parent_resp.json()["id"]
+
+        # Create child organization with parent
+        child_resp = client.post(
+            "/organizations",
+            json={
+                "name": "Child Division",
+                "parent_id": parent_id,
+            },
+        )
+        assert child_resp.status_code in [200, 201]
+        child_id = child_resp.json()["id"]
+
+        try:
+            # Verify parent is set
+            get_resp = client.get(f"/organizations/{child_id}")
+            assert get_resp.status_code == 200
+            assert get_resp.json()["parent_id"] == parent_id
+
+            # Remove parent using command endpoint
+            cmd_resp = client.post(
+                f"/organizations/{child_id}/commands/remove-parent",
+                json={},
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["parent_id"] is None
+
+            # Verify parent is removed
+            get_resp = client.get(f"/organizations/{child_id}")
+            assert get_resp.status_code == 200
+            assert get_resp.json()["parent_id"] is None
+
+            # Test removing parent when already None (idempotent)
+            cmd_resp = client.post(
+                f"/organizations/{child_id}/commands/remove-parent",
+                json={},
+            )
+            assert cmd_resp.status_code == 200
+            data = cmd_resp.json()
+            assert data["parent_id"] is None
+
+        finally:
+            client.delete(f"/organizations/{child_id}?reason=cleanup")
+            client.delete(f"/organizations/{parent_id}?reason=cleanup")
+
+    def test_set_parent_command_multilevel_cycle_detection(self, client: APIClient):
+        """POST /organizations/{id}/commands/set-parent should detect cycles in multilevel hierarchies."""
+        # Create three organizations: A -> B -> C
+        org_a_resp = client.post("/organizations", json={"name": "Org A"})
+        assert org_a_resp.status_code in [200, 201]
+        org_a_id = org_a_resp.json()["id"]
+
+        org_b_resp = client.post(
+            "/organizations",
+            json={"name": "Org B", "parent_id": org_a_id},
+        )
+        assert org_b_resp.status_code in [200, 201]
+        org_b_id = org_b_resp.json()["id"]
+
+        org_c_resp = client.post(
+            "/organizations",
+            json={"name": "Org C", "parent_id": org_b_id},
+        )
+        assert org_c_resp.status_code in [200, 201]
+        org_c_id = org_c_resp.json()["id"]
+
+        try:
+            # Try to make A a child of C (would create cycle: A -> B -> C -> A)
+            cycle_resp = client.post(
+                f"/organizations/{org_a_id}/commands/set-parent",
+                json={"parent_id": org_c_id},
+            )
+            assert cycle_resp.status_code == 400
+            error_data = cycle_resp.json()
+            assert "cycle" in str(error_data).lower() or "circular" in str(error_data).lower()
+
+            # Verify hierarchy is unchanged
+            get_a = client.get(f"/organizations/{org_a_id}")
+            get_b = client.get(f"/organizations/{org_b_id}")
+            get_c = client.get(f"/organizations/{org_c_id}")
+
+            assert get_a.json()["parent_id"] is None
+            assert get_b.json()["parent_id"] == org_a_id
+            assert get_c.json()["parent_id"] == org_b_id
+
+        finally:
+            client.delete(f"/organizations/{org_c_id}?reason=cleanup")
+            client.delete(f"/organizations/{org_b_id}?reason=cleanup")
+            client.delete(f"/organizations/{org_a_id}?reason=cleanup")

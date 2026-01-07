@@ -7,39 +7,14 @@ open Microsoft.Data.Sqlite
 open EATool.Domain
 open EATool.Infrastructure
 
-/// Organization domain events
-type OrganizationEvent =
-    | OrganizationCreated of OrganizationCreatedData
-    | OrganizationUpdated of OrganizationUpdatedData
-    | OrganizationDeleted of OrganizationDeletedData
-
-and OrganizationCreatedData =
-    {
-        Id: string
-        Name: string
-        ParentId: string option
-        Domains: string list
-        Contacts: string list
-    }
-
-and OrganizationUpdatedData =
-    {
-        Id: string
-        Name: string option
-        ParentId: string option
-        Domains: string list option
-        Contacts: string list option
-    }
-
-and OrganizationDeletedData =
-    {
-        Id: string
-    }
-
 module OrganizationProjection =
     
     let private serializeList (items: string list) =
         JsonSerializer.Serialize(items)
+    
+    let private deserializeList (json: string) =
+        try JsonSerializer.Deserialize<string list>(json)
+        with _ -> []
 
     let private getUtcTimestamp () = DateTime.UtcNow.ToString("O")
 
@@ -48,7 +23,7 @@ module OrganizationProjection =
         p.ParameterName <- name
         p.Value <- value |> Option.defaultValue (box DBNull.Value)
         cmd.Parameters.Add(p) |> ignore
-
+    
     let private handleCreated (data: OrganizationCreatedData) (connString: string) : Result<unit, string> =
         try
             let now = getUtcTimestamp ()
@@ -74,37 +49,120 @@ module OrganizationProjection =
             Ok ()
         with ex ->
             Error $"Failed to handle OrganizationCreated: {ex.Message}"
-
-    let private handleUpdated (data: OrganizationUpdatedData) (connString: string) : Result<unit, string> =
+    
+    let private handleParentAssigned (data: ParentAssignedData) (connString: string) : Result<unit, string> =
         try
             let now = getUtcTimestamp ()
             use conn = new SqliteConnection(connString)
             conn.Open()
-
-            // Build dynamic update based on provided fields
-            let updates = ResizeArray<string>()
-            let addUpdate field = updates.Add(field)
-
-            data.Name |> Option.iter (fun _ -> addUpdate "name = $name")
-            data.ParentId |> Option.iter (fun _ -> addUpdate "parent_id = $parent_id")
-            data.Domains |> Option.iter (fun _ -> addUpdate "domains = $domains")
-            data.Contacts |> Option.iter (fun _ -> addUpdate "contacts = $contacts")
-            addUpdate "updated_at = $updated_at"
-
-            if updates.Count > 0 then
-                use cmd = conn.CreateCommand()
-                cmd.CommandText <- sprintf "UPDATE organizations SET %s WHERE id = $id" (String.Join(", ", updates))
-                cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
-                data.Name |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$name", v) |> ignore)
-                data.ParentId |> Option.iter (fun v -> addOptionalParam cmd "$parent_id" (Some (box v)))
-                data.Domains |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$domains", serializeList v) |> ignore)
-                data.Contacts |> Option.iter (fun v -> cmd.Parameters.AddWithValue("$contacts", serializeList v) |> ignore)
-                cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
-
-                cmd.ExecuteNonQuery() |> ignore
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE organizations SET parent_id = $parent_id, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$parent_id", data.NewParentId) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
             Ok ()
         with ex ->
-            Error $"Failed to handle OrganizationUpdated: {ex.Message}"
+            Error $"Failed to handle ParentAssigned: {ex.Message}"
+    
+    let private handleParentRemoved (data: ParentRemovedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE organizations SET parent_id = NULL, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle ParentRemoved: {ex.Message}"
+    
+    let private handleContactInfoUpdated (data: ContactInfoUpdatedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <- "UPDATE organizations SET contacts = $contacts, updated_at = $updated_at WHERE id = $id"
+            cmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            cmd.Parameters.AddWithValue("$contacts", serializeList data.NewContacts) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            cmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle ContactInfoUpdated: {ex.Message}"
+    
+    let private handleDomainAdded (data: DomainAddedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            
+            // Get current domains
+            use getCmd = conn.CreateCommand()
+            getCmd.CommandText <- "SELECT domains FROM organizations WHERE id = $id"
+            getCmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            use reader = getCmd.ExecuteReader()
+            
+            let currentDomains =
+                if reader.Read() && not (reader.IsDBNull(0)) then
+                    deserializeList (reader.GetString(0))
+                else
+                    []
+            
+            reader.Close()
+            
+            // Add new domain (ensure uniqueness)
+            let updatedDomains = 
+                if List.contains data.Domain currentDomains then currentDomains
+                else currentDomains @ [data.Domain]
+            
+            // Update
+            use updateCmd = conn.CreateCommand()
+            updateCmd.CommandText <- "UPDATE organizations SET domains = $domains, updated_at = $updated_at WHERE id = $id"
+            updateCmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            updateCmd.Parameters.AddWithValue("$domains", serializeList updatedDomains) |> ignore
+            updateCmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            updateCmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle DomainAdded: {ex.Message}"
+    
+    let private handleDomainRemoved (data: DomainRemovedData) (connString: string) : Result<unit, string> =
+        try
+            let now = getUtcTimestamp ()
+            use conn = new SqliteConnection(connString)
+            conn.Open()
+            
+            // Get current domains
+            use getCmd = conn.CreateCommand()
+            getCmd.CommandText <- "SELECT domains FROM organizations WHERE id = $id"
+            getCmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            use reader = getCmd.ExecuteReader()
+            
+            let currentDomains =
+                if reader.Read() && not (reader.IsDBNull(0)) then
+                    deserializeList (reader.GetString(0))
+                else
+                    []
+            
+            reader.Close()
+            
+            // Remove domain
+            let updatedDomains = currentDomains |> List.filter ((<>) data.Domain)
+            
+            // Update
+            use updateCmd = conn.CreateCommand()
+            updateCmd.CommandText <- "UPDATE organizations SET domains = $domains, updated_at = $updated_at WHERE id = $id"
+            updateCmd.Parameters.AddWithValue("$id", data.Id) |> ignore
+            updateCmd.Parameters.AddWithValue("$domains", serializeList updatedDomains) |> ignore
+            updateCmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+            updateCmd.ExecuteNonQuery() |> ignore
+            Ok ()
+        with ex ->
+            Error $"Failed to handle DomainRemoved: {ex.Message}"
 
     let private handleDeleted (data: OrganizationDeletedData) (connString: string) : Result<unit, string> =
         try
@@ -126,11 +184,21 @@ module OrganizationProjection =
             
             member _.CanHandle(eventType: string) =
                 match eventType with
-                | "OrganizationCreated" | "OrganizationUpdated" | "OrganizationDeleted" -> true
+                | "OrganizationCreated"
+                | "ParentAssigned"
+                | "ParentRemoved"
+                | "ContactInfoUpdated"
+                | "DomainAdded"
+                | "DomainRemoved"
+                | "OrganizationDeleted" -> true
                 | _ -> false
 
             member _.Handle(envelope: EventEnvelope<OrganizationEvent>) =
                 match envelope.Data with
                 | OrganizationCreated data -> handleCreated data connString
-                | OrganizationUpdated data -> handleUpdated data connString
+                | ParentAssigned data -> handleParentAssigned data connString
+                | ParentRemoved data -> handleParentRemoved data connString
+                | ContactInfoUpdated data -> handleContactInfoUpdated data connString
+                | DomainAdded data -> handleDomainAdded data connString
+                | DomainRemoved data -> handleDomainRemoved data connString
                 | OrganizationDeleted data -> handleDeleted data connString
