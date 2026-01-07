@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-07  
-> **Total Items:** 48 (36 Active, 12 Complete)  
-> **Progress:** 12/48 complete (25%)  
+> **Total Items:** 55 (43 Active, 12 Complete)  
+> **Progress:** 12/55 complete (22%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -13,8 +13,8 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-10-active)** (10 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-19-active)** (19 active) - Should be planned
+- **[P1 - High](#p1---high-13-active)** (13 active) - Should be done this sprint
+- **[P2 - Medium](#p2---medium-23-active)** (23 active) - Should be planned
 - **[P3 - Low](#p3---low-6-active)** (6 active) - Nice to have
 
 ### Completed Items
@@ -28,7 +28,7 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (10 active)
+## P1 - High (13 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -40,10 +40,14 @@ All P0 items complete! ✅
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
 | 047 | Implement ApplicationService & ApplicationInterface CRUD Endpoints | 🟢 Ready | [Item-047-Prio-P1-🟢 Ready.md](Item-047-Prio-P1-🟢%20Ready.md) |
+| 049 | OpenTelemetry SDK Integration & Configuration | 🟢 Ready | [Item-049-Prio-P1-🟢 Ready.md](Item-049-Prio-P1-🟢%20Ready.md) |
+| 050 | Structured Logging Implementation with OTel ILogger | 🟢 Ready | [Item-050-Prio-P1-🟢 Ready.md](Item-050-Prio-P1-🟢%20Ready.md) |
+| 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
+| 052 | Metrics Implementation via OTel Meter API | 🟢 Ready | [Item-052-Prio-P1-🟢 Ready.md](Item-052-Prio-P1-🟢%20Ready.md) |
 
 ---
 
-## P2 - Medium (20 active)
+## P2 - Medium (23 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -58,6 +62,9 @@ All P0 items complete! ✅
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
+| 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
+| 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P2-🟢 Ready.md](Item-054-Prio-P2-🟢%20Ready.md) |
+| 055 | Observability Testing & Integration | 🟢 Ready | [Item-055-Prio-P2-🟢 Ready.md](Item-055-Prio-P2-🟢%20Ready.md) |
 | 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
 | 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
 | 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
