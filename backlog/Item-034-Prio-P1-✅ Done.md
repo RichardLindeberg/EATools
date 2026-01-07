@@ -1,10 +1,11 @@
 # Item-034: Migrate Relation Endpoints to Commands
 
-**Status:** ⏳ In Progress  
+**Status:** ✅ Done  
 **Priority:** P1 - HIGH  
 **Effort:** 16-20 hours  
 **Created:** 2026-01-06  
-**Owner:** TBD
+**Completed:** 2026-01-07  
+**Owner:** GitHub Copilot
 
 ---
 

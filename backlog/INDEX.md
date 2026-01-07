@@ -45,8 +45,8 @@
 | 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
 | 031 | Migrate Application Endpoints to Commands | ✅ Done | [Item-031-Prio-P1-✅ Done.md](Item-031-Prio-P1-✅%20Done.md) |
 | 032 | Migrate Organization Endpoints to Commands | ✅ Done | [Item-032-Prio-P1-✅ Done.md](Item-032-Prio-P1-✅%20Done.md) |
-| 033 | Migrate BusinessCapability Endpoints to Commands | 🟢 Ready | [Item-033-Prio-P1-🟢 Ready.md](Item-033-Prio-P1-🟢%20Ready.md) |
-| 034 | Migrate Relation Endpoints to Commands | 🟢 Ready | [Item-034-Prio-P1-🟢 Ready.md](Item-034-Prio-P1-🟢%20Ready.md) |
+| 033 | Migrate BusinessCapability Endpoints to Commands | ✅ Done | [Item-033-Prio-P1-✅ Done.md](Item-033-Prio-P1-✅%20Done.md) |
+| 034 | Migrate Relation Endpoints to Commands | ✅ Done | [Item-034-Prio-P1-✅ Done.md](Item-034-Prio-P1-✅%20Done.md) |
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
 
