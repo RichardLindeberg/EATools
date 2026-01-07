@@ -1,6 +1,6 @@
 # Item-034: Migrate Relation Endpoints to Commands
 
-**Status:** 🟢 Ready  
+**Status:** ⏳ In Progress  
 **Priority:** P1 - HIGH  
 **Effort:** 16-20 hours  
 **Created:** 2026-01-06  
