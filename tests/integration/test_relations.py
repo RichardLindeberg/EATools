@@ -18,8 +18,6 @@ class TestRelationValidation:
                 "depends_on",
                 "communicates_with",
                 "calls",
-                "publishes_event_to",
-                "consumes_event_from",
             ]
         ],
     )
@@ -28,7 +26,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -48,7 +46,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -74,7 +72,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -103,7 +101,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -123,7 +121,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -152,7 +150,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",
@@ -178,7 +176,7 @@ class TestRelationValidation:
         assert resp.status_code in (200, 201)
         rel_id = resp.json().get("id")
         if rel_id:
-            client.delete(f"/relations/{rel_id}")
+            client.post(f"/relations/{rel_id}/commands/delete", json={})
 
     @pytest.mark.parametrize(
         "payload",

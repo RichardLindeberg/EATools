@@ -107,6 +107,7 @@ type BusinessCapability =
         Id: string
         Name: string
         ParentId: string option
+        Description: string option
         CreatedAt: UtcTimestamp
         UpdatedAt: UtcTimestamp
     }
@@ -289,6 +290,7 @@ type CreateBusinessCapabilityRequest =
     {
         Name: string
         ParentId: string option
+        Description: string option
     }
 
 type CreateDataEntityRequest =

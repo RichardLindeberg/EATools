@@ -24,6 +24,10 @@
     <Compile Include="Domain/ApplicationCommandHandler.fs" />
     <Compile Include="Domain/OrganizationCommands.fs" />
     <Compile Include="Domain/OrganizationCommandHandler.fs" />
+    <Compile Include="Domain/BusinessCapabilityCommands.fs" />
+    <Compile Include="Domain/BusinessCapabilityCommandHandler.fs" />
+    <Compile Include="Domain/RelationCommands.fs" />
+    <Compile Include="Domain/RelationCommandHandler.fs" />
     <Compile Include="Domain/CommandHandler.fs" />
     <Compile Include="Domain/CommandDispatcher.fs" />
     <Compile Include="Infrastructure/Database.fs" />
@@ -32,10 +36,14 @@
     <Compile Include="Infrastructure/EventJson.fs" />
     <Compile Include="Infrastructure/ApplicationEventJson.fs" />
     <Compile Include="Infrastructure/OrganizationEventJson.fs" />
+    <Compile Include="Infrastructure/BusinessCapabilityEventJson.fs" />
+    <Compile Include="Infrastructure/RelationEventJson.fs" />
     <Compile Include="Infrastructure/ProjectionTracker.fs" />
     <Compile Include="Infrastructure/ProjectionEngine.fs" />
     <Compile Include="Infrastructure/Projections/ApplicationProjection.fs" />
     <Compile Include="Infrastructure/Projections/OrganizationProjection.fs" />
+    <Compile Include="Infrastructure/Projections/BusinessCapabilityProjection.fs" />
+    <Compile Include="Infrastructure/Projections/RelationProjection.fs" />
     <Compile Include="Infrastructure/ApplicationRepository.fs" />
     <Compile Include="Infrastructure/ServerRepository.fs" />
     <Compile Include="Infrastructure/IntegrationRepository.fs" />
