@@ -242,6 +242,7 @@ module Json =
             "id", Encode.string cap.Id
             "name", Encode.string cap.Name
             "parent_id", (match cap.ParentId with | Some v -> Encode.string v | None -> Encode.nil)
+            "description", (match cap.Description with | Some v -> Encode.string v | None -> Encode.nil)
             "created_at", Encode.string cap.CreatedAt
             "updated_at", Encode.string cap.UpdatedAt
         ]

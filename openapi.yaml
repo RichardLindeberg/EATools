@@ -690,6 +690,10 @@ paths:
     post:
       tags: [BusinessCapabilities]
       summary: Create business capability
+      description: |
+        Creates a new business capability with event sourcing.
+        Optionally assigns a parent capability.
+        Includes optional description field.
       requestBody:
         required: true
         content:
@@ -726,9 +730,14 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-    patch:
+  /business-capabilities/{id}/commands/set-parent:
+    post:
       tags: [BusinessCapabilities]
-      summary: Update business capability
+      summary: Set business capability parent with cycle detection
+      description: |
+        Assigns a parent business capability to this capability.
+        Validates that no cycles are created in the hierarchy (A→B→C→A).
+        Uses event sourcing with CapabilityParentAssigned event.
       parameters:
         - $ref: '#/components/parameters/idPath'
       requestBody:
@@ -736,25 +745,92 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BusinessCapabilityUpdate'
+              type: object
+              required:
+                - parent_id
+              properties:
+                parent_id:
+                  type: string
+                  description: ID of the parent business capability
       responses:
         '200':
-          description: Updated
+          description: Parent assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessCapability'
+        '400':
+          description: Validation error or cycle detected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /business-capabilities/{id}/commands/remove-parent:
+    post:
+      tags: [BusinessCapabilities]
+      summary: Remove business capability parent
+      description: |
+        Makes this business capability a root capability by removing its parent.
+        Uses event sourcing with CapabilityParentRemoved event.
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Parent removed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BusinessCapability'
         '400':
           $ref: '#/components/responses/ValidationError'
-        '422':
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /business-capabilities/{id}/commands/update-description:
+    post:
+      tags: [BusinessCapabilities]
+      summary: Update business capability description
+      description: |
+        Updates the description of a business capability.
+        Uses event sourcing with CapabilityDescriptionUpdated event.
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  nullable: true
+                  description: Description of the business capability
+      responses:
+        '200':
+          description: Description updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessCapability'
+        '400':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-    delete:
+  /business-capabilities/{id}/commands/delete:
+    post:
       tags: [BusinessCapabilities]
       summary: Delete business capability
+      description: |
+        Deletes a business capability with event sourcing.
+        Uses CapabilityDeleted event.
       parameters:
         - $ref: '#/components/parameters/idPath'
       responses:
@@ -1756,6 +1832,10 @@ components:
           type: string
         parent_id:
           type: string
+        description:
+          type: string
+          nullable: true
+          description: Optional description of the business capability
         created_at:
           type: string
           format: date-time
@@ -1769,6 +1849,7 @@ components:
         id: cap-1
         name: Payments
         parent_id: cap-root
+        description: Handles all payment processing
         created_at: 2024-01-01T00:00:00Z
         updated_at: 2024-01-02T00:00:00Z
     BusinessCapabilityCreate:
@@ -1778,10 +1859,15 @@ components:
           type: string
         parent_id:
           type: string
+        description:
+          type: string
+          nullable: true
+          description: Optional description of the business capability
       required: [name]
       example:
         name: Payments
         parent_id: cap-root
+        description: Handles all payment processing
     BusinessCapabilityUpdate:
       type: object
       properties:

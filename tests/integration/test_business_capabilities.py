@@ -92,7 +92,7 @@ class TestBusinessCapabilities:
         assert response.status_code == 404
 
     def test_update_capability(self, client: APIClient):
-        """PATCH /business-capabilities/{id} should update fields."""
+        """POST /business-capabilities/{id}/commands/update-description should update description."""
         create_resp = client.post(
             "/business-capabilities",
             json={"name": "Capability Old"},
@@ -100,18 +100,21 @@ class TestBusinessCapabilities:
         assert create_resp.status_code in [200, 201]
         cap_id = create_resp.json()["id"]
 
-        update_payload = {"name": "Capability New", "parent_id": None}
-        update_resp = client.patch(f"/business-capabilities/{cap_id}", json=update_payload)
+        update_payload = {"description": "Updated description"}
+        update_resp = client.post(
+            f"/business-capabilities/{cap_id}/commands/update-description", 
+            json=update_payload
+        )
 
         assert update_resp.status_code in [200, 202]
         data = update_resp.json()
         assert data["id"] == cap_id
-        assert data["name"] == update_payload["name"]
+        assert data["description"] == update_payload["description"]
 
-        client.delete(f"/business-capabilities/{cap_id}")
+        client.post(f"/business-capabilities/{cap_id}/commands/delete")
 
     def test_delete_capability(self, client: APIClient):
-        """DELETE /business-capabilities/{id} should delete the capability."""
+        """POST /business-capabilities/{id}/commands/delete should delete the capability."""
         create_resp = client.post(
             "/business-capabilities",
             json={"name": "Capability Temp"},
@@ -119,7 +122,7 @@ class TestBusinessCapabilities:
         assert create_resp.status_code in [200, 201]
         cap_id = create_resp.json()["id"]
 
-        delete_resp = client.delete(f"/business-capabilities/{cap_id}")
+        delete_resp = client.post(f"/business-capabilities/{cap_id}/commands/delete")
         assert delete_resp.status_code in [200, 202, 204]
 
         get_resp = client.get(f"/business-capabilities/{cap_id}")
