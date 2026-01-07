@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-07  
-> **Total Items:** 47 (35 Active, 12 Complete)  
-> **Progress:** 12/47 complete (26%)  
+> **Total Items:** 48 (36 Active, 12 Complete)  
+> **Progress:** 12/48 complete (25%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -43,7 +43,7 @@ All P0 items complete! ✅
 
 ---
 
-## P2 - Medium (19 active)
+## P2 - Medium (20 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -66,6 +66,7 @@ All P0 items complete! ✅
 | 042 | Implement Compensation Events | 🟢 Ready | [Item-042-Prio-P2-🟢 Ready.md](Item-042-Prio-P2-🟢%20Ready.md) |
 | 043 | Create Data Migration Strategy from CRUD to Event-Sourced | 🟢 Ready | [Item-043-Prio-P2-🟢 Ready.md](Item-043-Prio-P2-🟢%20Ready.md) |
 | 044 | Create Event Sourcing Test Suite | 🟢 Ready | [Item-044-Prio-P2-🟢 Ready.md](Item-044-Prio-P2-🟢%20Ready.md) |
+| 048 | Fix F# Code Standards Violations in Backend | 🟢 Ready | [Item-048-Prio-P2-🟢 Ready.md](Item-048-Prio-P2-🟢%20Ready.md) |
 
 ---
 
@@ -87,7 +88,7 @@ All P0 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
 - **P1 (High):** 4/14 complete (29%)
-- **P2 (Medium):** 1/20 complete (5%)
+- **P2 (Medium):** 1/21 complete (5%)
 - **P3 (Low):** 0/6 complete (0%)
 
 ### By Status
