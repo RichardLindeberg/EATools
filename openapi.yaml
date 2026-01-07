@@ -1022,10 +1022,11 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-    patch:
+  /relations/{id}/commands/update-confidence:
+    post:
       tags: [Relations]
-      summary: Update relation
-      description: Unsupported source/target/relation_type combinations fail with 422 ValidationError.
+      summary: Update relation confidence
+      description: Updates the confidence level and verification metadata for a relation. Confidence must be between 0.0 and 1.0.
       parameters:
         - $ref: '#/components/parameters/idPath'
       requestBody:
@@ -1033,33 +1034,120 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RelationUpdate'
+              type: object
+              required: [confidence]
+              properties:
+                confidence:
+                  type: number
+                  format: float
+                  minimum: 0.0
+                  maximum: 1.0
+                  description: Confidence level (0.0 to 1.0)
+                evidence_source:
+                  type: string
+                  description: Source of evidence supporting this confidence level
+                last_verified_at:
+                  type: string
+                  format: date-time
+                  description: Timestamp of last verification
       responses:
         '200':
-          description: Updated
+          description: Confidence updated
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Relation'
         '400':
           $ref: '#/components/responses/ValidationError'
-        '422':
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /relations/{id}/commands/set-effective-dates:
+    post:
+      tags: [Relations]
+      summary: Set effective dates for temporal relations
+      description: Sets the effective_from and effective_to dates. effective_from must be <= effective_to.
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                effective_from:
+                  type: string
+                  format: date-time
+                  description: Start date of relation validity
+                effective_to:
+                  type: string
+                  format: date-time
+                  description: End date of relation validity
+      responses:
+        '200':
+          description: Effective dates set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+        '400':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-    delete:
+  /relations/{id}/commands/update-description:
+    post:
       tags: [Relations]
-      summary: Delete relation
+      summary: Update relation description
       parameters:
         - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  maxLength: 2000
+      responses:
+        '200':
+          description: Description updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /relations/{id}/commands/delete:
+    post:
+      tags: [Relations]
+      summary: Delete relation
+      description: Soft deletes a relation with optional reason
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Reason for deletion
       responses:
         '204':
           description: Deleted
         '400':
-          $ref: '#/components/responses/ValidationError'
-        '422':
           $ref: '#/components/responses/ValidationError'
         '403':
           $ref: '#/components/responses/Forbidden'

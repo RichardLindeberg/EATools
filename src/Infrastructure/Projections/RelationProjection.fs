@@ -60,12 +60,12 @@ module RelationProjection =
                 INSERT INTO relations (
                     id, source_id, target_id, source_type, target_type, relation_type,
                     description, data_classification, confidence, effective_from, effective_to,
-                    created_at, updated_at
+                    bidirectional, created_at, updated_at
                 )
                 VALUES (
                     $id, $source_id, $target_id, $source_type, $target_type, $relation_type,
                     $description, $data_classification, $confidence, $effective_from, $effective_to,
-                    $created_at, $updated_at
+                    $bidirectional, $created_at, $updated_at
                 )
                 ON CONFLICT(id) DO NOTHING
                 """
@@ -80,6 +80,7 @@ module RelationProjection =
             addOptionalParam cmd "$confidence" (data.Confidence |> Option.map box)
             addOptionalParam cmd "$effective_from" (data.EffectiveFrom |> Option.map box)
             addOptionalParam cmd "$effective_to" (data.EffectiveTo |> Option.map box)
+            cmd.Parameters.AddWithValue("$bidirectional", 0) |> ignore  // Default to false (0)
             cmd.Parameters.AddWithValue("$created_at", now) |> ignore
             cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
 
