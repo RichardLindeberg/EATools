@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-07  
-> **Total Items:** 55 (43 Active, 12 Complete)  
-> **Progress:** 12/55 complete (22%)  
+> **Total Items:** 65 (53 Active, 12 Complete)  
+> **Progress:** 12/65 complete (18%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -28,7 +28,7 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (13 active)
+## P1 - High (15 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -44,10 +44,14 @@ All P0 items complete! ✅
 | 050 | Structured Logging Implementation with OTel ILogger | 🟢 Ready | [Item-050-Prio-P1-🟢 Ready.md](Item-050-Prio-P1-🟢%20Ready.md) |
 | 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
 | 052 | Metrics Implementation via OTel Meter API | 🟢 Ready | [Item-052-Prio-P1-🟢 Ready.md](Item-052-Prio-P1-🟢%20Ready.md) |
+| 056 | Required Fields Enforcement Across All Entities | 🟢 Ready | [Item-056-Prio-P0-🟢 Ready.md](Item-056-Prio-P0-🟢%20Ready.md) |
+| 057 | Unique Constraints & Cycle Detection Validation | 🟢 Ready | [Item-057-Prio-P1-🟢 Ready.md](Item-057-Prio-P1-🟢%20Ready.md) |
+| 063 | Standardized API Error Response Format | 🟢 Ready | [Item-063-Prio-P1-🟢 Ready.md](Item-063-Prio-P1-🟢%20Ready.md) |
+| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
 ---
 
-## P2 - Medium (23 active)
+## P2 - Medium (28 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -74,6 +78,11 @@ All P0 items complete! ✅
 | 043 | Create Data Migration Strategy from CRUD to Event-Sourced | 🟢 Ready | [Item-043-Prio-P2-🟢 Ready.md](Item-043-Prio-P2-🟢%20Ready.md) |
 | 044 | Create Event Sourcing Test Suite | 🟢 Ready | [Item-044-Prio-P2-🟢 Ready.md](Item-044-Prio-P2-🟢%20Ready.md) |
 | 048 | Fix F# Code Standards Violations in Backend | 🟢 Ready | [Item-048-Prio-P2-🟢 Ready.md](Item-048-Prio-P2-🟢%20Ready.md) |
+| 058 | Field Format Validation (Email, DNS, Hostname) | 🟢 Ready | [Item-058-Prio-P2-🟢 Ready.md](Item-058-Prio-P2-🟢%20Ready.md) |
+| 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P2-🟢 Ready.md](Item-059-Prio-P2-🟢%20Ready.md) |
+| 061 | Soft Delete Implementation Across All Entities | 🟢 Ready | [Item-061-Prio-P2-🟢 Ready.md](Item-061-Prio-P2-🟢%20Ready.md) |
+| 062 | Created/Modified Timestamp Tracking | 🟢 Ready | [Item-062-Prio-P2-🟢 Ready.md](Item-062-Prio-P2-🟢%20Ready.md) |
+| 065 | API Rate Limiting & Throttling | 🟢 Ready | [Item-065-Prio-P2-🟢 Ready.md](Item-065-Prio-P2-🟢%20Ready.md) |
 
 ---
 
@@ -94,8 +103,8 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 4/14 complete (29%)
-- **P2 (Medium):** 1/21 complete (5%)
+- **P1 (High):** 4/15 complete (27%)
+- **P2 (Medium):** 1/28 complete (4%)
 - **P3 (Low):** 0/6 complete (0%)
 
 ### By Status
