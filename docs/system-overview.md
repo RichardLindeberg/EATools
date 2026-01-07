@@ -106,7 +106,11 @@ The EA Tool is an API-first enterprise architecture management platform designed
 2. API validates token and authorization (same as read)
 3. Request body is validated against OpenAPI schema
 4. Business logic applies domain rules and constraints
-5. Database transaction commits changes
+5. For event-sourced domains (e.g., Relations, BusinessCapabilities):
+  - Command produces one or more domain events
+  - Events are appended to the event store
+  - Projections update the read model asynchronously
+  For CRUD domains, a database transaction commits changes
 6. Audit log records the mutation (actor, action, entity, timestamp)
 7. Webhooks fire asynchronously for registered events
 8. Response confirms the change

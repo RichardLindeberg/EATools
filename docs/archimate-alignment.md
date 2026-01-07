@@ -109,8 +109,8 @@ The EA Tool's relation types map to ArchiMate relationships:
 **Meaning**: Temporal or causal relationship.
 
 **EA Tool Usage**:
-- `application` → `application` (publishes_event_to)
-- Event-driven architectures
+- `integration` → `application` (publishes_event_to / consumes_event_from)
+- Event-driven architectures via message bus or pub/sub
 
 **Notation**: Dashed line with open arrow
 

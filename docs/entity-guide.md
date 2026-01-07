@@ -183,7 +183,7 @@ This guide describes all domain entities in the EA Tool, their purpose, key attr
 **Relationships**:
 - `application` → `application_interface` (exposes)
 - `application_interface` → `application_service` (serves)
-- `integration` → `application_interface` (calls, uses)
+<!-- Removed: integration → application_interface (calls, uses) is not supported by backend -->
 
 **Example**:
 ```json
@@ -279,7 +279,7 @@ This guide describes all domain entities in the EA Tool, their purpose, key attr
 
 **Relationships**:
 - `integration` → `application` (communicates_with, publishes_event_to, consumes_event_from)
-- `integration` → `application_interface` (calls, uses)
+<!-- Removed: integration → application_interface (calls, uses) is not supported by backend -->
 
 **Example**:
 ```json

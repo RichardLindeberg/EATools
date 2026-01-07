@@ -41,7 +41,7 @@ graph TB
     end
     
     %% Business Layer Relations
-    ORG2 -->|part_of| ORG1
+    %% Organization hierarchy is modeled via parent_id (not a relation)
     ORG2 -->|owns| APP1
     ORG1 -->|owns| SRV1
     APP1 -->|supports| BC
@@ -49,12 +49,12 @@ graph TB
     
     %% Application Relations
     APP1 -->|depends_on| APP2
-    APP1 -->|calls| INTF
-    APP2 -->|publishes_event_to| APP1
+    %% Applications expose interfaces; use of services occurs via service relations
     APP1 -->|realizes| SVC
     APP1 -->|exposes| INTF
     INTF -->|serves| SVC
     INT -->|communicates_with| APP2
+    INT -->|publishes_event_to| APP1
     
     %% Data Relations
     APP1 -->|writes| DE
@@ -123,35 +123,33 @@ graph TB
 #### `calls`
 **Meaning**: Source invokes target API/interface.
 
-**Valid Pairs**: 
+**Valid Pairs**:
 - application → application (direct calls)
-- integration → application_interface (via interface)
 
-**Example**: Application calls payment interface
+**Example**: Application exposes payment interface
 ```json
 {
   "source_id": "app-checkout",
   "target_id": "intf-payment-api",
   "source_type": "application",
   "target_type": "application_interface",
-  "relation_type": "calls",
-  "archimate_relationship": "Access"
+  "relation_type": "exposes",
+  "archimate_relationship": "Serving"
 }
 ```
 
 #### `publishes_event_to` / `consumes_event_from`
 **Meaning**: Event-driven communication via message bus or pub/sub.
 
-**Valid Pairs**: 
-- application → application
+**Valid Pairs**:
 - integration → application
 
-**Example**: Order service publishes events
+**Example**: Event bus publishes order events to an application
 ```json
 {
-  "source_id": "app-orders",
+  "source_id": "int-orders-bus",
   "target_id": "app-notifications",
-  "source_type": "application",
+  "source_type": "integration",
   "target_type": "application",
   "relation_type": "publishes_event_to",
   "archimate_relationship": "Triggering",
@@ -278,25 +276,8 @@ graph TB
 }
 ```
 
-#### `serves`
-**Meaning**: Interface provides access to a service.
-
-**Valid Pairs**: application_interface → application_service
-
-**ArchiMate**: `Serving` (interface serves service)
-
-**Example**: Payment API interface serves payment service
-```json
-{
-  "source_id": "intf-payment-api-v2",
-  "target_id": "svc-payment",
-  "source_type": "application_interface",
-  "target_type": "application_service",
-  "relation_type": "serves",
-  "archimate_relationship": "Serving"
-}
-```
-
+### Organization Hierarchy
+Organizational hierarchy is modeled using the `parent_id` field on the Organization entity. Relations are not used for org→org hierarchy in the current backend. Use `parent_id` for efficient hierarchy queries; model ownership via `organization → owns → {application|server}` relations where appropriate.
 #### `uses`
 **Meaning**: Application or integration uses a service or interface.
 
@@ -392,9 +373,11 @@ The system enforces valid relation type and entity type combinations. Invalid co
 
 ### Allowed Pairs Matrix
 
+The backend enforces a strict set of valid source/target/relation combinations:
+
 | Source Type | Target Type | Allowed Relation Types |
 |-------------|-------------|------------------------|
-| application | application | depends_on, communicates_with, calls, publishes_event_to, consumes_event_from |
+| application | application | depends_on, communicates_with, calls |
 | application | application_service | realizes, uses |
 | application | application_interface | exposes |
 | application | server | deployed_on, stores_data_on |
@@ -403,12 +386,9 @@ The system enforces valid relation type and entity type combinations. Invalid co
 | application_service | business_capability | realizes, supports |
 | application_interface | application_service | serves |
 | integration | application | communicates_with, publishes_event_to, consumes_event_from |
-| integration | application_interface | calls, uses |
 | server | server | connected_to |
-| organization | organization | part_of |
 | organization | application | owns |
 | organization | server | owns |
-| business_capability | application | realizes, implements, serves |
 
 ## Governance Metadata
 
@@ -506,8 +486,8 @@ DataEntity.lineage = [raw-data-entity-id]
 
 ### Integration Chain
 ```
-Application → publishes_event_to → Application (via message bus)
-Integration → calls → ApplicationInterface
+Integration → communicates_with → Application
+Integration → publishes_event_to → Application
 ApplicationInterface → serves → ApplicationService
 ```
 
