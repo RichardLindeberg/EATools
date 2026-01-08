@@ -2,6 +2,7 @@
 namespace EATool.Api
 
 open System
+open System.Diagnostics
 open Giraffe
 open Thoth.Json.Net
 open EATool.Domain
@@ -10,6 +11,7 @@ open EATool.Infrastructure.EventStore
 open EATool.Infrastructure.ApplicationEventJson
 open EATool.Infrastructure.EventJson
 open EATool.Infrastructure.ProjectionEngine
+open EATool.Infrastructure.Tracing
 
 module ApplicationsEndpoints =
     
@@ -196,6 +198,13 @@ module ApplicationsEndpoints =
                         // Generate unique application ID
                         let appId = generateId()
                         
+                        // Record command span event
+                        let activity = Activity.Current
+                        if activity <> null then
+                            activity.SetTag("command.type", "CreateApplication") |> ignore
+                            activity.SetTag("entity.id", appId) |> ignore
+                            activity.SetTag("entity.type", "Application") |> ignore
+                        
                         // Create command
                         let cmd : CreateApplicationData = {
                             Id = appId
@@ -208,19 +217,25 @@ module ApplicationsEndpoints =
                                 | Lifecycle.Retired -> "retired"
                             CapabilityId = req.CapabilityId
                             DataClassification = req.DataClassification
-                            Criticality = None // Not in current schema
+                            Criticality = None
                             Tags = req.Tags |> Option.defaultValue []
-                            Description = None // Not in current schema
+                            Description = None
                         }
                         
                         // Validate command and generate events
                         let state = ApplicationAggregate.Initial
                         match ApplicationCommandHandler.handleCreateApplication state cmd with
                         | Error err ->
+                            if activity <> null then
+                                activity.SetTag("command.result", "validation_failed") |> ignore
                             ctx.SetStatusCode 400
                             let errJson = Json.encodeErrorResponse "validation_error" err
                             return! (Giraffe.Core.json errJson) next ctx
                         | Ok events ->
+                            // Record event persistence span
+                            if activity <> null then
+                                activity.SetTag("event.count", events.Length) |> ignore
+                            
                             let eventStore = createApplicationEventStore()
                             let projectionEngine = createProjectionEngine eventStore
                             let aggregateGuid = parseAggregateId appId
@@ -229,10 +244,14 @@ module ApplicationsEndpoints =
 
                             match persistAndProject eventStore projectionEngine appId aggregateGuid baseVersion meta events with
                             | Error err ->
+                                if activity <> null then
+                                    activity.SetTag("event.persist.error", err) |> ignore
                                 ctx.SetStatusCode 500
                                 let errJson = Json.encodeErrorResponse "event_store_error" err
                                 return! (Giraffe.Core.json errJson) next ctx
                             | Ok _ ->
+                                if activity <> null then
+                                    activity.SetTag("command.result", "success") |> ignore
                                 match ApplicationRepository.getById appId with
                                 | Some app ->
                                     ctx.SetStatusCode 201

@@ -42,6 +42,8 @@
     <Compile Include="Domain/RelationCommandHandler.fs" />
     <Compile Include="Domain/CommandHandler.fs" />
     <Compile Include="Domain/CommandDispatcher.fs" />
+    <Compile Include="Infrastructure/Tracing/ActivitySourceFactory.fs" />
+    <Compile Include="Infrastructure/Tracing/TraceContextMiddleware.fs" />
     <Compile Include="Infrastructure/Observability.fs" />
     <Compile Include="Infrastructure/Logging/StructuredLogger.fs" />
     <Compile Include="Infrastructure/Logging/LogContext.fs" />
@@ -74,6 +76,7 @@
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
     <Compile Include="Api/HealthEndpoint.fs" />
+    <Compile Include="Api/Instrumentation.fs" />
     <Compile Include="Api/Endpoints.fs" />
     <Compile Include="Api/ApplicationsEndpoints.fs" />
     <Compile Include="Api/ApplicationServicesEndpoints.fs" />

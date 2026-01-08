@@ -7,6 +7,7 @@ open Giraffe
 open EATool.Infrastructure
 open EATool.Infrastructure.Observability
 open EATool.Infrastructure.Logging.LogContext
+open EATool.Infrastructure.Tracing
 open EATool.Api
 
 [<EntryPoint>]
@@ -59,7 +60,9 @@ let main args =
     
     let app = builder.Build()
     
-    // Configure middleware
+    // Configure middleware (order matters)
+    // TraceContextMiddleware must be before other middleware to capture all operations
+    app.UseMiddleware<TraceContextMiddleware.TraceContextMiddleware>() |> ignore
     app.UseMiddleware<CorrelationIdMiddleware>() |> ignore
     app.UseHttpsRedirection() |> ignore
     app.UseCors() |> ignore
