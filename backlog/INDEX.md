@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (40 Active, 25 Complete)  
-> **Progress:** 25/65 complete (38%)  
+> **Total Items:** 65 (39 Active, 26 Complete)  
+> **Progress:** 26/65 complete (40%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -12,13 +12,13 @@
 ## Quick Navigation
 
 ### Active Items
-- **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-4-active)** (4 active) - Should be done this sprint
+- **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
+- **[P1 - High](#p1---high-3-active)** (3 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-28-active)** (28 active) - Should be planned
 - **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-25-total)** (25 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-26-total)** (26 items) - See backlog/old/ directory
 
 ---
 
@@ -28,11 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (4 active)
+## P1 - High (3 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 056 | Required Fields Enforcement Across All Entities | 🟢 Ready | [Item-056-Prio-P0-🟢 Ready.md](Item-056-Prio-P0-🟢%20Ready.md) |
 | 057 | Unique Constraints & Cycle Detection Validation | 🟢 Ready | [Item-057-Prio-P1-🟢 Ready.md](Item-057-Prio-P1-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
