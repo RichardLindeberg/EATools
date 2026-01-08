@@ -43,6 +43,8 @@
     <Compile Include="Domain/CommandHandler.fs" />
     <Compile Include="Domain/CommandDispatcher.fs" />
     <Compile Include="Infrastructure/Observability.fs" />
+    <Compile Include="Infrastructure/Logging/StructuredLogger.fs" />
+    <Compile Include="Infrastructure/Logging/LogContext.fs" />
     <Compile Include="Infrastructure/Database.fs" />
     <Compile Include="Infrastructure/Migrations.fs" />
     <Compile Include="Infrastructure/EventStore.fs" />
