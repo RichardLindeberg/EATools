@@ -38,6 +38,41 @@ module Json =
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
 
+    let private decodeInterfaceStatus: Decoder<InterfaceStatus> =
+        Decode.string
+        |> Decode.andThen (fun s ->
+            match s.ToLowerInvariant() with
+            | "active" -> Decode.succeed InterfaceStatus.Active
+            | "deprecated" -> Decode.succeed InterfaceStatus.Deprecated
+            | "retired" -> Decode.succeed InterfaceStatus.Retired
+            | other -> Decode.fail ($"Invalid interface status: {other}"))
+
+    let decodeCreateApplicationServiceRequest: Decoder<CreateApplicationServiceRequest> =
+        Decode.object (fun get ->
+            {
+                Name = get.Required.Field "name" Decode.string
+                Description = get.Optional.Field "description" Decode.string
+                BusinessCapabilityId = get.Optional.Field "business_capability_id" Decode.string
+                Sla = get.Optional.Field "sla" Decode.string
+                ExposedByAppIds = get.Optional.Field "exposed_by_app_ids" (Decode.list Decode.string)
+                Tags = get.Optional.Field "tags" (Decode.list Decode.string)
+            })
+
+    let decodeCreateApplicationInterfaceRequest: Decoder<CreateApplicationInterfaceRequest> =
+        Decode.object (fun get ->
+            {
+                Name = get.Required.Field "name" Decode.string
+                Protocol = get.Required.Field "protocol" Decode.string
+                Endpoint = get.Optional.Field "endpoint" Decode.string
+                SpecificationUrl = get.Optional.Field "specification_url" Decode.string
+                Version = get.Optional.Field "version" Decode.string
+                AuthenticationMethod = get.Optional.Field "authentication_method" Decode.string
+                ExposedByAppId = get.Required.Field "exposed_by_app_id" Decode.string
+                ServesServiceIds = get.Optional.Field "serves_service_ids" (Decode.list Decode.string)
+                Status = get.Required.Field "status" decodeInterfaceStatus
+                Tags = get.Optional.Field "tags" (Decode.list Decode.string)
+            })
+
     let decodeCreateServerRequest: Decoder<CreateServerRequest> =
         Decode.object (fun get ->
             {
@@ -207,6 +242,46 @@ module Json =
             "tags", Encode.list (List.map Encode.string app.Tags)
             "created_at", Encode.string app.CreatedAt
             "updated_at", Encode.string app.UpdatedAt
+        ]
+
+    let encodeApplicationService (svc: ApplicationService): JsonValue =
+        Encode.object [
+            "id", Encode.string svc.Id
+            "name", Encode.string svc.Name
+            "description", (match svc.Description with | Some d -> Encode.string d | None -> Encode.nil)
+            "business_capability_id", (match svc.BusinessCapabilityId with | Some v -> Encode.string v | None -> Encode.nil)
+            "sla", (match svc.Sla with | Some v -> Encode.string v | None -> Encode.nil)
+            "exposed_by_app_ids", Encode.list (List.map Encode.string svc.ExposedByAppIds)
+            "consumers", Encode.list (List.map Encode.string svc.Consumers)
+            "tags", Encode.list (List.map Encode.string svc.Tags)
+            "created_at", Encode.string svc.CreatedAt
+            "updated_at", Encode.string svc.UpdatedAt
+        ]
+
+    let encodeInterfaceStatus (status: InterfaceStatus) : JsonValue =
+        let s =
+            match status with
+            | InterfaceStatus.Active -> "active"
+            | InterfaceStatus.Deprecated -> "deprecated"
+            | InterfaceStatus.Retired -> "retired"
+        Encode.string s
+
+    let encodeApplicationInterface (iface: ApplicationInterface): JsonValue =
+        Encode.object [
+            "id", Encode.string iface.Id
+            "name", Encode.string iface.Name
+            "protocol", Encode.string iface.Protocol
+            "endpoint", (match iface.Endpoint with | Some e -> Encode.string e | None -> Encode.nil)
+            "specification_url", (match iface.SpecificationUrl with | Some e -> Encode.string e | None -> Encode.nil)
+            "version", (match iface.Version with | Some v -> Encode.string v | None -> Encode.nil)
+            "authentication_method", (match iface.AuthenticationMethod with | Some a -> Encode.string a | None -> Encode.nil)
+            "exposed_by_app_id", Encode.string iface.ExposedByAppId
+            "serves_service_ids", Encode.list (List.map Encode.string iface.ServesServiceIds)
+            "rate_limits", (match iface.RateLimits with | Some rl -> Encode.object (rl |> Map.toList |> List.map (fun (k,v) -> k, Encode.string v)) | None -> Encode.nil)
+            "status", encodeInterfaceStatus iface.Status
+            "tags", Encode.list (List.map Encode.string iface.Tags)
+            "created_at", Encode.string iface.CreatedAt
+            "updated_at", Encode.string iface.UpdatedAt
         ]
 
     let encodeServer (srv: Server): JsonValue =

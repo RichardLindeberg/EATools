@@ -280,16 +280,16 @@ POST /relations
 ]
 ```
 
-### Edge Case: Interface Deprecation
+### Edge Case: Interface Deprecation / Retirement (CQRS Commands)
 
 ```json
-// Deprecate old interface version
-PATCH /application-interfaces/intf-payment-api-v1
-{
-  "status": "deprecated"
-}
+// Deprecate old interface version (CQRS command)
+POST /application-interfaces/intf-payment-api-v1/commands/deprecate
 
-// Consumers receive webhook notification
+// Later retire the interface (CQRS command)
+POST /application-interfaces/intf-payment-api-v1/commands/retire
+
+// Consumers may receive webhook notification (example payload)
 Webhook Payload:
 {
   "event": "application_interface.deprecated",

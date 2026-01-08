@@ -38,6 +38,8 @@ security:
 tags:
   - name: Organizations
   - name: Applications
+  - name: ApplicationServices
+  - name: ApplicationInterfaces
   - name: Servers
   - name: Integrations
   - name: BusinessCapabilities
@@ -1448,6 +1450,353 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+  /application-services:
+    get:
+      tags: [ApplicationServices]
+      summary: List application services
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - in: query
+          name: business_capability_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List application services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplicationServices'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [ApplicationServices]
+      summary: Create application service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationServiceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /application-services/{id}:
+    get:
+      tags: [ApplicationServices]
+      summary: Get application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Application service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-services/{id}/commands/update:
+    post:
+      tags: [ApplicationServices]
+      summary: Update application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationServiceUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-services/{id}/commands/set-business-capability:
+    post:
+      tags: [ApplicationServices]
+      summary: Set business capability for service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                business_capability_id:
+                  type: string
+      responses:
+        '200':
+          description: Business capability set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-services/{id}/commands/add-consumer:
+    post:
+      tags: [ApplicationServices]
+      summary: Add consumer application to service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [app_id]
+              properties:
+                app_id:
+                  type: string
+      responses:
+        '200':
+          description: Consumer added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationService'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-services/{id}/commands/delete:
+    post:
+      tags: [ApplicationServices]
+      summary: Delete application service
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    example: deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces:
+    get:
+      tags: [ApplicationInterfaces]
+      summary: List application interfaces
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - in: query
+          name: application_id
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/InterfaceStatus'
+      responses:
+        '200':
+          description: List application interfaces
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplicationInterfaces'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Create application interface
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationInterfaceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /application-interfaces/{id}:
+    get:
+      tags: [ApplicationInterfaces]
+      summary: Get application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Application interface
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces/{id}/commands/update:
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Update application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationInterfaceUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces/{id}/commands/set-service:
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Set served application services
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                service_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Served services set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces/{id}/commands/deprecate:
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Deprecate application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Status updated to deprecated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces/{id}/commands/retire:
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Retire application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Status updated to retired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationInterface'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /application-interfaces/{id}/commands/delete:
+    post:
+      tags: [ApplicationInterfaces]
+      summary: Delete application interface
+      parameters:
+        - $ref: '#/components/parameters/idPath'
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                    example: deleted
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 components:
   securitySchemes:
     bearerAuth:
@@ -1514,9 +1863,226 @@ components:
           schema:
             $ref: '#/components/schemas/ValidationError'
   schemas:
+    InterfaceStatus:
+      type: string
+      enum: [active, deprecated, retired]
     Lifecycle:
       type: string
       enum: [planned, active, deprecated, retired]
+    ApplicationService:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        business_capability_id:
+          type: string
+        sla:
+          type: string
+        exposed_by_app_ids:
+          type: array
+          items:
+            type: string
+        consumers:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, created_at, updated_at]
+      example:
+        id: aps-1234abcd
+        name: Customer Lookup
+        description: Provides customer search capability
+        business_capability_id: cap-1
+        sla: 99.9%
+        exposed_by_app_ids: [app-123]
+        consumers: [app-456]
+        tags: [customer, search]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ApplicationServiceCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        business_capability_id:
+          type: string
+        sla:
+          type: string
+        exposed_by_app_ids:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required: [name]
+      example:
+        name: Customer Lookup
+        description: Provides customer search capability
+        business_capability_id: cap-1
+        sla: 99.9%
+        exposed_by_app_ids: [app-123]
+        tags: [customer, search]
+    ApplicationServiceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        sla:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        description: Updated description
+        sla: 99.95%
+        tags: [customer, api]
+    ApplicationInterface:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+          nullable: true
+        specification_url:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+        authentication_method:
+          type: string
+          nullable: true
+        exposed_by_app_id:
+          type: string
+        serves_service_ids:
+          type: array
+          items:
+            type: string
+        rate_limits:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/InterfaceStatus'
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC ISO 8601 with Z
+      required: [id, name, protocol, exposed_by_app_id, status, created_at, updated_at]
+      example:
+        id: aif-1234abcd
+        name: Customer REST API
+        protocol: https
+        endpoint: https://api.example.com/customers
+        specification_url: https://api.example.com/customers/openapi.json
+        version: v1
+        authentication_method: oauth2
+        exposed_by_app_id: app-123
+        serves_service_ids: [aps-1234abcd]
+        rate_limits:
+          per_minute: "1000"
+          per_day: "50000"
+        status: active
+        tags: [customer, public]
+        created_at: 2024-01-05T10:00:00Z
+        updated_at: 2024-01-06T10:00:00Z
+    ApplicationInterfaceCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+        specification_url:
+          type: string
+        version:
+          type: string
+        authentication_method:
+          type: string
+        exposed_by_app_id:
+          type: string
+        serves_service_ids:
+          type: array
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/InterfaceStatus'
+        tags:
+          type: array
+          items:
+            type: string
+      required: [name, protocol, exposed_by_app_id, status]
+      example:
+        name: Customer REST API
+        protocol: https
+        endpoint: https://api.example.com/customers
+        specification_url: https://api.example.com/customers/openapi.json
+        version: v1
+        authentication_method: oauth2
+        exposed_by_app_id: app-123
+        serves_service_ids: [aps-1234abcd]
+        status: active
+        tags: [customer, public]
+    ApplicationInterfaceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        protocol:
+          type: string
+        endpoint:
+          type: string
+        version:
+          type: string
+        authentication_method:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        name: Customer REST API v2
+        version: v2
+        tags: [customer, public]
     Error:
       type: object
       properties:
@@ -2684,6 +3250,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Server'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedApplicationServices:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationService'
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+    PaginatedApplicationInterfaces:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationInterface'
         page:
           type: integer
         limit:
