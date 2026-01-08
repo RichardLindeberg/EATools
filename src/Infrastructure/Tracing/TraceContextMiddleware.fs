@@ -49,7 +49,11 @@ type TraceContextMiddleware(next: RequestDelegate) =
                 ActivityKind.Server
             )
             
+            // Ensure the activity is recorded so traceparent is generated
             if activity <> null then
+                // Force activity to be recorded by setting tags
+                activity.IsAllDataRequested <- true
+                
                 // Set standard HTTP semantic attributes
                 activity.SetTag("http.method", context.Request.Method) |> ignore
                 activity.SetTag("http.target", context.Request.Path.Value) |> ignore

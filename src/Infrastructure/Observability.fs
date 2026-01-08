@@ -98,6 +98,9 @@ let configureOTelTracing (services: IServiceCollection) =
                 KeyValuePair<string, obj>("deployment.environment", config.ServiceInfo.Environment)
               ]) |> ignore)
         .WithTracing(fun builder ->
+            // Add custom ActivitySource for middleware tracing
+            builder.AddSource("EATool") |> ignore
+            
             // Add standard instrumentations
             builder
                 .AddAspNetCoreInstrumentation(fun opts ->
