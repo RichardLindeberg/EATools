@@ -1,4 +1,4 @@
-# Item-047: Implement ApplicationService & ApplicationInterface CRUD Endpoints
+# Item-047: Implement ApplicationService & ApplicationInterface CQRS Endpoints
 
 **Status:** 🟢 Ready  
 **Priority:** P1 - HIGH  
@@ -10,35 +10,29 @@
 
 ## Problem Statement
 
-ApplicationService and ApplicationInterface entities are defined in domain models and referenced by the relation validation matrix, but lack API endpoints and repositories. Clients cannot currently create, read, update, or delete these entities, blocking full service-layer modeling per ArchiMate specification.
+ApplicationService and ApplicationInterface entities are defined in domain models and referenced by the relation validation matrix, but lack API endpoints and repositories. Clients cannot currently create, read, update, or delete these entities through the command/event flow, blocking full service-layer modeling per ArchiMate specification.
 
 ---
 
 ## Detailed Tasks
 
-### 1. Infrastructure Layer
+### 1. Infrastructure Layer (Query Side)
 
 #### ApplicationServiceRepository.fs
 - [ ] Create `src/Infrastructure/ApplicationServiceRepository.fs`
-- [ ] Implement CRUD operations:
-  - `create (req: CreateApplicationServiceRequest) : ApplicationService`
+- [ ] Implement command/event-friendly accessors for projections:
   - `getAll (page: int) (limit: int) : PaginatedResponse<ApplicationService>`
   - `getById (id: string) : ApplicationService option`
   - `getByBusinessCapabilityId (capId: string) : ApplicationService list`
-  - `update (id: string) (req: CreateApplicationServiceRequest) : ApplicationService option`
-  - `delete (id: string) : bool`
 - [ ] Add indexes on business_capability_id, created_at
 - [ ] Handle JSON serialization for ExposedByAppIds, Consumers, Tags arrays
 
 #### ApplicationInterfaceRepository.fs
 - [ ] Create `src/Infrastructure/ApplicationInterfaceRepository.fs`
-- [ ] Implement CRUD operations:
-  - `create (req: CreateApplicationInterfaceRequest) : ApplicationInterface`
+- [ ] Implement query-side accessors for projections:
   - `getAll (page: int) (limit: int) : PaginatedResponse<ApplicationInterface>`
   - `getById (id: string) : ApplicationInterface option`
   - `getByApplicationId (appId: string) : ApplicationInterface list`
-  - `update (id: string) (req: CreateApplicationInterfaceRequest) : ApplicationInterface option`
-  - `delete (id: string) : bool`
 - [ ] Add indexes on application_id (implied via serves_service_ids relationship), status, created_at
 - [ ] Handle JSON arrays: serves_service_ids, rate_limits (if structured)
 
@@ -46,7 +40,7 @@ ApplicationService and ApplicationInterface entities are defined in domain model
 
 #### ApplicationServicesEndpoints.fs
 - [ ] Create `src/Api/ApplicationServicesEndpoints.fs`
-- [ ] Implement routes:
+- [ ] Implement CQRS-style routes (commands + queries):
   - `GET /application-services` — List with pagination
   - `GET /application-services?business_capability_id={id}` — Filter by capability
   - `GET /application-services/{id}` — Get by ID
@@ -59,7 +53,7 @@ ApplicationService and ApplicationInterface entities are defined in domain model
 
 #### ApplicationInterfacesEndpoints.fs
 - [ ] Create `src/Api/ApplicationInterfacesEndpoints.fs`
-- [ ] Implement routes:
+- [ ] Implement CQRS-style routes (commands + queries):
   - `GET /application-interfaces` — List with pagination
   - `GET /application-interfaces?application_id={id}` — Filter by exposing app
   - `GET /application-interfaces?status={active|deprecated|retired}` — Filter by status
@@ -72,7 +66,7 @@ ApplicationService and ApplicationInterface entities are defined in domain model
   - `POST /application-interfaces/{id}/commands/delete` — Delete
 - [ ] Wire into main Endpoints.fs routing
 
-### 3. Command Handlers (Event-Sourced)
+### 3. Command Handlers (Event-Sourced / Command Side)
 
 #### ApplicationServiceCommandHandler.fs
 - [ ] Create `src/Domain/ApplicationServiceCommandHandler.fs`
@@ -132,14 +126,14 @@ ApplicationService and ApplicationInterface entities are defined in domain model
 
 #### test_application_services.py
 - [ ] Create `tests/integration/test_application_services.py`
-- [ ] Test CRUD:
-  - POST /application-services → 200/201, returns id
-  - GET /application-services → 200, paginated list
-  - GET /application-services/{id} → 200 or 404
-  - POST /application-services/{id}/commands/update → 200
-  - POST /application-services/{id}/commands/set-business-capability → 200
-  - POST /application-services/{id}/commands/add-consumer → 200
-  - POST /application-services/{id}/commands/delete → 200
+- [ ] Test command/query flow:
+  - POST /application-services (command) → 200/201, returns id
+  - GET /application-services (query) → 200, paginated list
+  - GET /application-services/{id} (query) → 200 or 404
+  - POST /application-services/{id}/commands/update (command) → 200
+  - POST /application-services/{id}/commands/set-business-capability (command) → 200
+  - POST /application-services/{id}/commands/add-consumer (command) → 200
+  - POST /application-services/{id}/commands/delete (command) → 200
 - [ ] Test filtering by business_capability_id
 - [ ] Test validation:
   - Missing name → 422
@@ -148,15 +142,15 @@ ApplicationService and ApplicationInterface entities are defined in domain model
 
 #### test_application_interfaces.py
 - [ ] Create `tests/integration/test_application_interfaces.py`
-- [ ] Test CRUD:
-  - POST /application-interfaces → 200/201, returns id
-  - GET /application-interfaces → 200, paginated list
-  - GET /application-interfaces/{id} → 200 or 404
-  - POST /application-interfaces/{id}/commands/update → 200
-  - POST /application-interfaces/{id}/commands/set-service → 200
-  - POST /application-interfaces/{id}/commands/deprecate → 200, status=deprecated
-  - POST /application-interfaces/{id}/commands/retire → 200, status=retired
-  - POST /application-interfaces/{id}/commands/delete → 200
+- [ ] Test command/query flow:
+  - POST /application-interfaces (command) → 200/201, returns id
+  - GET /application-interfaces (query) → 200, paginated list
+  - GET /application-interfaces/{id} (query) → 200 or 404
+  - POST /application-interfaces/{id}/commands/update (command) → 200
+  - POST /application-interfaces/{id}/commands/set-service (command) → 200
+  - POST /application-interfaces/{id}/commands/deprecate (command) → 200, status=deprecated
+  - POST /application-interfaces/{id}/commands/retire (command) → 200, status=retired
+  - POST /application-interfaces/{id}/commands/delete (command) → 200
 - [ ] Test filtering by application_id and status
 - [ ] Test validation:
   - Missing name/protocol/version → 422
