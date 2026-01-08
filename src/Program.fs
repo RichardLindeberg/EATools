@@ -6,6 +6,7 @@ open Microsoft.Extensions.Logging
 open Giraffe
 open EATool.Infrastructure
 open EATool.Infrastructure.Observability
+open EATool.Infrastructure.Logging.LogContext
 open EATool.Api
 
 [<EntryPoint>]
@@ -37,7 +38,15 @@ let main args =
     // Configure logging with OpenTelemetry
     builder.Logging.ClearProviders() |> ignore
     builder.Logging.AddConsole() |> ignore
+    builder.Logging.AddJsonConsole(fun options ->
+        options.IncludeScopes <- true
+        options.TimestampFormat <- "yyyy-MM-dd'T'HH:mm:ss.fff'Z'"
+        options.UseUtcTimestamp <- true) |> ignore
     configureOTelLogging builder.Logging |> ignore
+    
+    // Set log levels based on environment
+    let logLevel = if environment = "development" then LogLevel.Debug else LogLevel.Information
+    builder.Logging.SetMinimumLevel(logLevel) |> ignore
     
     // Initialize database
     let dbConfig = Database.createConfig environment
@@ -51,6 +60,7 @@ let main args =
     let app = builder.Build()
     
     // Configure middleware
+    app.UseMiddleware<CorrelationIdMiddleware>() |> ignore
     app.UseHttpsRedirection() |> ignore
     app.UseCors() |> ignore
     
