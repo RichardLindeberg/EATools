@@ -2,8 +2,10 @@ open System
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Logging
 open Giraffe
 open EATool.Infrastructure
+open EATool.Infrastructure.Observability
 open EATool.Api
 
 [<EntryPoint>]
@@ -28,6 +30,15 @@ let main args =
     
     builder.Services.AddGiraffe() |> ignore
     
+    // Configure OpenTelemetry
+    configureOTelTracing builder.Services |> ignore
+    configureOTelMetrics builder.Services |> ignore
+    
+    // Configure logging with OpenTelemetry
+    builder.Logging.ClearProviders() |> ignore
+    builder.Logging.AddConsole() |> ignore
+    configureOTelLogging builder.Logging |> ignore
+    
     // Initialize database
     let dbConfig = Database.createConfig environment
     match Database.initializeSchema dbConfig with
@@ -45,7 +56,8 @@ let main args =
     
     // Combine all routes and configure Giraffe
     let allRoutes =
-        Endpoints.routes
+        HealthEndpoint.routes
+        @ Endpoints.routes
         @ ApplicationsEndpoints.routes
         @ ApplicationServicesEndpoints.routes
         @ ApplicationInterfacesEndpoints.routes

@@ -36,6 +36,8 @@ security:
     - email
   - apiKey: []
 tags:
+  - name: Health
+    description: Health and observability endpoints
   - name: Organizations
   - name: Applications
   - name: ApplicationServices
@@ -50,6 +52,19 @@ tags:
   - name: Exports
   - name: Webhooks
 paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Get service health status
+      description: Returns health status with OpenTelemetry observability information
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
   /organizations:
     get:
       tags: [Organizations]
@@ -1863,6 +1878,68 @@ components:
           schema:
             $ref: '#/components/schemas/ValidationError'
   schemas:
+    HealthStatus:
+      type: object
+      required:
+        - status
+        - service
+        - version
+        - environment
+        - instance_id
+        - uptime_seconds
+        - timestamp
+        - observability
+      properties:
+        status:
+          type: string
+          description: Overall health status
+          example: healthy
+        service:
+          type: string
+          description: Service name
+          example: eatool-api
+        version:
+          type: string
+          description: Service version
+          example: 1.0.0
+        environment:
+          type: string
+          description: Deployment environment
+          example: production
+        instance_id:
+          type: string
+          description: Service instance identifier
+          example: api-pod-01
+        uptime_seconds:
+          type: number
+          description: Service uptime in seconds
+          example: 12345.67
+        timestamp:
+          type: string
+          format: date-time
+          description: Current server time in ISO 8601 format
+          example: "2026-01-08T10:30:45.123Z"
+        observability:
+          $ref: '#/components/schemas/ObservabilityStatus'
+    ObservabilityStatus:
+      type: object
+      required:
+        - tracing_enabled
+        - metrics_enabled
+      properties:
+        tracing_enabled:
+          type: boolean
+          description: Whether distributed tracing is enabled
+          example: true
+        metrics_enabled:
+          type: boolean
+          description: Whether metrics collection is enabled
+          example: true
+        otlp_endpoint:
+          type: string
+          nullable: true
+          description: OpenTelemetry OTLP endpoint URL if configured
+          example: "http://otel-collector:4317"
     InterfaceStatus:
       type: string
       enum: [active, deprecated, retired]
