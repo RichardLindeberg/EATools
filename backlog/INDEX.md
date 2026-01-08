@@ -13,9 +13,9 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-10-active)** (10 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-23-active)** (23 active) - Should be planned
-- **[P3 - Low](#p3---low-6-active)** (6 active) - Nice to have
+- **[P1 - High](#p1---high-8-active)** (8 active) - Should be done this sprint
+- **[P2 - Medium](#p2---medium-28-active)** (28 active) - Should be planned
+- **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
 - **[View Completed Items](#-completed-items-20-total)** (20 items) - See backlog/old/ directory
@@ -28,12 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (10 active)
+## P1 - High (8 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
-| 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
 | 049 | OpenTelemetry SDK Integration & Configuration | 🟢 Ready | [Item-049-Prio-P1-🟢 Ready.md](Item-049-Prio-P1-🟢%20Ready.md) |
 | 050 | Structured Logging Implementation with OTel ILogger | 🟢 Ready | [Item-050-Prio-P1-🟢 Ready.md](Item-050-Prio-P1-🟢%20Ready.md) |
 | 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
@@ -80,11 +78,13 @@ All P0 items complete! ✅
 
 ---
 
-## P3 - Low (6 active)
+## P3 - Low (8 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 023 | Fix Agent Configuration Errors | 🟢 Ready | [Item-023-Prio-P3-🟢 Ready.md](Item-023-Prio-P3-🟢%20Ready.md) |
+| 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P3-🟢 Ready.md](Item-035-Prio-P3-🟢%20Ready.md) |
+| 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P3-🟢 Ready.md](Item-036-Prio-P3-🟢%20Ready.md) |
 | 024 | Document Dual Database Environment Strategy | 🟢 Ready | [Item-024-Prio-P3-🟢 Ready.md](Item-024-Prio-P3-🟢%20Ready.md) |
 | 025 | Create Architecture Decision Records (ADRs) | 🟢 Ready | [Item-025-Prio-P3-🟢 Ready.md](Item-025-Prio-P3-🟢%20Ready.md) |
 | 026 | Create Backlog Item Template | � In Progress | [Item-026-Prio-P3-🟡 In Progress.md](Item-026-Prio-P3-🟡%20In%20Progress.md) |
@@ -97,15 +97,15 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 11/22 complete (50%)
+- **P1 (High):** 12/20 complete (60%)
 - **P2 (Medium):** 1/29 complete (3%)
-- **P3 (Low):** 1/7 complete (14%)
+- **P3 (Low):** 1/9 complete (11%)
 
 ### By Status
-- 🟢 Ready: 46
+- 🟢 Ready: 44
 - 🔴 Blocked: 0
-- 🟡 In Progress: 0
-- ✅ Done: 19
+- 🟡 In Progress: 1
+- ✅ Done: 20
 
 ---
 
@@ -155,9 +155,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 ## 🎯 Next Steps
 
 ### Recommended First Sprint (P1 Items)
-1. **Item-035** - Implement Snapshot System
-2. **Item-036** - Create AuditLog as Event Projection
-3. **Remaining P1 specs & observability** - 049, 050, 051, 052, 056, 057, 063, 064
+1. **Remaining P1 specs & observability** - 049, 050, 051, 052, 056, 057, 063, 064
 
 **Focus:** Complete remaining P1 items before moving to P2
 

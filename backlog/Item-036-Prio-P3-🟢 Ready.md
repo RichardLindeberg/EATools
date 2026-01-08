@@ -1,7 +1,7 @@
 # Item-036: Create AuditLog as Event Projection
 
 **Status:** 🟢 Ready  
-**Priority:** P1 - HIGH  
+**Priority:** P3 - LOW  
 **Effort:** 8-12 hours  
 **Created:** 2026-01-06  
 **Owner:** TBD

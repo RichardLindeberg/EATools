@@ -1,7 +1,7 @@
 # Item-035: Implement Snapshot System
 
 **Status:** �� Ready  
-**Priority:** P1 - HIGH  
+**Priority:** P3 - LOW  
 **Effort:** 12-16 hours  
 **Created:** 2026-01-06  
 **Owner:** TBD
