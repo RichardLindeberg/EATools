@@ -3,6 +3,7 @@ namespace EATool.Infrastructure
 open System
 open Microsoft.Data.Sqlite
 open EATool.Domain
+open EATool.Infrastructure.Metrics
 
 module EventStore =
     type EventRecord<'T> = {
@@ -70,6 +71,7 @@ module EventStore =
 
         interface IEventStore<'TEvent> with
             member _.Append(evts) =
+                let startTime = DateTime.UtcNow
                 use conn = openConn ()
                 use tx = conn.BeginTransaction()
                 try
@@ -105,49 +107,65 @@ module EventStore =
                         cmd.ExecuteNonQuery() |> ignore
 
                     tx.Commit()
+                    let duration = (DateTime.UtcNow - startTime).TotalMilliseconds
+                    let aggregateType = if evts.Length > 0 then evts.[0].AggregateType else "unknown"
+                    EventStoreMetrics.recordAppend aggregateType evts.Length duration true
                     Ok ()
                 with ex ->
                     try tx.Rollback() with _ -> ()
+                    let duration = (DateTime.UtcNow - startTime).TotalMilliseconds
+                    let aggregateType = if evts.Length > 0 then evts.[0].AggregateType else "unknown"
+                    EventStoreMetrics.recordAppend aggregateType evts.Length duration false
                     Error ex.Message
 
             member _.GetEvents(aggregateId) =
-                use conn = openConn ()
-                use cmd = conn.CreateCommand()
-                cmd.CommandText <- "SELECT event_id, aggregate_id, aggregate_type, aggregate_version, event_type, event_version, event_timestamp, actor, actor_type, source, causation_id, correlation_id, data FROM events WHERE aggregate_id = $agg ORDER BY aggregate_version ASC"
-                cmd.Parameters.AddWithValue("$agg", aggregateId.ToString()) |> ignore
-                use reader = cmd.ExecuteReader()
-                let res = System.Collections.Generic.List<EventEnvelope<'TEvent>>()
-                while reader.Read() do
-                    let parseGuid (idx:int) = Guid.Parse(reader.GetString(idx))
-                    let optGuid (idx:int) = if reader.IsDBNull(idx) then None else Some (Guid.Parse(reader.GetString(idx)))
-                    let eventId = parseGuid 0
-                    let aggId = parseGuid 1
-                    let aggType = reader.GetString(2)
-                    let aggVer = reader.GetInt32(3)
-                    let eType = reader.GetString(4)
-                    let eVer = reader.GetInt32(5)
-                    let eTs = DateTime.Parse(reader.GetString(6))
-                    let actor = reader.GetString(7)
-                    let actorTypeStr = reader.GetString(8)
-                    let sourceStr = reader.GetString(9)
-                    let causation = optGuid 10
-                    let correlation = optGuid 11
-                    let dataStr = reader.GetString(12)
-                    let data = deserialize dataStr
-                    let actorType =
-                        match actorTypeStr with
-                        | "User" -> ActorType.User
-                        | "Service" -> ActorType.Service
-                        | _ -> ActorType.System
-                    let source =
-                        match sourceStr with
-                        | "UI" -> Source.UI
-                        | "API" -> Source.API
-                        | "Import" -> Source.Import
-                        | "Webhook" -> Source.Webhook
-                        | _ -> Source.System
-                    res.Add({ EventId = eventId; EventType = eType; EventVersion = eVer; EventTimestamp = eTs; AggregateId = aggId; AggregateType = aggType; AggregateVersion = aggVer; CausationId = causation; CorrelationId = correlation; Actor = actor; ActorType = actorType; Source = source; Data = data; Metadata = None })
-                res |> Seq.toList
+                let startTime = DateTime.UtcNow
+                try
+                    use conn = openConn ()
+                    use cmd = conn.CreateCommand()
+                    cmd.CommandText <- "SELECT event_id, aggregate_id, aggregate_type, aggregate_version, event_type, event_version, event_timestamp, actor, actor_type, source, causation_id, correlation_id, data FROM events WHERE aggregate_id = $agg ORDER BY aggregate_version ASC"
+                    cmd.Parameters.AddWithValue("$agg", aggregateId.ToString()) |> ignore
+                    use reader = cmd.ExecuteReader()
+                    let res = System.Collections.Generic.List<EventEnvelope<'TEvent>>()
+                    while reader.Read() do
+                        let parseGuid (idx:int) = Guid.Parse(reader.GetString(idx))
+                        let optGuid (idx:int) = if reader.IsDBNull(idx) then None else Some (Guid.Parse(reader.GetString(idx)))
+                        let eventId = parseGuid 0
+                        let aggId = parseGuid 1
+                        let aggType = reader.GetString(2)
+                        let aggVer = reader.GetInt32(3)
+                        let eType = reader.GetString(4)
+                        let eVer = reader.GetInt32(5)
+                        let eTs = DateTime.Parse(reader.GetString(6))
+                        let actor = reader.GetString(7)
+                        let actorTypeStr = reader.GetString(8)
+                        let sourceStr = reader.GetString(9)
+                        let causation = optGuid 10
+                        let correlation = optGuid 11
+                        let dataStr = reader.GetString(12)
+                        let data = deserialize dataStr
+                        let actorType =
+                            match actorTypeStr with
+                            | "User" -> ActorType.User
+                            | "Service" -> ActorType.Service
+                            | _ -> ActorType.System
+                        let source =
+                            match sourceStr with
+                            | "UI" -> Source.UI
+                            | "API" -> Source.API
+                            | "Import" -> Source.Import
+                            | "Webhook" -> Source.Webhook
+                            | _ -> Source.System
+                        res.Add({ EventId = eventId; EventType = eType; EventVersion = eVer; EventTimestamp = eTs; AggregateId = aggId; AggregateType = aggType; AggregateVersion = aggVer; CausationId = causation; CorrelationId = correlation; Actor = actor; ActorType = actorType; Source = source; Data = data; Metadata = None })
+                    let events = res |> Seq.toList
+                    let duration = (DateTime.UtcNow - startTime).TotalMilliseconds
+                    let aggregateType = if events.Length > 0 then events.[0].AggregateType else "unknown"
+                    EventStoreMetrics.recordRead aggregateType events.Length duration true
+                    events
+                with ex ->
+                    let duration = (DateTime.UtcNow - startTime).TotalMilliseconds
+                    EventStoreMetrics.recordRead "unknown" 0 duration false
+                    reraise()
 
             member _.GetEventsSince(aggregateId, version) =
                 use conn = openConn ()

@@ -8,6 +8,7 @@ open EATool.Infrastructure
 open EATool.Infrastructure.Observability
 open EATool.Infrastructure.Logging.LogContext
 open EATool.Infrastructure.Tracing
+open EATool.Infrastructure.Metrics
 open EATool.Api
 
 [<EntryPoint>]
@@ -58,6 +59,10 @@ let main args =
         | Error err -> printfn "[%s] Database migration failed: %s" environment err
     | Error err -> printfn "[%s] Database initialization failed: %s" environment err
     
+    // Initialize metrics
+    MetricsRegistry.initialize()
+    printfn "[%s] Metrics registry initialized" environment
+    
     let app = builder.Build()
     
     // Configure middleware (order matters)
@@ -70,6 +75,7 @@ let main args =
     // Combine all routes and configure Giraffe
     let allRoutes =
         HealthEndpoint.routes
+        @ MetricsEndpoint.routes
         @ Endpoints.routes
         @ ApplicationsEndpoints.routes
         @ ApplicationServicesEndpoints.routes

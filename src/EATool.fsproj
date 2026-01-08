@@ -44,6 +44,12 @@
     <Compile Include="Domain/CommandDispatcher.fs" />
     <Compile Include="Infrastructure/Tracing/ActivitySourceFactory.fs" />
     <Compile Include="Infrastructure/Tracing/TraceContextMiddleware.fs" />
+    <Compile Include="Infrastructure/Metrics/MetricsRegistry.fs" />
+    <Compile Include="Infrastructure/Metrics/HttpMetrics.fs" />
+    <Compile Include="Infrastructure/Metrics/CommandMetrics.fs" />
+    <Compile Include="Infrastructure/Metrics/EventStoreMetrics.fs" />
+    <Compile Include="Infrastructure/Metrics/ProjectionMetrics.fs" />
+    <Compile Include="Infrastructure/Metrics/BusinessMetrics.fs" />
     <Compile Include="Infrastructure/Observability.fs" />
     <Compile Include="Infrastructure/Logging/StructuredLogger.fs" />
     <Compile Include="Infrastructure/Logging/LogContext.fs" />
@@ -76,6 +82,7 @@
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
     <Compile Include="Api/HealthEndpoint.fs" />
+    <Compile Include="Api/MetricsEndpoint.fs" />
     <Compile Include="Api/Instrumentation.fs" />
     <Compile Include="Api/Endpoints.fs" />
     <Compile Include="Api/ApplicationsEndpoints.fs" />

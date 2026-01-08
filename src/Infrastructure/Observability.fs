@@ -174,6 +174,7 @@ let configureOTelMetrics (services: IServiceCollection) =
                 |> ignore
             
             // Add custom meters
+            builder.AddMeter("EATool") |> ignore
             builder.AddMeter("EATool.Commands") |> ignore
             builder.AddMeter("EATool.EventStore") |> ignore
             builder.AddMeter("EATool.Projections") |> ignore

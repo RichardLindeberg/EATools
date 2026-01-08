@@ -12,6 +12,7 @@ open EATool.Infrastructure.ApplicationEventJson
 open EATool.Infrastructure.EventJson
 open EATool.Infrastructure.ProjectionEngine
 open EATool.Infrastructure.Tracing
+open EATool.Infrastructure.Metrics
 
 module ApplicationsEndpoints =
     
@@ -252,6 +253,8 @@ module ApplicationsEndpoints =
                             | Ok _ ->
                                 if activity <> null then
                                     activity.SetTag("command.result", "success") |> ignore
+                                // Record business metric
+                                BusinessMetrics.recordApplicationCreated()
                                 match ApplicationRepository.getById appId with
                                 | Some app ->
                                     ctx.SetStatusCode 201
