@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (44 Active, 21 Complete)  
-> **Progress:** 21/65 complete (32%)  
+> **Total Items:** 65 (43 Active, 22 Complete)  
+> **Progress:** 22/65 complete (34%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-7-active)** (7 active) - Should be done this sprint
+- **[P1 - High](#p1---high-6-active)** (6 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-28-active)** (28 active) - Should be planned
 - **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-21-total)** (21 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-22-total)** (22 items) - See backlog/old/ directory
 
 ---
 
@@ -28,11 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (7 active)
+## P1 - High (6 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 050 | Structured Logging Implementation with OTel ILogger | 🟢 Ready | [Item-050-Prio-P1-🟢 Ready.md](Item-050-Prio-P1-🟢%20Ready.md) |
 | 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
 | 052 | Metrics Implementation via OTel Meter API | 🟢 Ready | [Item-052-Prio-P1-🟢 Ready.md](Item-052-Prio-P1-🟢%20Ready.md) |
 | 056 | Required Fields Enforcement Across All Entities | 🟢 Ready | [Item-056-Prio-P0-🟢 Ready.md](Item-056-Prio-P0-🟢%20Ready.md) |
@@ -96,19 +95,19 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 13/20 complete (65%)
+- **P1 (High):** 14/20 complete (70%)
 - **P2 (Medium):** 1/29 complete (3%)
 - **P3 (Low):** 1/9 complete (11%)
 
 ### By Status
-- 🟢 Ready: 43
+- 🟢 Ready: 42
 - 🔴 Blocked: 0
 - 🟡 In Progress: 1
-- ✅ Done: 21
+- ✅ Done: 22
 
 ---
 
-## ✅ Completed Items (21 total)
+## ✅ Completed Items (22 total)
 
 All completed items have been moved to [backlog/old/](old/) directory to keep the main backlog focused on active work.
 
@@ -123,7 +122,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 029 | Create Command Framework and Base Types | 2026-01-06 | [old/Item-029-Prio-P0-✅ Done.md](old/Item-029-Prio-P0-✅%20Done.md) |
 | 030 | Implement CQRS Projection Framework | 2026-01-06 | [old/Item-030-Prio-P0-✅ Done.md](old/Item-030-Prio-P0-✅%20Done.md) |
 
-### P1 - High (13 complete)
+### P1 - High (14 complete)
 | ID | Title | Completed | Files |
 |----|-------|-----------|-------|
 | 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | 2026-01-06 | [old/Item-005-Prio-P1-✅ Done.md](old/Item-005-Prio-P1-✅%20Done.md) |
@@ -139,6 +138,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 034 | Migrate Relation Endpoints to Commands | 2026-01-07 | [old/Item-034-Prio-P1-✅ Done.md](old/Item-034-Prio-P1-✅%20Done.md) |
 | 047 | Implement ApplicationService & ApplicationInterface CQRS Endpoints | 2026-01-08 | [old/Item-047-Prio-P1-✅ Done.md](old/Item-047-Prio-P1-✅%20Done.md) |
 | 049 | OpenTelemetry SDK Integration & Configuration | 2026-01-08 | [old/Item-049-Prio-P1-✅ Done.md](old/Item-049-Prio-P1-✅%20Done.md) |
+| 050 | Structured Logging Implementation with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
 
 ### P2 - Medium (1 complete)
 | ID | Title | Completed | Files |
@@ -155,7 +155,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 ## 🎯 Next Steps
 
 ### Recommended First Sprint (P1 Items)
-1. **Remaining P1 specs & observability** - 050, 051, 052, 056, 057, 063, 064
+1. **Remaining P1 specs & observability** - 051, 052, 056, 057, 063, 064
 
 **Focus:** Complete remaining P1 items before moving to P2
 

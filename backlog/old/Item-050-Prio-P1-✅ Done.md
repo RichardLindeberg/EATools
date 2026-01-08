@@ -1,9 +1,10 @@
 # Item-050: Structured Logging Implementation with OTel ILogger
 
-**Status:** 🟢 Ready  
+**Status:** ✅ Done  
 **Priority:** P1 - HIGH  
 **Effort:** 8-10 hours  
 **Created:** 2026-01-07  
+**Completed:** 2026-01-08  
 **Owner:** TBD
 
 ---
@@ -44,42 +45,42 @@ This violates core observability requirements (LOG-001 through LOG-011) and bloc
 
 ## Detailed Tasks
 
-- [ ] Create `src/Infrastructure/Logging/StructuredLogger.fs` module:
+- [x] Create `src/Infrastructure/Logging/StructuredLogger.fs` module:
   - Define record types for OTel log attributes (trace_id, span_id, service.name, etc.)
   - Create helper functions: `logInfo`, `logWarn`, `logError` taking structured data
   - Ensure all functions accept correlation ID and current Activity context
   - Map F# logging calls to ILogger with proper OTel attributes
 
-- [ ] Create `src/Infrastructure/Logging/LogContext.fs`:
+- [x] Create `src/Infrastructure/Logging/LogContext.fs`:
   - Extension to HttpContext to extract/create correlation IDs
   - Middleware to inject correlation ID into request context
   - Methods to get current Activity (trace context) for logging
 
-- [ ] Configure ASP.NET Core logging in `Program.fs`:
+- [x] Configure ASP.NET Core logging in `Program.fs`:
   - Add logging provider that outputs JSON in OTel format
   - Configure log levels per environment (DEBUG in dev, INFO in prod)
   - Ensure trace context (trace_id, span_id) is included in all logs
 
-- [ ] Update all handler logging in `src/Api/Handlers.fs`:
+- [x] Update all handler logging in `src/Api/Handlers.fs`:
   - Replace `logger.Log()` with structured logging calls from StructuredLogger
   - Include operation name, entity ID, result status for each handler
   - Log errors with exception details and affected aggregate ID (LOG-006)
 
-- [ ] Add logging to key domain operations:
+- [x] Add logging to key domain operations:
   - Command processing: log command type, aggregate ID, result (LOG-007)
   - Event persistence: log event count, total size, duration (LOG-008)
   - External calls: log HTTP method, target, status, latency (LOG-009)
 
-- [ ] Add database operation logging:
+- [x] Add database operation logging:
   - Connection pool status (active connections)
   - Query execution time and query count
   - Slow query alerts (>500ms)
 
-- [ ] Verify no PII in any logs:
+- [x] Verify no PII in any logs:
   - Scan all logging calls for email, names, sensitive data
   - Ensure only user IDs (not user details) are logged (LOG-004)
 
-- [ ] Update runbooks with logging configuration:
+- [x] Update runbooks with logging configuration:
   - How to enable DEBUG logs in production for troubleshooting
   - How to search logs by trace ID
   - Common log attributes and their meanings
@@ -88,17 +89,17 @@ This violates core observability requirements (LOG-001 through LOG-011) and bloc
 
 ## Acceptance Criteria
 
-- [ ] All logs are emitted via OTel ILogger (no direct console.log or printf)
-- [ ] Sample logs from a full request/response cycle are valid JSON per OTel schema
-- [ ] Logs contain trace_id, span_id, trace_flags for tracing
-- [ ] No PII appears in any log (email, names, secrets redacted)
-- [ ] Error logs include exception type, message, stack trace (LOG-006)
-- [ ] Correlation ID middleware is active on all HTTP endpoints
-- [ ] DEBUG logs do not appear in production logs (only in sampled troubleshooting)
-- [ ] Logging overhead <5% of request latency (p99) - CON-001
-- [ ] All tests pass (89+ integration tests)
-- [ ] Build succeeds with 0 errors, 0 warnings
-- [ ] Documentation updated with logging best practices
+- [x] All logs are emitted via OTel ILogger (no direct console.log or printf)
+- [x] Sample logs from a full request/response cycle are valid JSON per OTel schema
+- [x] Logs contain trace_id, span_id, trace_flags for tracing
+- [x] No PII appears in any log (email, names, secrets redacted)
+- [x] Error logs include exception type, message, stack trace (LOG-006)
+- [x] Correlation ID middleware is active on all HTTP endpoints
+- [x] DEBUG logs do not appear in production logs (only in sampled troubleshooting)
+- [x] Logging overhead <5% of request latency (p99) - CON-001
+- [x] All tests pass (105 integration tests)
+- [x] Build succeeds with 0 errors, 0 warnings
+- [x] Documentation updated with logging best practices
 
 ---
 
@@ -118,3 +119,11 @@ This violates core observability requirements (LOG-001 through LOG-011) and bloc
 ## Notes
 
 This item focuses on structured logging foundation. Metrics and tracing are separate items. Keep logging calls simple and consistent across all modules.
+
+---
+
+## History
+
+| Date | Action | Description |
+|------|--------|-------------|
+| 2026-01-08 | ✅ Completed | Implemented structured logging infrastructure with OTel ILogger, correlation ID middleware, and JSON console output. All 105 tests passing. |
