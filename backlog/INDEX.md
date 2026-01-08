@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
-> **Last Updated:** 2026-01-07  
-> **Total Items:** 65 (53 Active, 12 Complete)  
-> **Progress:** 12/65 complete (18%)  
+> **Last Updated:** 2026-01-08  
+> **Total Items:** 65 (46 Active, 19 Complete)  
+> **Progress:** 19/65 complete (29%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-13-active)** (13 active) - Should be done this sprint
+- **[P1 - High](#p1---high-11-active)** (11 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-23-active)** (23 active) - Should be planned
 - **[P3 - Low](#p3---low-6-active)** (6 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-12-total)** (12 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-19-total)** (19 items) - See backlog/old/ directory
 
 ---
 
@@ -28,15 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (15 active)
+## P1 - High (11 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 007 | Create Authorization Model Specification | 🟢 Ready | [Item-007-Prio-P1-🟢 Ready.md](Item-007-Prio-P1-🟢%20Ready.md) |
-| 008 | Create Data Architecture Specification | 🟢 Ready | [Item-008-Prio-P1-🟢 Ready.md](Item-008-Prio-P1-🟢%20Ready.md) |
-| 009 | Create Authentication Specification | 🟢 Ready | [Item-009-Prio-P1-🟢 Ready.md](Item-009-Prio-P1-🟢%20Ready.md) |
-| 010 | Create Error Handling Specification | 🟢 Ready | [Item-010-Prio-P1-🟢 Ready.md](Item-010-Prio-P1-🟢%20Ready.md) |
-| 011 | Create Query Patterns Specification | 🟢 Ready | [Item-011-Prio-P1-🟢 Ready.md](Item-011-Prio-P1-🟢%20Ready.md) |
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
 | 047 | Implement ApplicationService & ApplicationInterface CRUD Endpoints | 🟢 Ready | [Item-047-Prio-P1-🟢 Ready.md](Item-047-Prio-P1-🟢%20Ready.md) |
@@ -103,19 +98,19 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 4/15 complete (27%)
-- **P2 (Medium):** 1/28 complete (4%)
-- **P3 (Low):** 0/6 complete (0%)
+- **P1 (High):** 11/22 complete (50%)
+- **P2 (Medium):** 1/29 complete (3%)
+- **P3 (Low):** 1/7 complete (14%)
 
 ### By Status
-- 🟢 Ready: 34
+- 🟢 Ready: 46
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 12
+- ✅ Done: 19
 
 ---
 
-## ✅ Completed Items (12 total)
+## ✅ Completed Items (19 total)
 
 All completed items have been moved to [backlog/old/](old/) directory to keep the main backlog focused on active work.
 
@@ -130,11 +125,16 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 029 | Create Command Framework and Base Types | 2026-01-06 | [old/Item-029-Prio-P0-✅ Done.md](old/Item-029-Prio-P0-✅%20Done.md) |
 | 030 | Implement CQRS Projection Framework | 2026-01-06 | [old/Item-030-Prio-P0-✅ Done.md](old/Item-030-Prio-P0-✅%20Done.md) |
 
-### P1 - High (4 complete)
+### P1 - High (11 complete)
 | ID | Title | Completed | Files |
 |----|-------|-----------|-------|
 | 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | 2026-01-06 | [old/Item-005-Prio-P1-✅ Done.md](old/Item-005-Prio-P1-✅%20Done.md) |
 | 006 | Review and Simplify Lifecycle Storage Strategy | 2026-01-06 | [old/Item-006-Prio-P1-✅ Done.md](old/Item-006-Prio-P1-✅%20Done.md) |
+| 007 | Create Authorization Model Specification | 2026-01-08 | [old/Item-007-Prio-P1-✅ Done.md](old/Item-007-Prio-P1-✅%20Done.md) |
+| 008 | Create Data Architecture Specification | 2026-01-08 | [old/Item-008-Prio-P1-✅ Done.md](old/Item-008-Prio-P1-✅%20Done.md) |
+| 009 | Create Authentication Specification | 2026-01-08 | [old/Item-009-Prio-P1-✅ Done.md](old/Item-009-Prio-P1-✅%20Done.md) |
+| 010 | Create Error Handling Specification | 2026-01-08 | [old/Item-010-Prio-P1-✅ Done.md](old/Item-010-Prio-P1-✅%20Done.md) |
+| 011 | Create Query Patterns Specification | 2026-01-08 | [old/Item-011-Prio-P1-✅ Done.md](old/Item-011-Prio-P1-✅%20Done.md) |
 | 031 | Migrate Application Endpoints to Commands | 2026-01-06 | [old/Item-031-Prio-P1-✅ Done.md](old/Item-031-Prio-P1-✅%20Done.md) |
 | 032 | Migrate Organization Endpoints to Commands | 2026-01-07 | [old/Item-032-Prio-P1-✅ Done.md](old/Item-032-Prio-P1-✅%20Done.md) |
 | 033 | Migrate BusinessCapability Endpoints to Commands | 2026-01-07 | [old/Item-033-Prio-P1-✅ Done.md](old/Item-033-Prio-P1-✅%20Done.md) |
@@ -145,6 +145,11 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 |----|-------|-----------|-------|
 | 012 | Add `parent_id` Filter to Organizations Endpoint | 2026-01-06 | [old/Item-012-Prio-P2-✅ Done.md](old/Item-012-Prio-P2-✅%20Done.md) |
 
+### P3 - Low (1 complete)
+| ID | Title | Completed | Files |
+|----|-------|-----------|-------|
+| 026 | Create Backlog Item Template | 2026-01-06 | [old/Item-026-Prio-P3-✅ Done.md](old/Item-026-Prio-P3-✅%20Done.md) |
+
 ---
 
 ## 🎯 Next Steps
@@ -152,7 +157,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 ### Recommended First Sprint (P1 Items)
 1. **Item-035** - Implement Snapshot System
 2. **Item-036** - Create AuditLog as Event Projection
-3. **Item-007-011** - Create key specification documents
+3. **Remaining P1 specs & observability** - 047, 049, 050, 051, 052, 056, 057, 063, 064
 
 **Focus:** Complete remaining P1 items before moving to P2
 
@@ -209,7 +214,7 @@ Use [TEMPLATE.md](TEMPLATE.md) when creating new backlog items. The template inc
 5. Mark as ✅ Done when finished
 
 ### For Project Managers
-1. Check progress at a glance (7/46 complete)
+1. Check progress at a glance (19/65 complete)
 2. Identify blocked items (dependencies)
 3. Plan sprints by priority
 4. Track effort estimates

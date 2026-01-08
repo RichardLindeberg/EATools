@@ -71,21 +71,30 @@ All specifications follow this structure:
 1. [Domain Model Overview](spec-schema-domain-overview.md)
 2. [Application Layer Entities](spec-schema-entities-application.md)
 3. [Validation Rules](spec-schema-validation.md)
+4. [Error Handling](spec-tool-error-handling.md)
+5. [Query Patterns](spec-tool-query-patterns.md)
 
 ### Frontend Developers
 1. [API Contract](spec-tool-api-contract.md) *(coming soon)*
 2. [Schema Examples](spec-schema-examples.md)
 3. [Application Layer Entities](spec-schema-entities-application.md)
+4. [Query Patterns](spec-tool-query-patterns.md)
 
 ### Integration Partners
 1. [API Contract](spec-tool-api-contract.md) *(coming soon)*
-2. [Authentication](spec-process-authentication.md) *(coming soon)*
-3. [Webhook Events](spec-process-webhooks.md) *(coming soon)*
+2. [Authentication](spec-process-authentication.md)
+3. [Error Handling](spec-tool-error-handling.md)
+4. [Webhook Events](spec-process-webhooks.md) *(coming soon)*
+5. [Query Patterns](spec-tool-query-patterns.md)
 
 ### Architects
 1. [Domain Model Overview](spec-schema-domain-overview.md)
 2. [System Architecture](spec-architecture-system-design.md) *(coming soon)*
-3. [Authorization Model](spec-process-authorization.md) *(coming soon)*
+3. [Data Architecture](spec-architecture-data.md)
+4. [Authentication](spec-process-authentication.md)
+5. [Authorization Model](spec-process-authorization.md)
+6. [Error Handling](spec-tool-error-handling.md)
+7. [Query Patterns](spec-tool-query-patterns.md)
 
 ## Status Legend
 
@@ -107,7 +116,12 @@ All specifications follow this structure:
 | spec-schema-entities-meta.md | 📋 Planned | Extract from domain-model |
 | spec-schema-entities-supporting.md | 📋 Planned | Extract from domain-model |
 | spec-schema-validation.md | 📋 Planned | Extract from domain-model |
-| spec-schema-examples.md | �� Planned | Extract from domain-model |
+| spec-schema-examples.md | 📋 Planned | Extract from domain-model |
+| spec-process-authorization.md | ✅ Complete | Authorization model, OPA/Rego |
+| spec-process-authentication.md | ✅ Complete | OIDC, JWT, API keys |
+| spec-architecture-data.md | ✅ Complete | Data architecture, schemas, migrations |
+| spec-tool-error-handling.md | ✅ Complete | Error codes, responses, trace IDs |
+| spec-tool-query-patterns.md | ✅ Complete | Pagination, filtering, sorting, search |
 
 ## Contributing
 
@@ -129,4 +143,4 @@ When creating or updating specifications:
 ---
 
 **Maintained by**: EA Platform Team  
-**Last Updated**: 2026-01-06
+**Last Updated**: 2026-01-08

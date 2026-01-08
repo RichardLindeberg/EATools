@@ -1,6 +1,6 @@
 # EATool - Project Backlog
 
-> **Last Updated:** 2026-01-06  
+> **Last Updated:** 2026-01-08  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 ---
@@ -38,21 +38,19 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 | Priority | Count | Status |
 |----------|-------|--------|
 | P0 - Critical | 7 | 7/7 complete |
-| P1 - High | 13 | 4/13 complete |
-| P2 - Medium | 20 | 1/20 complete |
-| P3 - Low | 6 | 0/6 complete |
-| **Total** | **46** | **12/46 complete** |
+| P1 - High | 22 | 11/22 complete |
+| P2 - Medium | 29 | 1/29 complete |
+| P3 - Low | 7 | 1/7 complete |
+| **Total** | **65** | **19/65 complete** |
 
 ---
 
 ## 🎯 Recommended Next Actions
 
 1. **Read** [backlog/INDEX.md](backlog/INDEX.md) for complete overview
-2. **Focus on P1 specs next:**
-   - [Item-007](backlog/Item-007-Prio-P1-🟢%20Ready.md): Authorization Model Specification
-   - [Item-008](backlog/Item-008-Prio-P1-🟢%20Ready.md): Data Architecture Specification
-   - [Item-009](backlog/Item-009-Prio-P1-🟢%20Ready.md): Authentication Specification
-3. **Continue with P1 patterns** (Items 010-011) to round out the specification set
+2. **Focus on remaining P1 work:**
+   - Specifications and observability (Items 035, 036, 047, 049-052, 056-057, 063-064)
+3. **Continue with P1 patterns** once remaining specs are complete
 
 ---
 

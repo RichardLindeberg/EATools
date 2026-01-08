@@ -2,7 +2,7 @@
 title: EA Tool Specifications Index
 version: 1.0
 date_created: 2026-01-06
-last_updated: 2026-01-06
+last_updated: 2026-01-08
 owner: EA Platform Team
 tags: [index, overview, specifications]
 ---
@@ -34,18 +34,20 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 
 - **[API Contract](spec-tool-api-contract.md)** - REST API endpoints, request/response patterns, error handling, pagination
 - **[API Versioning](spec-tool-api-versioning.md)** *(planned)* - Versioning strategy, deprecation policy, breaking changes
+- **[Error Handling](spec-tool-error-handling.md)** - Error codes, structures, trace IDs, rate limiting, client guidance
+- **[Query Patterns](spec-tool-query-patterns.md)** - Pagination, filtering, sorting, search, soft-delete toggles, response envelopes
 
 ### Architecture & Design
 
 - **[Event Sourcing & Command-Based Architecture](spec-architecture-event-sourcing.md)** - Command design, event store, CQRS, audit requirements, prevention of fat events
 - **[System Architecture](spec-architecture-system-design.md)** *(planned)* - Component design, deployment, infrastructure
-- **[Data Architecture](spec-architecture-data.md)** *(planned)* - Database schema, migrations, indexing strategy
+- **[Data Architecture](spec-architecture-data.md)** - Database schema, migrations, indexing strategy, event store, projections
 - **[Integration Architecture](spec-architecture-integration.md)** *(planned)* - External systems, webhooks, SDK generation
 
 ### Security & Authorization
 
-- **[Authorization Model](spec-process-authorization.md)** *(planned)* - OPA/Rego policies, RBAC/ABAC, decision flows
-- **[Authentication](spec-process-authentication.md)** *(planned)* - OIDC integration, API keys, token management
+- **[Authorization Model](spec-process-authorization.md)** - OPA/Rego policies, RBAC/ABAC, obligations, fail-closed decision flows
+- **[Authentication](spec-process-authentication.md)** - OIDC integration, API keys, token management
 - **[Security Controls](spec-process-security.md)** *(planned)* - Data classification, PII handling, audit logging
 
 ### Processes & Operations
