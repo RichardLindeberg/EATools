@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 64 (36 Active, 28 Complete)  
-> **Progress:** 28/64 complete (43%)  
+> **Total Items:** 64 (35 Active, 29 Complete)  
+> **Progress:** 29/64 complete (45%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,7 +14,7 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-2-active)** (2 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-27-active)** (27 active) - Should be planned
+- **[P2 - Medium](#p2---medium-26-active)** (26 active) - Should be planned
 - **[P3 - Low](#p3---low-7-active)** (7 active) - Nice to have
 
 ### Completed Items
@@ -37,7 +37,7 @@ All P0 items complete! ✅
 
 ---
 
-## P2 - Medium (27 active)
+## P2 - Medium (26 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -54,7 +54,6 @@ All P0 items complete! ✅
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 | 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
 | 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P2-🟢 Ready.md](Item-054-Prio-P2-🟢%20Ready.md) |
-| 055 | Observability Testing & Integration | 🟢 Ready | [Item-055-Prio-P2-🟢 Ready.md](Item-055-Prio-P2-🟢%20Ready.md) |
 | 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
 | 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
 | 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
@@ -91,22 +90,22 @@ All P0 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
 - **P1 (High):** 17/20 complete (85%)
-- **P2 (Medium):** 1/28 complete (4%)
+- **P2 (Medium):** 2/28 complete (7%)
 - **P3 (Low):** 1/8 complete (12%)
 ### By Status
-- 🟢 Ready: 37
+- 🟢 Ready: 36
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 28
+- ✅ Done: 29
 
 ---
 
-## ✅ Completed Items (28 total)
+## ✅ Completed Items (29 total)
 
 All completed items are in [backlog/old/](old/) or current directory:
 - P0: 8
 - P1: 18
-- P2: 1
+- P2: 2
 - P3: 1
 
 See the files directly for details and completion dates.

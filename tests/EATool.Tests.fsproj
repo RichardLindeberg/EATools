@@ -4,6 +4,8 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="fixtures/MockOTelExporter.fs" />
+    <Compile Include="fixtures/OTelTestHelpers.fs" />
     <Compile Include="CommandFrameworkTests.fs" />
     <Compile Include="ApplicationCommandTests.fs" />
     <Compile Include="EventStoreTests.fs" />
@@ -11,6 +13,12 @@
     <Compile Include="EventJsonStoreTests.fs" />
     <Compile Include="ProjectionTests.fs" />
     <Compile Include="ProjectionHandlerTests.fs" />
+    <Compile Include="LoggingTests.fs" />
+    <Compile Include="TracingTests.fs" />
+    <Compile Include="MetricsTests.fs" />
+    <Compile Include="ContextPropagationTests.fs" />
+    <Compile Include="PIIDetectionTests.fs" />
+    <Compile Include="integration/ObservabilityIntegrationTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
