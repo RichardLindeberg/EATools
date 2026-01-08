@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 64 (35 Active, 29 Complete)  
-> **Progress:** 29/64 complete (45%)  
+> **Total Items:** 73 (43 Active, 30 Complete)  
+> **Progress:** 30/73 complete (41%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,11 +14,11 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-2-active)** (2 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-26-active)** (26 active) - Should be planned
-- **[P3 - Low](#p3---low-7-active)** (7 active) - Nice to have
+- **[P2 - Medium](#p2---medium-33-active)** (33 active) - Should be planned
+- **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-28-total)** (28 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-30-total)** (30 items) - See backlog/old/ directory
 
 ---
 
@@ -37,14 +37,13 @@ All P0 items complete! ✅
 
 ---
 
-## P2 - Medium (26 active)
+## P2 - Medium (33 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 013 | Standardize Query Parameter Patterns Across Endpoints | 🟢 Ready | [Item-013-Prio-P2-🟢 Ready.md](Item-013-Prio-P2-🟢%20Ready.md) |
 | 014 | Add Missing API Documentation Files | 🟢 Ready | [Item-014-Prio-P2-🟢 Ready.md](Item-014-Prio-P2-🟢%20Ready.md) |
 | 015 | Expand Relation Validation Matrix | 🟢 Ready | [Item-015-Prio-P2-🟢 Ready.md](Item-015-Prio-P2-🟢%20Ready.md) |
-| 016 | Create Testing Strategy Specification | 🟢 Ready | [Item-016-Prio-P2-🟢 Ready.md](Item-016-Prio-P2-🟢%20Ready.md) |
 | 017 | Create Data Migration Strategy Specification | 🟢 Ready | [Item-017-Prio-P2-🟢 Ready.md](Item-017-Prio-P2-🟢%20Ready.md) |
 | 018 | Enhance Enum Documentation in Domain Model | 🟢 Ready | [Item-018-Prio-P2-🟢 Ready.md](Item-018-Prio-P2-🟢%20Ready.md) |
 | 019 | Decide on Consolidation of spec-schema-domain-model.md | 🟢 Ready | [Item-019-Prio-P2-🟢 Ready.md](Item-019-Prio-P2-🟢%20Ready.md) |
@@ -67,10 +66,18 @@ All P0 items complete! ✅
 | 061 | Soft Delete Implementation Across All Entities | 🟢 Ready | [Item-061-Prio-P2-🟢 Ready.md](Item-061-Prio-P2-🟢%20Ready.md) |
 | 062 | Created/Modified Timestamp Tracking | 🟢 Ready | [Item-062-Prio-P2-🟢 Ready.md](Item-062-Prio-P2-🟢%20Ready.md) |
 | 065 | API Rate Limiting & Throttling | 🟢 Ready | [Item-065-Prio-P2-🟢 Ready.md](Item-065-Prio-P2-🟢%20Ready.md) |
+| 066 | Define Performance Thresholds & Latency SLOs | 🟢 Ready | [Item-066-Prio-P2-🟢 Ready.md](Item-066-Prio-P2-🟢%20Ready.md) |
+| 067 | Add CI Coverage Gates & Artifacts | 🟢 Ready | [Item-067-Prio-P2-🟢 Ready.md](Item-067-Prio-P2-🟢%20Ready.md) |
+| 068 | AuthN/AuthZ Integration Test Coverage | 🟢 Ready | [Item-068-Prio-P2-🟢 Ready.md](Item-068-Prio-P2-🟢%20Ready.md) |
+| 069 | Observability Contract Tests for Write Paths | 🟢 Ready | [Item-069-Prio-P2-🟢 Ready.md](Item-069-Prio-P2-🟢%20Ready.md) |
+| 070 | Metrics Label Cardinality & PII Guardrails | 🟢 Ready | [Item-070-Prio-P2-🟢 Ready.md](Item-070-Prio-P2-🟢%20Ready.md) |
+| 071 | Error Contract & Validation Coverage | 🟢 Ready | [Item-071-Prio-P2-🟢 Ready.md](Item-071-Prio-P2-🟢%20Ready.md) |
+| 072 | Data Cleanup & Idempotency Tests | 🟢 Ready | [Item-072-Prio-P2-🟢 Ready.md](Item-072-Prio-P2-🟢%20Ready.md) |
+| 073 | Performance Smoke Hooks (Non-Failing) | 🟢 Ready | [Item-073-Prio-P2-🟢 Ready.md](Item-073-Prio-P2-🟢%20Ready.md) |
 
 ---
 
-## P3 - Low (7 active)
+## P3 - Low (8 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -82,6 +89,7 @@ All P0 items complete! ✅
 | 026 | Create Backlog Item Template | � In Progress | [Item-026-Prio-P3-🟡 In Progress.md](Item-026-Prio-P3-🟡%20In%20Progress.md) |
 | 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
 | 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
+| 074 | Contract Drift Detection vs OpenAPI | 🟢 Ready | [Item-074-Prio-P3-🟢 Ready.md](Item-074-Prio-P3-🟢%20Ready.md) |
 
 ---
 
@@ -89,23 +97,23 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
-- **P1 (High):** 17/20 complete (85%)
-- **P2 (Medium):** 2/28 complete (7%)
-- **P3 (Low):** 1/8 complete (12%)
+- **P1 (High):** 18/20 complete (90%)
+- **P2 (Medium):** 3/36 complete (8%)
+- **P3 (Low):** 1/9 complete (11%)
 ### By Status
-- 🟢 Ready: 36
+- 🟢 Ready: 42
 - 🔴 Blocked: 0
-- 🟡 In Progress: 0
-- ✅ Done: 29
+- 🟡 In Progress: 1
+- ✅ Done: 30
 
 ---
 
-## ✅ Completed Items (29 total)
+## ✅ Completed Items (30 total)
 
 All completed items are in [backlog/old/](old/) or current directory:
 - P0: 8
 - P1: 18
-- P2: 2
+- P2: 3
 - P3: 1
 
 See the files directly for details and completion dates.

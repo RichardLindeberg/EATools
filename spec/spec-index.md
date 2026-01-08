@@ -53,6 +53,7 @@ The EA Tool is an API-first enterprise architecture management platform that cat
 ### Processes & Operations
 
 - **[Monitoring & Observability](spec-process-observability.md)** - OpenTelemetry compliance, structured logging, metrics, distributed tracing, alerting
+- **[Testing Strategy](spec-testing-strategy.md)** - Unit, integration, and performance testing patterns, coverage thresholds, CI gating
 - **[Data Import/Export](spec-process-import-export.md)** *(planned)* - Bulk operations, CSV/Excel formats, job management
 - **[Webhook Events](spec-process-webhooks.md)** *(planned)* - Event types, payload formats, retry logic
 

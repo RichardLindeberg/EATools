@@ -13,7 +13,7 @@ All backlog items are now managed in the [`/backlog`](backlog/) folder with the 
 Item-{id:3d}-Prio-{P0|P1|P2|P3}.md
 ```
 
-**Start here:** [backlog/INDEX.md](backlog/INDEX.md) - Full backlog index with all 46 items
+**Start here:** [backlog/INDEX.md](backlog/INDEX.md) - Full backlog index with all 73 items
 
 ---
 
@@ -37,11 +37,11 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 
 | Priority | Count | Status |
 |----------|-------|--------|
-| P0 - Critical | 7 | 7/7 complete |
-| P1 - High | 22 | 12/22 complete |
-| P2 - Medium | 29 | 1/29 complete |
-| P3 - Low | 7 | 1/7 complete |
-| **Total** | **65** | **20/65 complete** |
+| P0 - Critical | 8 | 8/8 complete |
+| P1 - High | 20 | 18/20 complete |
+| P2 - Medium | 36 | 3/36 complete |
+| P3 - Low | 9 | 1/9 complete |
+| **Total** | **73** | **30/73 complete** |
 
 ---
 
@@ -61,7 +61,7 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 - [backlog/TEMPLATE.md](backlog/TEMPLATE.md) - Item template for new items
 
 ### By Priority
-- **[P0 Items](backlog/INDEX.md#p0---critical-7-items)** - Critical (7 items)
-- **[P1 Items](backlog/INDEX.md#p1---high-13-items)** - High (13 items)
-- **[P2 Items](backlog/INDEX.md#p2---medium-20-items)** - Medium (20 items)
-- **[P3 Items](backlog/INDEX.md#p3---low-6-items)** - Low (6 items)
+- **[P0 Items](backlog/INDEX.md#p0---critical-0-active)** - Critical (8 total)
+- **[P1 Items](backlog/INDEX.md#p1---high-2-active)** - High (20 total)
+- **[P2 Items](backlog/INDEX.md#p2---medium-33-active)** - Medium (36 total)
+- **[P3 Items](backlog/INDEX.md#p3---low-8-active)** - Low (9 total)

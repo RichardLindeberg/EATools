@@ -122,6 +122,7 @@ All specifications follow this structure:
 | spec-architecture-data.md | ✅ Complete | Data architecture, schemas, migrations |
 | spec-tool-error-handling.md | ✅ Complete | Error codes, responses, trace IDs |
 | spec-tool-query-patterns.md | ✅ Complete | Pagination, filtering, sorting, search |
+| spec-testing-strategy.md | ✅ Complete | Testing patterns, coverage, CI/CD gates |
 
 ## Contributing
 
