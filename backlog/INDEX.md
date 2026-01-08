@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (38 Active, 27 Complete)  
-> **Progress:** 27/65 complete (42%)  
+> **Total Items:** 64 (37 Active, 27 Complete)  
+> **Progress:** 27/64 complete (42%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,8 +14,8 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-3-active)** (3 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-28-active)** (28 active) - Should be planned
-- **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
+- **[P2 - Medium](#p2---medium-27-active)** (27 active) - Should be planned
+- **[P3 - Low](#p3---low-7-active)** (7 active) - Nice to have
 
 ### Completed Items
 - **[View Completed Items](#-completed-items-27-total)** (27 items) - See backlog/old/ directory
@@ -28,15 +28,17 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (2 active)
+## P1 - High (3 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
+| 058 | Field Format Validation (Email, DNS, Hostname) | 🟢 Ready | [Item-058-Prio-P1-🟢 Ready.md](Item-058-Prio-P1-🟢%20Ready.md) |
+| 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
 ---
 
-## P2 - Medium (28 active)
+## P2 - Medium (27 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -63,15 +65,14 @@ All P0 items complete! ✅
 | 043 | Create Data Migration Strategy from CRUD to Event-Sourced | 🟢 Ready | [Item-043-Prio-P2-🟢 Ready.md](Item-043-Prio-P2-🟢%20Ready.md) |
 | 044 | Create Event Sourcing Test Suite | 🟢 Ready | [Item-044-Prio-P2-🟢 Ready.md](Item-044-Prio-P2-🟢%20Ready.md) |
 | 048 | Fix F# Code Standards Violations in Backend | 🟢 Ready | [Item-048-Prio-P2-🟢 Ready.md](Item-048-Prio-P2-🟢%20Ready.md) |
-| 058 | Field Format Validation (Email, DNS, Hostname) | 🟢 Ready | [Item-058-Prio-P2-🟢 Ready.md](Item-058-Prio-P2-🟢%20Ready.md) |
-| 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P2-🟢 Ready.md](Item-059-Prio-P2-🟢%20Ready.md) |
+| 060 | Range & Temporal Constraint Validation | 🟢 Ready | [Item-060-Prio-P2-🟢 Ready.md](Item-060-Prio-P2-🟢%20Ready.md) |
 | 061 | Soft Delete Implementation Across All Entities | 🟢 Ready | [Item-061-Prio-P2-🟢 Ready.md](Item-061-Prio-P2-🟢%20Ready.md) |
 | 062 | Created/Modified Timestamp Tracking | 🟢 Ready | [Item-062-Prio-P2-🟢 Ready.md](Item-062-Prio-P2-🟢%20Ready.md) |
 | 065 | API Rate Limiting & Throttling | 🟢 Ready | [Item-065-Prio-P2-🟢 Ready.md](Item-065-Prio-P2-🟢%20Ready.md) |
 
 ---
 
-## P3 - Low (8 active)
+## P3 - Low (7 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -89,74 +90,33 @@ All P0 items complete! ✅
 ## 📊 Progress Tracking
 
 ### By Priority
-- **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 15/20 complete (75%)
-- **P2 (Medium):** 1/29 complete (3%)
-- **P3 (Low):** 1/9 complete (11%)
+- **P0 (Critical):** 8/8 complete (100%) ✅
+- **P1 (High):** 17/20 complete (85%)
+- **P2 (Medium):** 1/28 complete (4%)
+- **P3 (Low):** 1/8 complete (12%)
 ### By Status
-- 🟢 Ready: 40
+- 🟢 Ready: 37
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 23
+- ✅ Done: 27
 
 ---
 
-## ✅ Completed Items (23 total)
+## ✅ Completed Items (27 total)
 
-All completed items have been moved to [backlog/old/](old/) directory to keep the main backlog focused on active work.
+All completed items are in [backlog/old/](old/):
+- P0: 8
+- P1: 17
+- P2: 1
+- P3: 1
 
-### P0 - Critical (7 complete)
-| ID | Title | Completed | Files |
-|----|-------|-----------|-------|
-| 001 | Add `parent_id` Support to Organization Entity | 2026-01-06 | [old/Item-001-Prio-P0-✅ Done.md](old/Item-001-Prio-P0-✅%20Done.md) |
-| 002 | Add Integration Tests for Organization Hierarchy | 2026-01-06 | [old/Item-002-Prio-P0-✅ Done.md](old/Item-002-Prio-P0-✅%20Done.md) |
-| 003 | Document Implementation Gaps from Specifications | 2026-01-06 | [old/Item-003-Prio-P0-✅ Done.md](old/Item-003-Prio-P0-✅%20Done.md) |
-| 004 | Create API Contract Specification | 2026-01-06 | [old/Item-004-Prio-P0-✅ Done.md](old/Item-004-Prio-P0-✅%20Done.md) |
-| 028 | Design and Implement Event Store Infrastructure | 2026-01-06 | [old/Item-028-Prio-P0-✅ Done.md](old/Item-028-Prio-P0-✅%20Done.md) |
-| 029 | Create Command Framework and Base Types | 2026-01-06 | [old/Item-029-Prio-P0-✅ Done.md](old/Item-029-Prio-P0-✅%20Done.md) |
-| 030 | Implement CQRS Projection Framework | 2026-01-06 | [old/Item-030-Prio-P0-✅ Done.md](old/Item-030-Prio-P0-✅%20Done.md) |
-
-### P1 - High (14 complete)
-| ID | Title | Completed | Files |
-|----|-------|-----------|-------|
-| 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | 2026-01-06 | [old/Item-005-Prio-P1-✅ Done.md](old/Item-005-Prio-P1-✅%20Done.md) |
-| 006 | Review and Simplify Lifecycle Storage Strategy | 2026-01-06 | [old/Item-006-Prio-P1-✅ Done.md](old/Item-006-Prio-P1-✅%20Done.md) |
-| 007 | Create Authorization Model Specification | 2026-01-08 | [old/Item-007-Prio-P1-✅ Done.md](old/Item-007-Prio-P1-✅%20Done.md) |
-| 008 | Create Data Architecture Specification | 2026-01-08 | [old/Item-008-Prio-P1-✅ Done.md](old/Item-008-Prio-P1-✅%20Done.md) |
-| 009 | Create Authentication Specification | 2026-01-08 | [old/Item-009-Prio-P1-✅ Done.md](old/Item-009-Prio-P1-✅%20Done.md) |
-| 010 | Create Error Handling Specification | 2026-01-08 | [old/Item-010-Prio-P1-✅ Done.md](old/Item-010-Prio-P1-✅%20Done.md) |
-| 011 | Create Query Patterns Specification | 2026-01-08 | [old/Item-011-Prio-P1-✅ Done.md](old/Item-011-Prio-P1-✅%20Done.md) |
-| 031 | Migrate Application Endpoints to Commands | 2026-01-06 | [old/Item-031-Prio-P1-✅ Done.md](old/Item-031-Prio-P1-✅%20Done.md) |
-| 032 | Migrate Organization Endpoints to Commands | 2026-01-07 | [old/Item-032-Prio-P1-✅ Done.md](old/Item-032-Prio-P1-✅%20Done.md) |
-| 033 | Migrate BusinessCapability Endpoints to Commands | 2026-01-07 | [old/Item-033-Prio-P1-✅ Done.md](old/Item-033-Prio-P1-✅%20Done.md) |
-| 034 | Migrate Relation Endpoints to Commands | 2026-01-07 | [old/Item-034-Prio-P1-✅ Done.md](old/Item-034-Prio-P1-✅%20Done.md) |
-| 047 | Implement ApplicationService & ApplicationInterface CQRS Endpoints | 2026-01-08 | [old/Item-047-Prio-P1-✅ Done.md](old/Item-047-Prio-P1-✅%20Done.md) |
-| 049 | OpenTelemetry SDK Integration & Configuration | 2026-01-08 | [old/Item-049-Prio-P1-✅ Done.md](old/Item-049-Prio-P1-✅%20Done.md) |
-| 050 | Structured Logging Implementation with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
-
-### Observability Stack (4 complete)
-| ID | Title | Completed | Files |
-|----|-------|-----------|-------|
-| 049 | OpenTelemetry SDK Integration & Health Check Endpoint | 2026-01-08 | [old/Item-049-Prio-P1-✅ Done.md](old/Item-049-Prio-P1-✅%20Done.md) |
-| 050 | Structured Logging with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
-| 051 | Distributed Tracing via OTel ActivitySource | 2026-01-08 | [old/Item-051-Prio-P1-✅ Done.md](old/Item-051-Prio-P1-✅%20Done.md) |
-| 052 | Metrics Implementation via OTel Meter API | 2026-01-08 | [old/Item-052-Prio-P1-✅ Done.md](old/Item-052-Prio-P1-✅%20Done.md) |
-| 063 | Standardized API Error Response Format | 2026-01-08 | [old/Item-063-Prio-P1-✅ Done.md](old/Item-063-Prio-P1-✅%20Done.md) |
-
-### P2 - Medium (1 complete)
-| ID | Title | Completed | Files |
-|----|-------|-----------|-------|
-| 012 | Add `parent_id` Filter to Organizations Endpoint | 2026-01-06 | [old/Item-012-Prio-P2-✅ Done.md](old/Item-012-Prio-P2-✅%20Done.md) |
-
-### P3 - Low (1 complete)
-| ID | Title | Completed | Files |
-|----|-------|-----------|-------|
-| 026 | Create Backlog Item Template | 2026-01-06 | [old/Item-026-Prio-P3-✅ Done.md](old/Item-026-Prio-P3-✅%20Done.md) |
+See the files directly in [old/](old/) for details and completion dates.
 
 ---
 
 ## 🎯 Next Steps
 
+Focus P1 items: 058, 059, 064.
 ### Recommended Next Sprint (P1 Items)
 1. **Item-056** - Required Fields Enforcement 
 2. **Item-057** - Unique Constraints & Cycle Detection
