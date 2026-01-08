@@ -156,6 +156,8 @@ module BusinessCapabilitiesEndpoints =
                         let errorJson = Json.encodeErrorResponse "validation_error" "Business capability name is required"
                         return! (Giraffe.Core.json errorJson) next ctx
                     else
+                        // Proceed with command generation; uniqueness will be enforced by projection/repository
+
                         let capId = generateId()
                         let cmd : CreateCapabilityData = {
                             Id = capId
@@ -180,8 +182,12 @@ module BusinessCapabilitiesEndpoints =
 
                             match persistAndProject eventStore projectionEngine capId aggregateGuid baseVersion meta events with
                             | Error err ->
-                                ctx.SetStatusCode 500
-                                let errJson = Json.encodeErrorResponse "event_store_error" err
+                                // Map known constraint errors to conflict
+                                let isConflict =
+                                    (err.Contains("already exists") || err.Contains("UNIQUE") || err.Contains("unique"))
+                                if isConflict then ctx.SetStatusCode 409 else ctx.SetStatusCode 500
+                                let errType = if isConflict then "conflict" else "event_store_error"
+                                let errJson = Json.encodeErrorResponse errType err
                                 return! (Giraffe.Core.json errJson) next ctx
                             | Ok _ ->
                                 match BusinessCapabilityRepository.getById capId with

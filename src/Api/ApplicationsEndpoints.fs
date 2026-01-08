@@ -247,8 +247,12 @@ module ApplicationsEndpoints =
                             | Error err ->
                                 if activity <> null then
                                     activity.SetTag("event.persist.error", err) |> ignore
-                                ctx.SetStatusCode 500
-                                let errJson = Json.encodeErrorResponse "event_store_error" err
+                                // Map known repository constraint errors to Conflict
+                                let isConflict =
+                                    (err.Contains("already exists") || err.Contains("UNIQUE") || err.Contains("unique"))
+                                if isConflict then ctx.SetStatusCode 409 else ctx.SetStatusCode 500
+                                let errType = if isConflict then "conflict" else "event_store_error"
+                                let errJson = Json.encodeErrorResponse errType err
                                 return! (Giraffe.Core.json errJson) next ctx
                             | Ok _ ->
                                 if activity <> null then

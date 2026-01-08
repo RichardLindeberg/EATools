@@ -4,8 +4,10 @@ namespace EATool.Infrastructure
 open System
 open Microsoft.Data.Sqlite
 open EATool.Domain
+open EATool.Infrastructure.Validation
 
 module BusinessCapabilityRepository =
+    
     let private generateId () =
         let guid = Guid.NewGuid().ToString("N")
         "cap-" + guid.Substring(0, 8)
@@ -90,7 +92,50 @@ module BusinessCapabilityRepository =
         use reader = cmd.ExecuteReader()
         if reader.Read() then Some (mapCapability reader) else None
 
+    /// Check if a capability name already exists under the same parent (unique within parent scope)
+    let capNameExistsUnderParent (name: string) (parentId: string option) (excludeId: string option) : bool =
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        
+        let baseQuery = "SELECT COUNT(1) FROM business_capabilities WHERE name = $name"
+        let parentClause = 
+            match parentId with
+            | None -> " AND parent_id IS NULL"
+            | Some pid -> " AND parent_id = $parent_id"
+        
+        let excludeClause =
+            match excludeId with
+            | Some id -> " AND id != $id"
+            | None -> ""
+        
+        cmd.CommandText <- baseQuery + parentClause + excludeClause
+        cmd.Parameters.AddWithValue("$name", name) |> ignore
+        
+        match parentId with
+        | Some pid -> cmd.Parameters.AddWithValue("$parent_id", pid) |> ignore
+        | None -> ()
+        
+        match excludeId with
+        | Some id -> cmd.Parameters.AddWithValue("$id", id) |> ignore
+        | None -> ()
+        
+        let count = cmd.ExecuteScalar() :?> int64
+        count > 0L
+
+    /// Check if setting a new parent would create a cycle
+    let wouldCreateCycle (childId: string) (newParentId: string option) : bool =
+        CycleDetection.wouldCreateCycleBusCapability childId newParentId getById
+
     let create (req: CreateBusinessCapabilityRequest) : BusinessCapability =
+        // Check for duplicate name under same parent
+        if capNameExistsUnderParent req.Name req.ParentId None then
+            let parentDesc = match req.ParentId with None -> "root" | Some pid -> $"parent {pid}"
+            failwith $"BusinessCapability with name '{req.Name}' already exists under {parentDesc}"
+        
+        // Check for cycles if setting a parent
+        if wouldCreateCycle (Guid.NewGuid().ToString()) req.ParentId then
+            failwith "Cannot set parent: would create circular parent reference"
+        
         let id = generateId ()
         let now = getUtcTimestamp ()
 
@@ -120,6 +165,15 @@ module BusinessCapabilityRepository =
     let update (id: string) (req: CreateBusinessCapabilityRequest) : BusinessCapability option =
         match getById id with
         | Some existing ->
+            // Check for duplicate name under same parent (excluding current record)
+            if capNameExistsUnderParent req.Name req.ParentId (Some id) then
+                let parentDesc = match req.ParentId with None -> "root" | Some pid -> $"parent {pid}"
+                failwith $"BusinessCapability with name '{req.Name}' already exists under {parentDesc}"
+            
+            // Check for cycles if parent changed
+            if existing.ParentId <> req.ParentId && wouldCreateCycle id req.ParentId then
+                failwith "Cannot set parent: would create circular parent reference"
+            
             let now = getUtcTimestamp ()
 
             use conn = Database.getConnection ()
@@ -127,7 +181,9 @@ module BusinessCapabilityRepository =
             cmd.CommandText <-
                 """
                 UPDATE business_capabilities
-                SET description = $description,
+                SET name = $name,
+                    parent_id = $parent_id,
+                    description = $description,
                     updated_at = $updated_at
                 WHERE id = $id
                 """

@@ -72,6 +72,7 @@
     <Compile Include="Infrastructure/Projections/BusinessCapabilityProjection.fs" />
     <Compile Include="Infrastructure/Projections/RelationProjection.fs" />
     <Compile Include="Infrastructure/ApplicationRepository.fs" />
+    <Compile Include="Infrastructure/Validation/CycleDetection.fs" />
     <Compile Include="Infrastructure/ServerRepository.fs" />
     <Compile Include="Infrastructure/IntegrationRepository.fs" />
     <Compile Include="Infrastructure/BusinessCapabilityRepository.fs" />

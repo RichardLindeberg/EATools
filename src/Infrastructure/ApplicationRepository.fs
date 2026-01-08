@@ -133,7 +133,26 @@ module ApplicationRepository =
         use reader = cmd.ExecuteReader()
         if reader.Read() then Some (mapApplication reader) else None
 
+    /// Check if an application name already exists (globally unique)
+    let appNameExists (name: string) (excludeId: string option) : bool =
+        use conn = Database.getConnection ()
+        use cmd = conn.CreateCommand()
+        match excludeId with
+        | Some id ->
+            cmd.CommandText <- "SELECT COUNT(1) FROM applications WHERE name = $name AND id != $id"
+            cmd.Parameters.AddWithValue("$id", id) |> ignore
+        | None ->
+            cmd.CommandText <- "SELECT COUNT(1) FROM applications WHERE name = $name"
+        
+        cmd.Parameters.AddWithValue("$name", name) |> ignore
+        let count = cmd.ExecuteScalar() :?> int64
+        count > 0L
+
+    /// Create an application with unique name validation
+    /// Raises an exception if name already exists
     let create (req: CreateApplicationRequest) : Application =
+        if appNameExists req.Name None then
+            failwith $"Application with name '{req.Name}' already exists"
         let id = generateId ()
         let now = getUtcTimestamp ()
         let tags = req.Tags |> Option.defaultValue []
@@ -172,6 +191,9 @@ module ApplicationRepository =
     let update (id: string) (req: CreateApplicationRequest) : Application option =
         match getById id with
         | Some existing ->
+            if appNameExists req.Name (Some id) then
+                failwith $"Application with name '{req.Name}' already exists"
+            
             let now = getUtcTimestamp ()
             let tags = req.Tags |> Option.defaultValue existing.Tags
             let lifecycleValue = lifecycleToString req.Lifecycle
