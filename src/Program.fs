@@ -66,6 +66,8 @@ let main args =
     let app = builder.Build()
     
     // Configure middleware (order matters)
+    // ErrorHandlingMiddleware should be first to catch all exceptions
+    app.UseMiddleware<EATool.Api.Middleware.ErrorHandlingMiddleware>() |> ignore
     // TraceContextMiddleware must be before other middleware to capture all operations
     app.UseMiddleware<TraceContextMiddleware.TraceContextMiddleware>() |> ignore
     app.UseMiddleware<CorrelationIdMiddleware>() |> ignore

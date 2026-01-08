@@ -81,6 +81,9 @@
     <Compile Include="Infrastructure/ApplicationInterfaceRepository.fs" />
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
+    <Compile Include="Api/ErrorCodes.fs" />
+    <Compile Include="Api/ErrorResponse.fs" />
+    <Compile Include="Api/Middleware/ErrorHandlingMiddleware.fs" />
     <Compile Include="Api/HealthEndpoint.fs" />
     <Compile Include="Api/MetricsEndpoint.fs" />
     <Compile Include="Api/Instrumentation.fs" />
