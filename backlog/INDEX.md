@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (41 Active, 24 Complete)  
-> **Progress:** 24/65 complete (37%)  
+> **Total Items:** 65 (40 Active, 25 Complete)  
+> **Progress:** 25/65 complete (38%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-5-active)** (5 active) - Should be done this sprint
+- **[P1 - High](#p1---high-4-active)** (4 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-28-active)** (28 active) - Should be planned
 - **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-24-total)** (24 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-25-total)** (25 items) - See backlog/old/ directory
 
 ---
 
@@ -28,13 +28,12 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (5 active)
+## P1 - High (4 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 056 | Required Fields Enforcement Across All Entities | 🟢 Ready | [Item-056-Prio-P0-🟢 Ready.md](Item-056-Prio-P0-🟢%20Ready.md) |
 | 057 | Unique Constraints & Cycle Detection Validation | 🟢 Ready | [Item-057-Prio-P1-🟢 Ready.md](Item-057-Prio-P1-🟢%20Ready.md) |
-| 063 | Standardized API Error Response Format | 🟢 Ready | [Item-063-Prio-P1-🟢 Ready.md](Item-063-Prio-P1-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
 ---
@@ -144,6 +143,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 050 | Structured Logging with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
 | 051 | Distributed Tracing via OTel ActivitySource | 2026-01-08 | [old/Item-051-Prio-P1-✅ Done.md](old/Item-051-Prio-P1-✅%20Done.md) |
 | 052 | Metrics Implementation via OTel Meter API | 2026-01-08 | [old/Item-052-Prio-P1-✅ Done.md](old/Item-052-Prio-P1-✅%20Done.md) |
+| 063 | Standardized API Error Response Format | 2026-01-08 | [old/Item-063-Prio-P1-✅ Done.md](old/Item-063-Prio-P1-✅%20Done.md) |
 
 ### P2 - Medium (1 complete)
 | ID | Title | Completed | Files |
@@ -162,9 +162,9 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 ### Recommended Next Sprint (P1 Items)
 1. **Item-056** - Required Fields Enforcement 
 2. **Item-057** - Unique Constraints & Cycle Detection
-3. **Item-063** - Standardized API Error Response Format
+3. **Item-064** - API Authentication & Authorization Framework
 
-**Focus:** Continue with validation and error handling improvements
+**Focus:** Continue with validation and security improvements
 
 ---
 
