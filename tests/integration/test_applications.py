@@ -57,6 +57,7 @@ class TestApplications:
             "name": "Payments Service",
             "lifecycle": "active",
             "owner": "payments-team",
+            "data_classification": "internal",
             "tags": ["payments", "pci"],
         }
         response = client.post("/applications", json=payload)
@@ -91,6 +92,8 @@ class TestApplications:
             json={
                 "name": "Catalog Service",
                 "lifecycle": "active",
+                "owner": "catalog-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -117,6 +120,8 @@ class TestApplications:
             json={
                 "name": "Legacy Billing",
                 "lifecycle": "active",
+                "owner": "billing-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -126,6 +131,7 @@ class TestApplications:
             "name": "Modern Billing",
             "lifecycle": "sunset",
             "owner": "finance-team",
+            "data_classification": "internal",
         }
         update_resp = client.patch(f"/applications/{app_id}", json=update_payload)
 
@@ -145,6 +151,8 @@ class TestApplications:
             json={
                 "name": "Temp App",
                 "lifecycle": "active",
+                "owner": "temp-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -171,6 +179,8 @@ class TestApplications:
             json={
                 "name": "Customer Portal",
                 "lifecycle": "active",
+                "owner": "portal-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -217,6 +227,8 @@ class TestApplications:
             json={
                 "name": "New Service",
                 "lifecycle": "planned",
+                "owner": "new-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -266,6 +278,8 @@ class TestApplications:
             json={
                 "name": "Team App",
                 "lifecycle": "active",
+                "owner": "old-team",
+                "data_classification": "internal",
             },
         )
         assert create_resp.status_code in [200, 201]

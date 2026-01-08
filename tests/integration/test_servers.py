@@ -89,6 +89,7 @@ class TestServers:
             json={
                 "hostname": "srv-get-01",
                 "environment": "dev",
+                "criticality": "low",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -114,6 +115,7 @@ class TestServers:
             json={
                 "hostname": "srv-update-01",
                 "environment": "dev",
+                "criticality": "low",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -122,6 +124,7 @@ class TestServers:
         update_payload = {
             "hostname": "srv-update-02",
             "environment": "prod",
+            "criticality": "high",
             "region": "us-east-1",
             "owning_team": "sre",
         }
@@ -143,6 +146,7 @@ class TestServers:
             json={
                 "hostname": "srv-delete-01",
                 "environment": "dev",
+                "criticality": "low",
             },
         )
         assert create_resp.status_code in [200, 201]

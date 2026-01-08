@@ -53,40 +53,46 @@ module ApplicationCommandHandler =
             Error "Application name is required"
         elif String.IsNullOrWhiteSpace(cmd.Id) then
             Error "Application ID is required"
+        elif String.IsNullOrWhiteSpace(cmd.Owner) then
+            Error "Application owner is required"
+        elif String.IsNullOrWhiteSpace(cmd.DataClassification) then
+            Error "Application data_classification is required"
         else
-            // Validate optional fields
-            let validateAndCreate() =
-                let eventData : ApplicationCreatedData = {
-                    Id = cmd.Id
-                    Name = cmd.Name
-                    Owner = cmd.Owner
-                    Lifecycle = cmd.Lifecycle
-                    CapabilityId = cmd.CapabilityId
-                    DataClassification = cmd.DataClassification
-                    Criticality = cmd.Criticality
-                    Tags = cmd.Tags
-                    Description = cmd.Description
-                }
-                Ok [ApplicationCreated eventData]
-            
-            match cmd.DataClassification with
-            | Some c when not (String.IsNullOrWhiteSpace c) ->
-                match validateClassification c with
-                | Error e -> Error e
-                | Ok () ->
-                    match cmd.Criticality with
-                    | Some cr when not (String.IsNullOrWhiteSpace cr) ->
-                        match validateCriticality cr with
-                        | Error e -> Error e
-                        | Ok () -> validateAndCreate()
-                    | _ -> validateAndCreate()
-            | _ -> 
+            // Validate classification value
+            match validateClassification cmd.DataClassification with
+            | Error e -> Error e
+            | Ok () ->
+                // Validate criticality if provided
                 match cmd.Criticality with
                 | Some cr when not (String.IsNullOrWhiteSpace cr) ->
                     match validateCriticality cr with
                     | Error e -> Error e
-                    | Ok () -> validateAndCreate()
-                | _ -> validateAndCreate()
+                    | Ok () ->
+                        let eventData : ApplicationCreatedData = {
+                            Id = cmd.Id
+                            Name = cmd.Name
+                            Owner = Some cmd.Owner
+                            Lifecycle = cmd.Lifecycle
+                            CapabilityId = cmd.CapabilityId
+                            DataClassification = Some cmd.DataClassification
+                            Criticality = cmd.Criticality
+                            Tags = cmd.Tags
+                            Description = cmd.Description
+                        }
+                        Ok [ApplicationCreated eventData]
+                | _ ->
+                    let eventData : ApplicationCreatedData = {
+                        Id = cmd.Id
+                        Name = cmd.Name
+                        Owner = Some cmd.Owner
+                        Lifecycle = cmd.Lifecycle
+                        CapabilityId = cmd.CapabilityId
+                        DataClassification = Some cmd.DataClassification
+                        Criticality = cmd.Criticality
+                        Tags = cmd.Tags
+                        Description = cmd.Description
+                    }
+                    Ok [ApplicationCreated eventData]
     
     /// Handle SetDataClassification command
     let handleSetDataClassification (state: ApplicationAggregate) (cmd: SetDataClassificationData) : Result<ApplicationEvent list, string> =

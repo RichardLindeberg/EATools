@@ -76,10 +76,10 @@ type Server =
     {
         Id: string
         Hostname: string
-        Environment: string option
+        Environment: string
         Region: string option
         Platform: string option
-        Criticality: string option
+        Criticality: string
         OwningTeam: string option
         Tags: string list
         CreatedAt: UtcTimestamp
@@ -233,20 +233,20 @@ type CreateOrganizationRequest =
 type CreateApplicationRequest =
     {
         Name: string
-        Owner: string option
+        Owner: string
         Lifecycle: Lifecycle
         CapabilityId: string option
-        DataClassification: string option
+        DataClassification: string
         Tags: string list option
     }
 
 type CreateServerRequest =
     {
         Hostname: string
-        Environment: string option
+        Environment: string
         Region: string option
         Platform: string option
-        Criticality: string option
+        Criticality: string
         OwningTeam: string option
         Tags: string list option
     }

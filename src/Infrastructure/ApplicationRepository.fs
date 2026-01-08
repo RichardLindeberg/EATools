@@ -148,11 +148,11 @@ module ApplicationRepository =
             """
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
-        addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
+        cmd.Parameters.AddWithValue("$owner", req.Owner) |> ignore
         cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
         cmd.Parameters.AddWithValue("$lifecycle_raw", lifecycleValue) |> ignore
         addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
-        addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
+        cmd.Parameters.AddWithValue("$data_classification", req.DataClassification) |> ignore
         cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
         cmd.Parameters.AddWithValue("$created_at", now) |> ignore
         cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
@@ -161,10 +161,10 @@ module ApplicationRepository =
 
         { Id = id
           Name = req.Name
-          Owner = req.Owner
+          Owner = Some req.Owner
           Lifecycle = req.Lifecycle
           CapabilityId = req.CapabilityId
-          DataClassification = req.DataClassification
+          DataClassification = Some req.DataClassification
           Tags = tags
           CreatedAt = now
           UpdatedAt = now }
@@ -193,11 +193,11 @@ module ApplicationRepository =
                 """
             cmd.Parameters.AddWithValue("$id", id) |> ignore
             cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
-            addOptionalParam cmd "$owner" (req.Owner |> Option.map box)
+            cmd.Parameters.AddWithValue("$owner", req.Owner) |> ignore
             cmd.Parameters.AddWithValue("$lifecycle", lifecycleValue) |> ignore
             cmd.Parameters.AddWithValue("$lifecycle_raw", lifecycleValue) |> ignore
             addOptionalParam cmd "$capability_id" (req.CapabilityId |> Option.map box)
-            addOptionalParam cmd "$data_classification" (req.DataClassification |> Option.map box)
+            cmd.Parameters.AddWithValue("$data_classification", req.DataClassification) |> ignore
             cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
             cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
 
@@ -206,10 +206,10 @@ module ApplicationRepository =
                 Some
                     { existing with
                         Name = req.Name
-                        Owner = req.Owner
+                        Owner = Some req.Owner
                         Lifecycle = req.Lifecycle
                         CapabilityId = req.CapabilityId
-                        DataClassification = req.DataClassification
+                        DataClassification = Some req.DataClassification
                         Tags = tags
                         UpdatedAt = now }
             else None

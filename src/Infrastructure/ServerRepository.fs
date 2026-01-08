@@ -33,10 +33,10 @@ module ServerRepository =
         {
             Id = reader.GetString(idIdx)
             Hostname = reader.GetString(hostIdx)
-            Environment = getStringOption reader envIdx
+            Environment = reader.GetString(envIdx)
             Region = getStringOption reader regionIdx
             Platform = getStringOption reader platformIdx
-            Criticality = getStringOption reader critIdx
+            Criticality = reader.GetString(critIdx)
             OwningTeam = getStringOption reader teamIdx
             Tags = reader.GetString(tagsIdx) |> deserializeTags
             CreatedAt = reader.GetString(createdIdx)
@@ -114,10 +114,10 @@ module ServerRepository =
             """
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$hostname", req.Hostname) |> ignore
-        addOptionalParam cmd "$environment" (req.Environment |> Option.map box)
+        cmd.Parameters.AddWithValue("$environment", req.Environment) |> ignore
         addOptionalParam cmd "$region" (req.Region |> Option.map box)
         addOptionalParam cmd "$platform" (req.Platform |> Option.map box)
-        addOptionalParam cmd "$criticality" (req.Criticality |> Option.map box)
+        cmd.Parameters.AddWithValue("$criticality", req.Criticality) |> ignore
         addOptionalParam cmd "$owning_team" (req.OwningTeam |> Option.map box)
         cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
         cmd.Parameters.AddWithValue("$created_at", now) |> ignore
@@ -159,10 +159,10 @@ module ServerRepository =
                 """
             cmd.Parameters.AddWithValue("$id", id) |> ignore
             cmd.Parameters.AddWithValue("$hostname", req.Hostname) |> ignore
-            addOptionalParam cmd "$environment" (req.Environment |> Option.map box)
+            cmd.Parameters.AddWithValue("$environment", req.Environment) |> ignore
             addOptionalParam cmd "$region" (req.Region |> Option.map box)
             addOptionalParam cmd "$platform" (req.Platform |> Option.map box)
-            addOptionalParam cmd "$criticality" (req.Criticality |> Option.map box)
+            cmd.Parameters.AddWithValue("$criticality", req.Criticality) |> ignore
             addOptionalParam cmd "$owning_team" (req.OwningTeam |> Option.map box)
             cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
             cmd.Parameters.AddWithValue("$updated_at", now) |> ignore

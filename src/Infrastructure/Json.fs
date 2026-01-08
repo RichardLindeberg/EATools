@@ -31,10 +31,10 @@ module Json =
         Decode.object (fun get ->
             {
                 Name = get.Required.Field "name" Decode.string
-                Owner = get.Optional.Field "owner" Decode.string
+                Owner = get.Required.Field "owner" Decode.string
                 Lifecycle = get.Required.Field "lifecycle" decodeLifecycle
                 CapabilityId = get.Optional.Field "capability_id" Decode.string
-                DataClassification = get.Optional.Field "data_classification" Decode.string
+                DataClassification = get.Required.Field "data_classification" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
 
@@ -77,10 +77,10 @@ module Json =
         Decode.object (fun get ->
             {
                 Hostname = get.Required.Field "hostname" Decode.string
-                Environment = get.Optional.Field "environment" Decode.string
+                Environment = get.Required.Field "environment" Decode.string
                 Region = get.Optional.Field "region" Decode.string
                 Platform = get.Optional.Field "platform" Decode.string
-                Criticality = get.Optional.Field "criticality" Decode.string
+                Criticality = get.Required.Field "criticality" Decode.string
                 OwningTeam = get.Optional.Field "owning_team" Decode.string
                 Tags = get.Optional.Field "tags" (Decode.list Decode.string)
             })
@@ -288,10 +288,10 @@ module Json =
         Encode.object [
             "id", Encode.string srv.Id
             "hostname", Encode.string srv.Hostname
-            "environment", (match srv.Environment with | Some v -> Encode.string v | None -> Encode.nil)
+            "environment", Encode.string srv.Environment
             "region", (match srv.Region with | Some v -> Encode.string v | None -> Encode.nil)
             "platform", (match srv.Platform with | Some v -> Encode.string v | None -> Encode.nil)
-            "criticality", (match srv.Criticality with | Some v -> Encode.string v | None -> Encode.nil)
+            "criticality", Encode.string srv.Criticality
             "owning_team", (match srv.OwningTeam with | Some v -> Encode.string v | None -> Encode.nil)
             "tags", Encode.list (List.map Encode.string srv.Tags)
             "created_at", Encode.string srv.CreatedAt

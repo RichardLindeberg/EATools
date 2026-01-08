@@ -21,10 +21,10 @@ and CreateApplicationData =
     {
         Id: string
         Name: string
-        Owner: string option
+        Owner: string
         Lifecycle: string
         CapabilityId: string option
-        DataClassification: string option
+        DataClassification: string
         Criticality: string option
         Tags: string list
         Description: string option
