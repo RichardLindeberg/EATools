@@ -38,10 +38,10 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 | Priority | Count | Status |
 |----------|-------|--------|
 | P0 - Critical | 7 | 7/7 complete |
-| P1 - High | 22 | 11/22 complete |
+| P1 - High | 22 | 12/22 complete |
 | P2 - Medium | 29 | 1/29 complete |
 | P3 - Low | 7 | 1/7 complete |
-| **Total** | **65** | **19/65 complete** |
+| **Total** | **65** | **20/65 complete** |
 
 ---
 
@@ -49,7 +49,7 @@ See [backlog/Item-004-Prio-P0-✅ Done.md](backlog/Item-004-Prio-P0-✅%20Done.m
 
 1. **Read** [backlog/INDEX.md](backlog/INDEX.md) for complete overview
 2. **Focus on remaining P1 work:**
-   - Specifications and observability (Items 035, 036, 047, 049-052, 056-057, 063-064)
+   - Specifications and observability (Items 035, 036, 047, 049-052, 058-059, 063-064)
 3. **Continue with P1 patterns** once remaining specs are complete
 
 ---

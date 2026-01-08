@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (39 Active, 26 Complete)  
-> **Progress:** 26/65 complete (40%)  
+> **Total Items:** 65 (38 Active, 27 Complete)  
+> **Progress:** 27/65 complete (42%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -18,7 +18,7 @@
 - **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-26-total)** (26 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-27-total)** (27 items) - See backlog/old/ directory
 
 ---
 
@@ -28,11 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (3 active)
+## P1 - High (2 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 057 | Unique Constraints & Cycle Detection Validation | 🟢 Ready | [Item-057-Prio-P1-🟢 Ready.md](Item-057-Prio-P1-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
 ---
@@ -91,11 +90,11 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 7/7 complete (100%) ✅
-- **P1 (High):** 14/20 complete (70%)
+- **P1 (High):** 15/20 complete (75%)
 - **P2 (Medium):** 1/29 complete (3%)
 - **P3 (Low):** 1/9 complete (11%)
 ### By Status
-- 🟢 Ready: 41
+- 🟢 Ready: 40
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
 - ✅ Done: 23
