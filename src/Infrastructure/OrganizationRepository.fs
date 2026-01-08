@@ -18,6 +18,28 @@ module OrganizationRepository =
     let private deserializeList (payload: string) =
         try JsonSerializer.Deserialize<string list>(payload) with _ -> []
 
+    /// Validate all domains in the list
+    let private validateDomains (domains: string list) : Result<unit, string> =
+        domains
+        |> List.tryFind (fun d -> DnsValidator.validate d |> Option.isSome)
+        |> function
+            | Some invalidDomain ->
+                match DnsValidator.validate invalidDomain with
+                | Some error -> Error error
+                | None -> Ok ()
+            | None -> Ok ()
+
+    /// Validate all contacts in the list
+    let private validateContacts (contacts: string list) : Result<unit, string> =
+        contacts
+        |> List.tryFind (fun c -> EmailValidator.validate c |> Option.isSome)
+        |> function
+            | Some invalidEmail ->
+                match EmailValidator.validate invalidEmail with
+                | Some error -> Error error
+                | None -> Ok ()
+            | None -> Ok ()
+
     let private mapOrganization (reader: SqliteDataReader) : Organization =
         let idIdx = reader.GetOrdinal("id")
         let nameIdx = reader.GetOrdinal("name")
@@ -114,6 +136,41 @@ module OrganizationRepository =
 
         { Items = items; Page = page; Limit = limit; Total = total }
 
+    let createWithValidation (req: CreateOrganizationRequest) : Result<Organization, string> =
+        match validateDomains req.Domains, validateContacts req.Contacts with
+        | Error domainErr, _ -> Error domainErr
+        | _, Error contactErr -> Error contactErr
+        | Ok (), Ok () ->
+            let id = generateId ()
+            let now = getUtcTimestamp ()
+            let domains = req.Domains
+            let contacts = req.Contacts
+
+            use conn = Database.getConnection ()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <-
+                """
+                INSERT INTO organizations (id, name, parent_id, domains, contacts, created_at, updated_at)
+                VALUES ($id, $name, $parent_id, $domains, $contacts, $created_at, $updated_at)
+                """
+            cmd.Parameters.AddWithValue("$id", id) |> ignore
+            cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
+            let parentParam = cmd.Parameters.Add(new SqliteParameter("$parent_id", match req.ParentId with Some pid -> pid :> obj | None -> DBNull.Value))
+            cmd.Parameters.AddWithValue("$domains", serializeList domains) |> ignore
+            cmd.Parameters.AddWithValue("$contacts", serializeList contacts) |> ignore
+            cmd.Parameters.AddWithValue("$created_at", now) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+
+            cmd.ExecuteNonQuery() |> ignore
+
+            Ok { Id = id
+                 Name = req.Name
+                 ParentId = req.ParentId
+                 Domains = domains
+                 Contacts = contacts
+                 CreatedAt = now
+                 UpdatedAt = now }
+
     let create (req: CreateOrganizationRequest) : Organization =
         let id = generateId ()
         let now = getUtcTimestamp ()
@@ -144,6 +201,84 @@ module OrganizationRepository =
           Contacts = contacts
           CreatedAt = now
           UpdatedAt = now }
+
+    let updateWithValidation (id: string) (req: CreateOrganizationRequest) : Result<Organization option, string> =
+        match validateDomains req.Domains, validateContacts req.Contacts with
+        | Error domainErr, _ -> Error domainErr
+        | _, Error contactErr -> Error contactErr
+        | Ok (), Ok () ->
+            match getById id with
+            | Some existing ->
+                // Check if parent_id would create a cycle
+                if wouldCreateCycle id req.ParentId then
+                    Ok None // Reject circular reference
+                else
+                    // Check if new parent exists (if specified)
+                    match req.ParentId with
+                    | Some parentId ->
+                        if getById parentId |> Option.isNone then
+                            Ok None // Parent doesn't exist
+                        else
+                            let now = getUtcTimestamp ()
+                            let domains = req.Domains
+                            let contacts = req.Contacts
+
+                            use conn = Database.getConnection ()
+                            use cmd = conn.CreateCommand()
+                            cmd.CommandText <-
+                                """
+                                UPDATE organizations
+                                SET name = $name,
+                                    parent_id = $parent_id,
+                                    domains = $domains,
+                                    contacts = $contacts,
+                                    updated_at = $updated_at
+                                WHERE id = $id
+                                """
+                            cmd.Parameters.AddWithValue("$id", id) |> ignore
+                            cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
+                            cmd.Parameters.AddWithValue("$parent_id", parentId) |> ignore
+                            cmd.Parameters.AddWithValue("$domains", serializeList domains) |> ignore
+                            cmd.Parameters.AddWithValue("$contacts", serializeList contacts) |> ignore
+                            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+                            let rows = cmd.ExecuteNonQuery()
+                            if rows > 0 then
+                                let updated = { existing with Name = req.Name; ParentId = Some parentId; Domains = domains; Contacts = contacts; UpdatedAt = now }
+                                Ok (Some updated)
+                            else
+                                Ok None
+                    | None ->
+                        let now = getUtcTimestamp ()
+                        let domains = req.Domains
+                        let contacts = req.Contacts
+
+                        use conn = Database.getConnection ()
+                        use cmd = conn.CreateCommand()
+                        cmd.CommandText <-
+                            """
+                            UPDATE organizations
+                            SET name = $name,
+                                parent_id = $parent_id,
+                                domains = $domains,
+                                contacts = $contacts,
+                                updated_at = $updated_at
+                            WHERE id = $id
+                            """
+                        cmd.Parameters.AddWithValue("$id", id) |> ignore
+                        cmd.Parameters.AddWithValue("$name", req.Name) |> ignore
+                        cmd.Parameters.AddWithValue("$parent_id", DBNull.Value) |> ignore
+                        cmd.Parameters.AddWithValue("$domains", serializeList domains) |> ignore
+                        cmd.Parameters.AddWithValue("$contacts", serializeList contacts) |> ignore
+                        cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+
+                        let rows = cmd.ExecuteNonQuery()
+                        if rows > 0 then
+                            let updated = { existing with Name = req.Name; ParentId = None; Domains = domains; Contacts = contacts; UpdatedAt = now }
+                            Ok (Some updated)
+                        else
+                            Ok None
+            | None -> 
+                Ok None
 
     let update (id: string) (req: CreateOrganizationRequest) : Organization option =
         match getById id with

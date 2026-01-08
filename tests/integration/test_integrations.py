@@ -90,6 +90,7 @@ class TestIntegrations:
             json={
                 "source_app_id": "app-get-src",
                 "target_app_id": "app-get-tgt",
+                "protocol": "https",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -116,6 +117,7 @@ class TestIntegrations:
             json={
                 "source_app_id": "app-update-src",
                 "target_app_id": "app-update-tgt",
+                "protocol": "https",
             },
         )
         assert create_resp.status_code in [200, 201]
@@ -145,6 +147,7 @@ class TestIntegrations:
             json={
                 "source_app_id": "app-del-src",
                 "target_app_id": "app-del-tgt",
+                "protocol": "https",
             },
         )
         assert create_resp.status_code in [200, 201]

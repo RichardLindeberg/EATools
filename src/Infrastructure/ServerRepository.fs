@@ -16,6 +16,12 @@ module ServerRepository =
     let private serializeTags (tags: string list) = JsonSerializer.Serialize(tags)
     let private deserializeTags (payload: string) = try JsonSerializer.Deserialize<string list>(payload) with _ -> []
 
+    /// Validate hostname format using HostnameValidator
+    let private validateHostname (hostname: string) : Result<unit, string> =
+        match HostnameValidator.validate hostname with
+        | Some error -> Error error
+        | None -> Ok ()
+
     let private getStringOption (reader: SqliteDataReader) (ordinal: int) = if reader.IsDBNull(ordinal) then None else Some(reader.GetString(ordinal))
 
     let private mapServer (reader: SqliteDataReader) : Server =
@@ -100,6 +106,45 @@ module ServerRepository =
         use reader = cmd.ExecuteReader()
         if reader.Read() then Some (mapServer reader) else None
 
+    let createWithValidation (req: CreateServerRequest) : Result<Server, string> =
+        match validateHostname req.Hostname with
+        | Error err -> Error err
+        | Ok () ->
+            let id = generateId ()
+            let now = getUtcTimestamp ()
+            let tags = req.Tags |> Option.defaultValue []
+
+            use conn = Database.getConnection ()
+            use cmd = conn.CreateCommand()
+            cmd.CommandText <-
+                """
+                INSERT INTO servers (id, hostname, environment, region, platform, criticality, owning_team, tags, created_at, updated_at)
+                VALUES ($id, $hostname, $environment, $region, $platform, $criticality, $owning_team, $tags, $created_at, $updated_at)
+                """
+            cmd.Parameters.AddWithValue("$id", id) |> ignore
+            cmd.Parameters.AddWithValue("$hostname", req.Hostname) |> ignore
+            cmd.Parameters.AddWithValue("$environment", req.Environment) |> ignore
+            addOptionalParam cmd "$region" (req.Region |> Option.map box)
+            addOptionalParam cmd "$platform" (req.Platform |> Option.map box)
+            cmd.Parameters.AddWithValue("$criticality", req.Criticality) |> ignore
+            addOptionalParam cmd "$owning_team" (req.OwningTeam |> Option.map box)
+            cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
+            cmd.Parameters.AddWithValue("$created_at", now) |> ignore
+            cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+
+            cmd.ExecuteNonQuery() |> ignore
+
+            Ok { Id = id
+                 Hostname = req.Hostname
+                 Environment = req.Environment
+                 Region = req.Region
+                 Platform = req.Platform
+                 Criticality = req.Criticality
+                 OwningTeam = req.OwningTeam
+                 Tags = tags
+                 CreatedAt = now
+                 UpdatedAt = now }
+
     let create (req: CreateServerRequest) : Server =
         let id = generateId ()
         let now = getUtcTimestamp ()
@@ -135,6 +180,48 @@ module ServerRepository =
           Tags = tags
           CreatedAt = now
           UpdatedAt = now }
+
+    let updateWithValidation (id: string) (req: CreateServerRequest) : Result<Server option, string> =
+        match validateHostname req.Hostname with
+        | Error err -> Error err
+        | Ok () ->
+            match getById id with
+            | Some existing ->
+                let now = getUtcTimestamp ()
+                let tags = req.Tags |> Option.defaultValue existing.Tags
+
+                use conn = Database.getConnection ()
+                use cmd = conn.CreateCommand()
+                cmd.CommandText <-
+                    """
+                    UPDATE servers
+                    SET hostname = $hostname,
+                        environment = $environment,
+                        region = $region,
+                        platform = $platform,
+                        criticality = $criticality,
+                        owning_team = $owning_team,
+                        tags = $tags,
+                        updated_at = $updated_at
+                    WHERE id = $id
+                    """
+                cmd.Parameters.AddWithValue("$id", id) |> ignore
+                cmd.Parameters.AddWithValue("$hostname", req.Hostname) |> ignore
+                cmd.Parameters.AddWithValue("$environment", req.Environment) |> ignore
+                addOptionalParam cmd "$region" (req.Region |> Option.map box)
+                addOptionalParam cmd "$platform" (req.Platform |> Option.map box)
+                cmd.Parameters.AddWithValue("$criticality", req.Criticality) |> ignore
+                addOptionalParam cmd "$owning_team" (req.OwningTeam |> Option.map box)
+                cmd.Parameters.AddWithValue("$tags", serializeTags tags) |> ignore
+                cmd.Parameters.AddWithValue("$updated_at", now) |> ignore
+                let rows = cmd.ExecuteNonQuery()
+                if rows > 0 then
+                    let updated = { existing with Hostname = req.Hostname; Environment = req.Environment; Region = req.Region; Platform = req.Platform; Criticality = req.Criticality; OwningTeam = req.OwningTeam; Tags = tags; UpdatedAt = now }
+                    Ok (Some updated)
+                else
+                    Ok None
+            | None -> 
+                Ok None
 
     let update (id: string) (req: CreateServerRequest) : Server option =
         match getById id with

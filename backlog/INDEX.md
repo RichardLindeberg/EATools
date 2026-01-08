@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 64 (37 Active, 27 Complete)  
-> **Progress:** 27/64 complete (42%)  
+> **Total Items:** 64 (36 Active, 28 Complete)  
+> **Progress:** 28/64 complete (43%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-3-active)** (3 active) - Should be done this sprint
+- **[P1 - High](#p1---high-2-active)** (2 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-27-active)** (27 active) - Should be planned
 - **[P3 - Low](#p3---low-7-active)** (7 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-27-total)** (27 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-28-total)** (28 items) - See backlog/old/ directory
 
 ---
 
@@ -28,11 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (3 active)
+## P1 - High (2 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 058 | Field Format Validation (Email, DNS, Hostname) | 🟢 Ready | [Item-058-Prio-P1-🟢 Ready.md](Item-058-Prio-P1-🟢%20Ready.md) |
 | 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
@@ -98,19 +97,19 @@ All P0 items complete! ✅
 - 🟢 Ready: 37
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 27
+- ✅ Done: 28
 
 ---
 
-## ✅ Completed Items (27 total)
+## ✅ Completed Items (28 total)
 
-All completed items are in [backlog/old/](old/):
+All completed items are in [backlog/old/](old/) or current directory:
 - P0: 8
-- P1: 17
+- P1: 18
 - P2: 1
 - P3: 1
 
-See the files directly in [old/](old/) for details and completion dates.
+See the files directly for details and completion dates.
 
 ---
 

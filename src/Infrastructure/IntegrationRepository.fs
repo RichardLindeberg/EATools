@@ -34,7 +34,7 @@ module IntegrationRepository =
             Id = reader.GetString(idIdx)
             SourceAppId = reader.GetString(srcIdx)
             TargetAppId = reader.GetString(tgtIdx)
-            Protocol = optString protoIdx
+            Protocol = reader.GetString(protoIdx)
             DataContract = optString contractIdx
             Sla = optString slaIdx
             Frequency = optString freqIdx
@@ -115,7 +115,7 @@ module IntegrationRepository =
         cmd.Parameters.AddWithValue("$id", id) |> ignore
         cmd.Parameters.AddWithValue("$source_app_id", req.SourceAppId) |> ignore
         cmd.Parameters.AddWithValue("$target_app_id", req.TargetAppId) |> ignore
-        addOptionalParam cmd "$protocol" (req.Protocol |> Option.map box)
+        cmd.Parameters.AddWithValue("$protocol", req.Protocol) |> ignore
         addOptionalParam cmd "$data_contract" (req.DataContract |> Option.map box)
         addOptionalParam cmd "$sla" (req.Sla |> Option.map box)
         addOptionalParam cmd "$frequency" (req.Frequency |> Option.map box)
@@ -160,7 +160,7 @@ module IntegrationRepository =
             cmd.Parameters.AddWithValue("$id", id) |> ignore
             cmd.Parameters.AddWithValue("$source_app_id", req.SourceAppId) |> ignore
             cmd.Parameters.AddWithValue("$target_app_id", req.TargetAppId) |> ignore
-            addOptionalParam cmd "$protocol" (req.Protocol |> Option.map box)
+            cmd.Parameters.AddWithValue("$protocol", req.Protocol) |> ignore
             addOptionalParam cmd "$data_contract" (req.DataContract |> Option.map box)
             addOptionalParam cmd "$sla" (req.Sla |> Option.map box)
             addOptionalParam cmd "$frequency" (req.Frequency |> Option.map box)

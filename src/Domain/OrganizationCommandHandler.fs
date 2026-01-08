@@ -2,33 +2,20 @@
 namespace EATool.Domain
 
 open System
-open System.Text.RegularExpressions
 
 module OrganizationCommandHandler =
     
-    /// Validate domain name format (basic DNS validation)
+    /// Validate domain name format using DnsValidator
     let private validateDomain (domain: string) : Result<unit, string> =
-        if String.IsNullOrWhiteSpace(domain) then
-            Error "Domain cannot be empty"
-        else
-            let pattern = @"^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
-            let regex = Regex(pattern)
-            if regex.IsMatch(domain) then
-                Ok ()
-            else
-                Error $"Invalid domain format: {domain}"
+        match DnsValidator.validate domain with
+        | Some error -> Error error
+        | None -> Ok ()
     
-    /// Validate email format
+    /// Validate email format using EmailValidator
     let private validateEmail (email: string) : Result<unit, string> =
-        if String.IsNullOrWhiteSpace(email) then
-            Error "Email cannot be empty"
-        else
-            let pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-            let regex = Regex(pattern)
-            if regex.IsMatch(email) then
-                Ok ()
-            else
-                Error $"Invalid email format: {email}"
+        match EmailValidator.validate email with
+        | Some error -> Error error
+        | None -> Ok ()
     
     /// Check for cycles in parent hierarchy (requires external fetch function)
     let private checkForCycles (orgId: string) (parentId: string) (getOrganization: string -> Organization option) : Result<unit, string> =

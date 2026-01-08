@@ -26,6 +26,9 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Models.fs" />
     <Compile Include="Domain/Validation.fs" />
+    <Compile Include="Domain/Validation/EmailValidator.fs" />
+    <Compile Include="Domain/Validation/DnsValidator.fs" />
+    <Compile Include="Domain/Validation/HostnameValidator.fs" />
     <Compile Include="Domain/Commands.fs" />
     <Compile Include="Domain/Events.fs" />
     <Compile Include="Domain/ApplicationCommands.fs" />

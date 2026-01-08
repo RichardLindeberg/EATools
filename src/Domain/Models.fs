@@ -92,7 +92,7 @@ type Integration =
         Id: string
         SourceAppId: string
         TargetAppId: string
-        Protocol: string option
+        Protocol: string
         DataContract: string option
         Sla: string option
         Frequency: string option
@@ -279,7 +279,7 @@ type CreateIntegrationRequest =
     {
         SourceAppId: string
         TargetAppId: string
-        Protocol: string option
+        Protocol: string
         DataContract: string option
         Sla: string option
         Frequency: string option

@@ -90,7 +90,7 @@ module Json =
             {
                 SourceAppId = get.Required.Field "source_app_id" Decode.string
                 TargetAppId = get.Required.Field "target_app_id" Decode.string
-                Protocol = get.Optional.Field "protocol" Decode.string
+                Protocol = get.Required.Field "protocol" Decode.string
                 DataContract = get.Optional.Field "data_contract" Decode.string
                 Sla = get.Optional.Field "sla" Decode.string
                 Frequency = get.Optional.Field "frequency" Decode.string
@@ -303,7 +303,7 @@ module Json =
             "id", Encode.string i.Id
             "source_app_id", Encode.string i.SourceAppId
             "target_app_id", Encode.string i.TargetAppId
-            "protocol", (match i.Protocol with | Some v -> Encode.string v | None -> Encode.nil)
+            "protocol", Encode.string i.Protocol
             "data_contract", (match i.DataContract with | Some v -> Encode.string v | None -> Encode.nil)
             "sla", (match i.Sla with | Some v -> Encode.string v | None -> Encode.nil)
             "frequency", (match i.Frequency with | Some v -> Encode.string v | None -> Encode.nil)
