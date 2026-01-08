@@ -47,6 +47,8 @@ let main args =
     let allRoutes =
         Endpoints.routes
         @ ApplicationsEndpoints.routes
+        @ ApplicationServicesEndpoints.routes
+        @ ApplicationInterfacesEndpoints.routes
         @ ServersEndpoints.routes
         @ IntegrationsEndpoints.routes
         @ OrganizationsEndpoints.routes
