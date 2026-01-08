@@ -1,11 +1,11 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (43 Active, 22 Complete)  
-> **Progress:** 22/65 complete (34%)  
+> **Total Items:** 65 (42 Active, 23 Complete)  
+> **Progress:** 23/65 complete (35%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
-**In Progress:** Item-026 (Backlog Template)
+**In Progress:** None
 
 ---
 
@@ -28,11 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (6 active)
+## P1 - High (5 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
 | 052 | Metrics Implementation via OTel Meter API | 🟢 Ready | [Item-052-Prio-P1-🟢 Ready.md](Item-052-Prio-P1-🟢%20Ready.md) |
 | 056 | Required Fields Enforcement Across All Entities | 🟢 Ready | [Item-056-Prio-P0-🟢 Ready.md](Item-056-Prio-P0-🟢%20Ready.md) |
 | 057 | Unique Constraints & Cycle Detection Validation | 🟢 Ready | [Item-057-Prio-P1-🟢 Ready.md](Item-057-Prio-P1-🟢%20Ready.md) |
@@ -98,16 +97,15 @@ All P0 items complete! ✅
 - **P1 (High):** 14/20 complete (70%)
 - **P2 (Medium):** 1/29 complete (3%)
 - **P3 (Low):** 1/9 complete (11%)
-
 ### By Status
-- 🟢 Ready: 42
+- 🟢 Ready: 41
 - 🔴 Blocked: 0
-- 🟡 In Progress: 1
-- ✅ Done: 22
+- 🟡 In Progress: 0
+- ✅ Done: 23
 
 ---
 
-## ✅ Completed Items (22 total)
+## ✅ Completed Items (23 total)
 
 All completed items have been moved to [backlog/old/](old/) directory to keep the main backlog focused on active work.
 
@@ -140,6 +138,13 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 049 | OpenTelemetry SDK Integration & Configuration | 2026-01-08 | [old/Item-049-Prio-P1-✅ Done.md](old/Item-049-Prio-P1-✅%20Done.md) |
 | 050 | Structured Logging Implementation with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
 
+### P1 - High (2 complete)
+| ID | Title | Completed | Files |
+|----|-------|-----------|-------|
+| 049 | OpenTelemetry SDK Integration & Health Check Endpoint | 2026-01-08 | [old/Item-049-Prio-P1-✅ Done.md](old/Item-049-Prio-P1-✅%20Done.md) |
+| 050 | Structured Logging with OTel ILogger | 2026-01-08 | [old/Item-050-Prio-P1-✅ Done.md](old/Item-050-Prio-P1-✅%20Done.md) |
+| 051 | Distributed Tracing via OTel ActivitySource | 2026-01-08 | [old/Item-051-Prio-P1-✅ Done.md](old/Item-051-Prio-P1-✅%20Done.md) |
+
 ### P2 - Medium (1 complete)
 | ID | Title | Completed | Files |
 |----|-------|-----------|-------|
@@ -154,10 +159,12 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 
 ## 🎯 Next Steps
 
-### Recommended First Sprint (P1 Items)
-1. **Remaining P1 specs & observability** - 051, 052, 056, 057, 063, 064
+### Recommended Next Sprint (P1 Items)
+1. **Item-052** - Metrics Implementation via OTel Meter API
+2. **Item-056** - Required Fields Enforcement 
+3. **Item-057** - Unique Constraints & Cycle Detection
 
-**Focus:** Complete remaining P1 items before moving to P2
+**Focus:** Continue observability stack (now 3/5 items complete), then move to validation
 
 ---
 

@@ -1,10 +1,11 @@
 # Item-051: Distributed Tracing via OTel ActivitySource
 
-**Status:** 🟢 Ready  
+**Status:** ✅ Done  
 **Priority:** P1 - HIGH  
 **Effort:** 6-8 hours  
 **Created:** 2026-01-07  
-**Owner:** TBD
+**Owner:** TBD  
+**Completed:** 2026-01-08
 
 ---
 
@@ -123,6 +124,62 @@ This violates core tracing requirements and prevents end-to-end request flow vis
 
 **Related:**
 - Item-036 - AuditLog projection (should reference trace ID for auditing)
+
+---
+
+## Implementation Summary
+
+### Completed (2026-01-08)
+
+**1. Tracing Infrastructure Created**
+- **ActivitySourceFactory.fs** (108 lines)
+  - Central `ActivitySource("EATool", "1.0.0")` for all tracing
+  - Helper functions: `startActivity()`, `setTag()`, `setTags()`
+  - Specialized operations: `traceHttpOperation()`, `traceCommand()`, `traceDbOperation()`, `traceEventStore()`
+  - Proper error handling with exception tags
+
+- **TraceContextMiddleware.fs** (122 lines)
+  - W3C Trace Context header format: `00-{128bit-trace-id}-{64bit-span-id}-{2bit-flags}`
+  - Extracts `traceparent` and `tracestate` from incoming requests
+  - Creates root Activity span per HTTP request
+  - Sets OTel semantic attributes: `http.method`, `http.target`, `http.url`, `http.scheme`, `http.host`, `http.status_code`
+  - Stores Activity in HttpContext items for downstream access
+  - Injects response headers via `OnStarting` callback
+
+**2. Program.fs Integration**
+- Registered `TraceContextMiddleware` before other middleware
+- Ensures all requests are traced from entry to exit
+- Proper execution order: TraceContext → Correlation ID → Routing
+
+**3. API Handler Instrumentation**
+- **Api/Instrumentation.fs** (51 lines) - Helper module with:
+  - `recordCommand()` - Track command type, entity ID, result
+  - `recordEventPersistence()` - Track event count and success
+  - `recordProjectionProcessing()` - Track projection operations
+  - `getTraceContext()` - Extract trace information
+
+- **ApplicationsEndpoints.fs** - Enhanced POST /applications handler:
+  - Added command tags: `command.type`, `entity.id`, `entity.type`
+  - Added event persistence tracking: `event.count`, `event.persist.error`
+  - Added command result tracking: `command.result` (success/validation_failed)
+  - Proper error propagation with Activity tags
+
+**4. Testing**
+- All 105 integration tests passing
+- Verified Activity creation through logs
+- TraceId present in structured logging output
+- Trace context properly flowing through request lifecycle
+
+### Validation
+
+✓ ActivitySource correctly initialized with service info
+✓ Root Activity span created per HTTP request
+✓ W3C traceparent format validated
+✓ Semantic attributes set per OTel conventions
+✓ Error handling integrated with Activity tags
+✓ Command and event instrumentation in handlers
+✓ No breaking changes to existing endpoints
+✓ Structured logging includes trace context in scopes
 
 ---
 
