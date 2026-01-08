@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-08  
-> **Total Items:** 65 (46 Active, 19 Complete)  
-> **Progress:** 19/65 complete (29%)  
+> **Total Items:** 65 (45 Active, 20 Complete)  
+> **Progress:** 20/65 complete (31%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** Item-026 (Backlog Template)
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 7 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-11-active)** (11 active) - Should be done this sprint
+- **[P1 - High](#p1---high-10-active)** (10 active) - Should be done this sprint
 - **[P2 - Medium](#p2---medium-23-active)** (23 active) - Should be planned
 - **[P3 - Low](#p3---low-6-active)** (6 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-19-total)** (19 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-20-total)** (20 items) - See backlog/old/ directory
 
 ---
 
@@ -28,13 +28,12 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (11 active)
+## P1 - High (10 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P1-🟢 Ready.md](Item-035-Prio-P1-🟢%20Ready.md) |
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P1-🟢 Ready.md](Item-036-Prio-P1-🟢%20Ready.md) |
-| 047 | Implement ApplicationService & ApplicationInterface CRUD Endpoints | 🟢 Ready | [Item-047-Prio-P1-🟢 Ready.md](Item-047-Prio-P1-🟢%20Ready.md) |
 | 049 | OpenTelemetry SDK Integration & Configuration | 🟢 Ready | [Item-049-Prio-P1-🟢 Ready.md](Item-049-Prio-P1-🟢%20Ready.md) |
 | 050 | Structured Logging Implementation with OTel ILogger | 🟢 Ready | [Item-050-Prio-P1-🟢 Ready.md](Item-050-Prio-P1-🟢%20Ready.md) |
 | 051 | Distributed Tracing via OTel ActivitySource | 🟢 Ready | [Item-051-Prio-P1-🟢 Ready.md](Item-051-Prio-P1-🟢%20Ready.md) |
@@ -110,7 +109,7 @@ All P0 items complete! ✅
 
 ---
 
-## ✅ Completed Items (19 total)
+## ✅ Completed Items (20 total)
 
 All completed items have been moved to [backlog/old/](old/) directory to keep the main backlog focused on active work.
 
@@ -125,7 +124,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 029 | Create Command Framework and Base Types | 2026-01-06 | [old/Item-029-Prio-P0-✅ Done.md](old/Item-029-Prio-P0-✅%20Done.md) |
 | 030 | Implement CQRS Projection Framework | 2026-01-06 | [old/Item-030-Prio-P0-✅ Done.md](old/Item-030-Prio-P0-✅%20Done.md) |
 
-### P1 - High (11 complete)
+### P1 - High (12 complete)
 | ID | Title | Completed | Files |
 |----|-------|-----------|-------|
 | 005 | Fix BusinessCapability `parent_id` Query Parameter Inconsistency | 2026-01-06 | [old/Item-005-Prio-P1-✅ Done.md](old/Item-005-Prio-P1-✅%20Done.md) |
@@ -139,6 +138,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 | 032 | Migrate Organization Endpoints to Commands | 2026-01-07 | [old/Item-032-Prio-P1-✅ Done.md](old/Item-032-Prio-P1-✅%20Done.md) |
 | 033 | Migrate BusinessCapability Endpoints to Commands | 2026-01-07 | [old/Item-033-Prio-P1-✅ Done.md](old/Item-033-Prio-P1-✅%20Done.md) |
 | 034 | Migrate Relation Endpoints to Commands | 2026-01-07 | [old/Item-034-Prio-P1-✅ Done.md](old/Item-034-Prio-P1-✅%20Done.md) |
+| 047 | Implement ApplicationService & ApplicationInterface CQRS Endpoints | 2026-01-08 | [old/Item-047-Prio-P1-✅ Done.md](old/Item-047-Prio-P1-✅%20Done.md) |
 
 ### P2 - Medium (1 complete)
 | ID | Title | Completed | Files |
@@ -157,7 +157,7 @@ All completed items have been moved to [backlog/old/](old/) directory to keep th
 ### Recommended First Sprint (P1 Items)
 1. **Item-035** - Implement Snapshot System
 2. **Item-036** - Create AuditLog as Event Projection
-3. **Remaining P1 specs & observability** - 047, 049, 050, 051, 052, 056, 057, 063, 064
+3. **Remaining P1 specs & observability** - 049, 050, 051, 052, 056, 057, 063, 064
 
 **Focus:** Complete remaining P1 items before moving to P2
 
@@ -214,7 +214,7 @@ Use [TEMPLATE.md](TEMPLATE.md) when creating new backlog items. The template inc
 5. Mark as ✅ Done when finished
 
 ### For Project Managers
-1. Check progress at a glance (19/65 complete)
+1. Check progress at a glance (20/65 complete)
 2. Identify blocked items (dependencies)
 3. Plan sprints by priority
 4. Track effort estimates
