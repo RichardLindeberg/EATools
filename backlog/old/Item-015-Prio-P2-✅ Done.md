@@ -23,28 +23,28 @@
 
 ## Detailed Tasks
 
-- [ ] Review [docs/relationship-modeling.md](../../docs/relationship-modeling.md) for all documented patterns
-- [ ] Map each documented pattern to (source_type, target_type, relation_type)
-- [ ] Identify missing combinations
-- [ ] Add hierarchical relations:
-  - organization → organization (via parent_id, not relation)
-  - business_capability → business_capability (via parent_id, not relation)
-- [ ] Add missing application relations:
-  - application → application_service (uses - not just realizes)
-  - integration → application_interface (calls)
-- [ ] Document why some combinations are excluded
-- [ ] Add validation code if missing
-- [ ] Add tests for matrix enforcement
+- [x] Review [docs/relationship-modeling.md](../../docs/relationship-modeling.md) for all documented patterns
+- [x] Map each documented pattern to (source_type, target_type, relation_type)
+- [x] Identify missing combinations
+- [x] Add hierarchical relations:
+  - [x] organization → organization (via parent_id, not relation)
+  - [x] business_capability → business_capability (via parent_id, not relation)
+- [x] Add missing application relations:
+  - [x] application → application_service (uses - not just realizes)
+  - [x] integration → application_interface (calls)
+- [x] Document why some combinations are excluded
+- [x] Add validation code if missing
+- [x] Add tests for matrix enforcement
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] Matrix covers all documented patterns
-- [ ] Invalid combinations rejected with 422
-- [ ] Valid combinations accepted
-- [ ] Tests verify matrix enforcement
-- [ ] Documentation explains each combination
+- [x] Matrix covers all documented patterns
+- [x] Invalid combinations rejected with 422
+- [x] Valid combinations accepted
+- [x] Tests verify matrix enforcement
+- [x] Documentation explains each combination
 
 ---
 

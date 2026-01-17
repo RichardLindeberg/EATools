@@ -118,29 +118,129 @@ All entities share these base fields:
 ### Enum Definitions
 
 #### Lifecycle
+
+The `lifecycle` enum represents the operational phase of an asset. It defines a **one-way progression** through the asset's operational history.
+
+| Value | Meaning | When to Use | Next Valid States | Example |
+|-------|---------|-------------|-------------------|---------|
+| `planned` | Asset is planned but not yet operational | During development, before production deployment | `active`, `retired` | New payment system under development |
+| `active` | Asset is currently operational and in use | During normal operations, supporting business processes | `deprecated`, `retired` | Current CRM system in production |
+| `deprecated` | Asset is operational but being phased out; no new use | When transitioning off, but existing consumers still using | `retired` | Legacy reports system; migration in progress |
+| `retired` | Asset is no longer operational; historical only | After decommissioning, only for audit trail purposes | (none - terminal state) | Decommissioned mainframe application |
+
+**Valid Transitions Diagram:**
 ```
-planned | active | deprecated | retired
+planned ──→ active ──→ deprecated ──→ retired
+   ↓          ↓           ↓              ↓
+   └──────────┴───────────┴──────────────┘
+              All can transition directly to retired
 ```
+
+**Examples:**
+- New application: `planned` → after deployment → `active` → after replacement → `deprecated` → after final decommission → `retired`
+- Quick decommission: `active` → `retired` (skip deprecated if no migration period)
+- Cancelled project: `planned` → `retired` (no deprecation needed if never used)
 
 #### Data Classification
-```
-public | internal | confidential | restricted
-```
+
+The `data_classification` enum represents the sensitivity and disclosure restrictions for data assets. Used for governance, security policies, and access control.
+
+| Value | Meaning | Restrictions | Examples | Access Control |
+|-------|---------|--------------|----------|-----------------|
+| `public` | No confidentiality restrictions; can be freely shared | None; no special handling required | Product documentation, API docs, public roadmaps | Anyone; no restrictions |
+| `internal` | Internal use only; restricted to organization members | Not for external sharing; standard employee access | Employee directories, internal reports, meeting notes | All authenticated employees |
+| `confidential` | Sensitive business data; restricted access | Need-to-know basis; logged access; encryption at rest | Financial reports, strategic plans, customer data | Role-based or explicit approval |
+| `restricted` | Highly sensitive; maximum protection | Strict access controls; encryption everywhere; audit all access | PII, passwords, payment data, health records | Explicit approval + audit trail required |
+
+**Data Classification Inheritance:**
+- When storing data in `restricted` entity, consumers have `restricted` classification
+- Example: DataEntity marked `restricted` means applications reading it must handle restricted data
+- Relations inherit classification from target entity
+
+**Compliance Mapping:**
+- `public` & `internal`: Standard data governance
+- `confidential`: GDPR awareness; data subject access support required
+- `restricted`: Full GDPR/CCPA compliance; PII handling; encryption mandatory
+
+**Examples:**
+- Customer email addresses → `restricted` (PII)
+- Employee directory → `confidential` (internal use)
+- Product roadmap → `internal` (not for public)
+- API documentation → `public` (marketing material)
 
 #### Criticality
+
+The `criticality` enum represents business impact if an asset becomes unavailable. Drives SLA, support levels, and disaster recovery priorities.
+
+| Value | Meaning | Business Impact | Support Level | Recovery Priority | Example |
+|-------|---------|-----------------|----------------|------------------|---------|
+| `low` | Non-critical; temporary outage acceptable | Minimal; affects individual workflow | Office hours support | After business hours or next day | Sandbox environments, development tools |
+| `medium` | Important; outage causes business disruption | Department-level impact; hours of lost productivity | Business hours + escalation | Same business day restoration |  Internal reporting tools, non-customer-facing systems |
+| `high` | Critical; outage significantly impacts business | Cross-department impact; revenue impact | 24/7 on-call; 4-hour response SLA | Hours; immediate investigation |  Payment processing, customer portals, billing |
+| `critical` | Mission-critical; business cannot operate | Existential business impact; revenue loss per minute | 24/7 on-call; 1-hour response SLA | Minutes; highest priority | Core trading platform, primary customer-facing systems |
+
+**Business Impact Mapping:**
 ```
-low | medium | high | critical
+low        → Accept occasional downtime
+medium     → Plan maintenance windows; require notification
+high       → Plan maintenance during low-usage; notification required
+critical   → Blue-green deployments; zero-downtime requirement
 ```
+
+**Examples:**
+- Payment processor → `critical` (revenue per minute)
+- Customer-facing portal → `high` (revenue impact; SLA required)
+- Internal analytics → `medium` (business valuable but not immediate revenue)
+- Dev sandbox → `low` (no business impact)
 
 #### Environment
+
+The `environment` enum represents the operational deployment environment. Determines security policies, data retention, and monitoring intensity.
+
+| Value | Meaning | Purpose | Data Retention | Monitoring | Network | Example |
+|-------|---------|---------|---|---|---|---------|
+| `dev` | Development environment; developers have full access | Developer experimentation and integration testing | Short-term; can be wiped | Basic; warnings only | Internal/local networks | Local development, feature branches |
+| `staging` | Pre-production environment; mirrors production | Final testing before production deployment | Medium-term; mirrors prod rules | Intensive; all events logged | Behind VPN; restricted access | UAT, performance testing |
+| `prod` | Production environment; live customer data | Business operations; real customers | Long-term; compliance retention | Critical; audited; alerts | Restricted; encrypted; DDoS protection | Live customer systems |
+
+**Environment Progression:**
 ```
-dev | staging | prod
+dev ──→ staging ──→ prod
+(integrate)  (validate)  (operate)
 ```
 
+**Environment-Specific Rules:**
+- `dev`: No data encryption required; no backups required; reset safe
+- `staging`: Mirror production security; full backups; data obfuscation recommended
+- `prod`: Encryption everywhere; immutable audit logs; 24/7 monitoring; incident response SLA
+
+**Examples:**
+- Application version 1.5 in `prod` serving customers
+- Application version 1.6 in `staging` for UAT
+- Application version 1.7 in `dev` for feature branch
+
 #### Entity Type
+
+The `entity_type` enum represents the type/category of an entity. Used for filtering, visualization, and API routing.
+
+| Value | Meaning | ArchiMate Mapping | Relations | Example |
+|-------|---------|-------------------|-----------|---------|
+| `organization` | Organizational unit; team, department, division | BusinessRole, BusinessActor | Can own applications/servers | Engineering Dept, Payments Team |
+| `application` | Software application; system | ApplicationComponent | Depends on other apps; deploys to servers | CRM system, payment processor |
+| `application_service` | Business service provided by application(s) | ApplicationService | Realized by applications; supports capabilities | Payment Processing Service |
+| `application_interface` | Technical interface (API, interface) | ApplicationInterface | Exposed by applications; serves services | REST API v2, SOAP endpoint |
+| `server` | Infrastructure node; physical or virtual | Node, Device | Deployed to; connected to other servers | Production DB server, web server |
+| `integration` | External system integration | ExternalSystemService | Communicates with applications | Salesforce connector, payment gateway |
+| `business_capability` | Business function or capability | BusinessFunction | Supported by applications/services | Customer Management, Payment Processing |
+| `data_entity` | Data/information asset | DataObject | Read/written by applications | Customer database, transaction ledger |
+| `view` | Custom visualization or perspective | (not ArchiMate) | Contains filtered entities/relations | Architecture roadmap, compliance view |
+
+**Layering:**
 ```
-organization | application | application_service | application_interface | 
-server | integration | business_capability | data_entity | view
+Business Layer:     organization, business_capability
+Application Layer:  application, application_service, application_interface, integration, data_entity
+Technology Layer:   server
+Meta Layer:         view, relation
 ```
 
 ## 5. Acceptance Criteria

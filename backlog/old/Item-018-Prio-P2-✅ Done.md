@@ -27,23 +27,23 @@ Specifications list enum values but don't explain meanings, when to use, and val
 
 ## Detailed Tasks
 
-- [ ] Add enum glossary section to domain-overview.md
-- [ ] Document Lifecycle: planned → active → deprecated → retired
-- [ ] Document DataClassification: public, internal, confidential, restricted
-- [ ] Document Criticality: low, medium, high, critical
-- [ ] Document Environment: dev, staging, prod
-- [ ] For each enum: meaning, examples, valid transitions
-- [ ] Add transition diagrams (optional)
+- [x] Add enum glossary section to domain-overview.md
+- [x] Document Lifecycle: planned → active → deprecated → retired
+- [x] Document DataClassification: public, internal, confidential, restricted
+- [x] Document Criticality: low, medium, high, critical
+- [x] Document Environment: dev, staging, prod
+- [x] For each enum: meaning, examples, valid transitions
+- [x] Add transition diagrams (optional)
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] All enums documented
-- [ ] Values explained clearly
-- [ ] Examples provided
-- [ ] Valid transitions documented
-- [ ] Linked from main spec
+- [x] All enums documented
+- [x] Values explained clearly
+- [x] Examples provided
+- [x] Valid transitions documented
+- [x] Linked from main spec
 
 ---
 

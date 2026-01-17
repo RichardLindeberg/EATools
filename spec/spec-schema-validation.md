@@ -27,22 +27,56 @@ This specification defines all validation rules including the relation validatio
 
 Valid (source_type, target_type, relation_type) combinations:
 
-| Source Type | Target Type | Valid Relation Types |
-|------------|-------------|---------------------|
-| application | server | deployed_on, stores_data_on |
-| application | business_capability | supports |
-| application | data_entity | reads, writes |
-| application | application_service | realizes, uses |
-| application | application_interface | exposes |
-| application | application | depends_on, communicates_with, calls |
-| application_interface | application_service | serves |
-| application_service | business_capability | realizes, supports |
-| integration | application | communicates_with, publishes_event_to, consumes_event_from |
-| organization | application | owns |
-| organization | server | owns |
-| server | server | connected_to |
+### Comprehensive Validation Matrix
+
+| Source Type | Target Type | Valid Relation Types | ArchiMate Mapping | Notes |
+|------------|-------------|---------------------|------------------|-------|
+| application | application | depends_on, communicates_with, calls | Serving, Flow | Direct application communication |
+| application | application_service | realizes, uses | Realization, Serving | App implements or uses service |
+| application | application_interface | exposes | Composition, Assignment | App exposes interface for access |
+| application | server | deployed_on, stores_data_on | Assignment | Infrastructure deployment |
+| application | data_entity | reads, writes | Access | Data access patterns |
+| application | business_capability | supports | Realization, Serving | Business capability realization |
+| application_interface | application_service | serves | Serving | Interface provides service |
+| application_service | business_capability | realizes, supports | Realization, Serving | Service realizes capability |
+| integration | application | communicates_with, publishes_event_to, consumes_event_from | Triggering, Flow | Integration patterns |
+| integration | application_interface | calls | Serving | Integration calls interface |
+| organization | application | owns | Composition, Assignment | Ownership/stewardship |
+| organization | server | owns | Composition, Assignment | Infrastructure ownership |
+| organization | organization | part_of | Aggregation, Composition | Organizational hierarchy via relations |
+| server | server | connected_to | Association | Network/physical connectivity |
 
 **All other combinations MUST be rejected with 422 validation error.**
+
+### Hierarchical Entities
+
+The following hierarchies are modeled via `parent_id` field (NOT via relations):
+- Organization hierarchy: Use `parent_id` field on organization entity for efficient queries
+- Business Capability hierarchy: Use `parent_id` field on business_capability entity for tree navigation
+
+Relations may also be used for these hierarchies when additional governance metadata is needed (confidence, effective dates, custom labels).
+
+### Relation Type Semantics
+
+| Relation Type | Direction | Meaning |
+|---------------|-----------|---------|
+| `depends_on` | Unidirectional | Source requires target to function |
+| `communicates_with` | Typically Bidirectional | Applications communicate with each other |
+| `calls` | Unidirectional | Source invokes target |
+| `realizes` | Unidirectional | Source implements/realizes target |
+| `uses` | Unidirectional | Source uses target service/interface |
+| `exposes` | Unidirectional | Source makes target available |
+| `serves` | Unidirectional | Source provides/serves target |
+| `supports` | Unidirectional | Source supports target capability |
+| `deployed_on` | Unidirectional | Source is deployed/runs on target |
+| `stores_data_on` | Unidirectional | Source stores data on target |
+| `reads` | Unidirectional | Source reads target data |
+| `writes` | Unidirectional | Source writes target data |
+| `owns` | Unidirectional | Source owns/stewards target |
+| `connected_to` | Typically Bidirectional | Source connected to target (network/physical) |
+| `publishes_event_to` | Unidirectional | Source publishes events to target |
+| `consumes_event_from` | Unidirectional | Source consumes events from target |
+| `part_of` | Unidirectional | Source is part of target organization |
 
 ## 4. Field Validation Rules
 

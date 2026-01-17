@@ -30,25 +30,25 @@ Database migrations are implemented (using DbUp) but strategy is not documented.
 
 ## Detailed Tasks
 
-- [ ] Create spec-data-migrations.md
-- [ ] Document file naming convention: `{number}_{description}.sql`
-- [ ] Document forward-only migrations (no rollback)
-- [ ] Document backwards compatibility rules
-- [ ] Document zero-downtime migration patterns
-- [ ] Document running migrations at startup
-- [ ] Document testing migrations
-- [ ] Provide examples of common migration patterns
+- [x] Create spec-data-migrations.md
+- [x] Document file naming convention: `{number}_{description}.sql`
+- [x] Document forward-only migrations (no rollback)
+- [x] Document backwards compatibility rules
+- [x] Document zero-downtime migration patterns
+- [x] Document running migrations at startup
+- [x] Document testing migrations
+- [x] Provide examples of common migration patterns
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] Migration strategy documented
-- [ ] Naming convention documented
-- [ ] Backwards compatibility rules stated
-- [ ] Zero-downtime patterns explained
-- [ ] Examples provided
-- [ ] Linked from spec-index.md
+- [x] Migration strategy documented
+- [x] Naming convention documented
+- [x] Backwards compatibility rules stated
+- [x] Zero-downtime patterns explained
+- [x] Examples provided
+- [x] Linked from spec-index.md
 
 ---
 

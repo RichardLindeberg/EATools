@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (39 Active, 33 Complete)  
-> **Progress:** 33/72 complete (46%)  
+> **Total Items:** 72 (35 Active, 37 Complete)  
+> **Progress:** 37/72 complete (51%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -34,14 +34,10 @@ All P1 items complete! ✅
 
 ---
 
-## P2 - Medium (29 active)
+## P2 - Medium (25 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 014 | Add Missing API Documentation Files | 🟢 Ready | [Item-014-Prio-P2-🟢 Ready.md](Item-014-Prio-P2-🟢%20Ready.md) |
-| 015 | Expand Relation Validation Matrix | 🟢 Ready | [Item-015-Prio-P2-🟢 Ready.md](Item-015-Prio-P2-🟢%20Ready.md) |
-| 017 | Create Data Migration Strategy Specification | 🟢 Ready | [Item-017-Prio-P2-🟢 Ready.md](Item-017-Prio-P2-🟢%20Ready.md) |
-| 018 | Enhance Enum Documentation in Domain Model | 🟢 Ready | [Item-018-Prio-P2-🟢 Ready.md](Item-018-Prio-P2-🟢%20Ready.md) |
 | 019 | Decide on Consolidation of spec-schema-domain-model.md | 🟢 Ready | [Item-019-Prio-P2-🟢 Ready.md](Item-019-Prio-P2-🟢%20Ready.md) |
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
@@ -94,23 +90,23 @@ All P1 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
 - **P1 (High):** 19/19 complete (100%) ✅
-- **P2 (Medium):** 5/34 complete (15%)
+- **P2 (Medium):** 9/34 complete (26%)
 - **P3 (Low):** 1/11 complete (9%)
 
 ### By Status
-- 🟢 Ready: 39
+- 🟢 Ready: 35
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 33
+- ✅ Done: 37
 
 ---
 
-## ✅ Completed Items (33 total)
+## ✅ Completed Items (37 total)
 
 All completed items are in [backlog/old/](old/):
 - P0: 8 complete
 - P1: 19 complete (including Item-059 ✅)
-- P2: 5 complete (including Item-013 ✅)
+- P2: 9 complete (including Item-013 ✅, Item-014 ✅, Item-015 ✅, Item-017 ✅, Item-018 ✅)
 - P3: 1 complete
 
 See the old/ directory for details and completion dates.

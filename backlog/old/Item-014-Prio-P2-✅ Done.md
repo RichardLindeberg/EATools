@@ -29,36 +29,36 @@ This creates broken links and documentation gaps.
 ## Detailed Tasks
 
 ### API Usage Guide
-- [ ] Create docs/api-usage-guide.md with:
-  - Authentication setup (OIDC, API key)
-  - Making requests (curl, Postman, SDKs)
-  - Request/response examples
-  - Pagination patterns
-  - Filtering and search patterns
-  - Error handling
-  - Rate limiting
-  - Best practices
-  - Troubleshooting
+- [x] Create docs/api-usage-guide.md with:
+  - [x] Authentication setup (OIDC, API key)
+  - [x] Making requests (curl, Postman, SDKs)
+  - [x] Request/response examples
+  - [x] Pagination patterns
+  - [x] Filtering and search patterns
+  - [x] Error handling
+  - [x] Rate limiting
+  - [x] Best practices
+  - [x] Troubleshooting
 
 ### Authorization Guide
-- [ ] Create docs/authorization-guide.md with:
-  - RBAC patterns
-  - ABAC patterns
-  - OPA policy configuration
-  - Permission model
-  - Common authorization scenarios
-  - Troubleshooting access issues
+- [x] Create docs/authorization-guide.md with:
+  - [x] RBAC patterns
+  - [x] ABAC patterns
+  - [x] OPA policy configuration
+  - [x] Permission model
+  - [x] Common authorization scenarios
+  - [x] Troubleshooting access issues
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] api-usage-guide.md is comprehensive
-- [ ] authorization-guide.md is comprehensive
-- [ ] Content is accurate
-- [ ] Examples are tested
-- [ ] Links in README work
-- [ ] Both files follow docs style
+- [x] api-usage-guide.md is comprehensive
+- [x] authorization-guide.md is comprehensive
+- [x] Content is accurate
+- [x] Examples are tested
+- [x] Links in README work
+- [x] Both files follow docs style
 
 ---
 
