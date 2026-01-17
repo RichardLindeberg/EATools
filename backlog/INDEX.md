@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (35 Active, 37 Complete)  
-> **Progress:** 37/72 complete (51%)  
+> **Total Items:** 72 (34 Active, 38 Complete)  
+> **Progress:** 38/72 complete (53%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,7 +14,7 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-0-active)** (0 active, 19 complete) - All complete! 🎉
-- **[P2 - Medium](#p2---medium-30-active)** (30 active) - Should be planned
+- **[P2 - Medium](#p2---medium-24-active)** (24 active) - Should be planned
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Nice to have
 
 ### Completed Items
@@ -34,18 +34,17 @@ All P1 items complete! ✅
 
 ---
 
-## P2 - Medium (25 active)
+## P2 - Medium (24 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 019 | Decide on Consolidation of spec-schema-domain-model.md | 🟢 Ready | [Item-019-Prio-P2-🟢 Ready.md](Item-019-Prio-P2-🟢%20Ready.md) |
+| 019 | Decide on Consolidation of spec-schema-domain-model.md | ✅ Done | [Item-019-Prio-P2-✅ Done.md](old/Item-019-Prio-P2-✅%20Done.md) |
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 | 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
 | 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
-| 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
 | 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
 | 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
 | 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
@@ -90,23 +89,23 @@ All P1 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
 - **P1 (High):** 19/19 complete (100%) ✅
-- **P2 (Medium):** 9/34 complete (26%)
+- **P2 (Medium):** 10/34 complete (29%)
 - **P3 (Low):** 1/11 complete (9%)
 
 ### By Status
-- 🟢 Ready: 35
+- 🟢 Ready: 34
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 37
+- ✅ Done: 38
 
 ---
 
-## ✅ Completed Items (37 total)
+## ✅ Completed Items (38 total)
 
 All completed items are in [backlog/old/](old/):
 - P0: 8 complete
 - P1: 19 complete (including Item-059 ✅)
-- P2: 9 complete (including Item-013 ✅, Item-014 ✅, Item-015 ✅, Item-017 ✅, Item-018 ✅)
+- P2: 10 complete (including Item-013 ✅, Item-014 ✅, Item-015 ✅, Item-017 ✅, Item-018 ✅, Item-038 ✅)
 - P3: 1 complete
 
 See the old/ directory for details and completion dates.

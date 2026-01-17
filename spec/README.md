@@ -13,9 +13,7 @@ spec/
 ├── README.md                              # This file
 ├── spec-index.md                          # Central index (START HERE)
 │
-├── spec-schema-domain-model.md            # [ORIGINAL] Complete domain model (comprehensive)
-│
-├── spec-schema-domain-overview.md         # Domain model overview
+├── spec-schema-domain-overview.md         # Domain model overview (authoritative reference)
 ├── spec-schema-entities-business.md       # Business layer entities
 ├── spec-schema-entities-application.md    # Application layer entities  
 ├── spec-schema-entities-infrastructure.md # Infrastructure entities
@@ -107,8 +105,7 @@ All specifications follow this structure:
 | Specification | Status | Notes |
 |--------------|--------|-------|
 | spec-index.md | ✅ Complete | Central index |
-| spec-schema-domain-model.md | ✅ Complete | Original comprehensive version |
-| spec-schema-domain-overview.md | ✅ Complete | Split from domain-model |
+| spec-schema-domain-overview.md | ✅ Complete | Authoritative domain reference |
 | spec-schema-entities-business.md | 📋 Planned | Extract from domain-model |
 | spec-schema-entities-application.md | 📋 Planned | Extract from domain-model |
 | spec-schema-entities-infrastructure.md | 📋 Planned | Extract from domain-model |

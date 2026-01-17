@@ -132,7 +132,7 @@ module ApplicationEventJson =
                 "type", Encode.string "TagsRemoved"
                 "data", encodeTagsRemovedData data
             ]
-        | CriticalitySet data ->
+        | EATool.Domain.ApplicationEvent.CriticalitySet data ->
             Encode.object [
                 "type", Encode.string "CriticalitySet"
                 "data", encodeCriticalitySetData data
@@ -274,7 +274,7 @@ module ApplicationEventJson =
                 |> Decode.map TagsRemoved
             | "CriticalitySet" ->
                 Decode.field "data" decodeCriticalitySetData
-                |> Decode.map CriticalitySet
+                |> Decode.map EATool.Domain.ApplicationEvent.CriticalitySet
             | "DescriptionUpdated" ->
                 Decode.field "data" decodeDescriptionUpdatedData
                 |> Decode.map DescriptionUpdated

@@ -247,6 +247,6 @@ module ApplicationProjection =
                 | CapabilityRemoved data -> handleCapabilityRemoved data connString
                 | TagsAdded data -> handleTagsAdded data connString
                 | TagsRemoved data -> handleTagsRemoved data connString
-                | CriticalitySet data -> handleCriticalitySet data connString
+                | EATool.Domain.ApplicationEvent.CriticalitySet data -> handleCriticalitySet data connString
                 | DescriptionUpdated data -> handleDescriptionUpdated data connString
                 | ApplicationDeleted data -> handleDeleted data connString

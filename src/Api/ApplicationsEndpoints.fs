@@ -77,7 +77,7 @@ module ApplicationsEndpoints =
                 | CapabilityRemoved _ -> "CapabilityRemoved"
                 | TagsAdded _ -> "TagsAdded"
                 | TagsRemoved _ -> "TagsRemoved"
-                | CriticalitySet _ -> "CriticalitySet"
+                | EATool.Domain.ApplicationEvent.CriticalitySet _ -> "CriticalitySet"
                 | DescriptionUpdated _ -> "DescriptionUpdated"
                 | ApplicationDeleted _ -> "ApplicationDeleted"
             EventVersion = 1
