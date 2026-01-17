@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (34 Active, 38 Complete)  
-> **Progress:** 38/72 complete (53%)  
+> **Total Items:** 72 (28 Active, 44 Complete)  
+> **Progress:** 44/72 complete (61%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,7 +14,7 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-0-active)** (0 active, 19 complete) - All complete! 🎉
-- **[P2 - Medium](#p2---medium-24-active)** (24 active) - Should be planned
+- **[P2 - Medium](#p2---medium-17-active)** (17 active) - Should be planned
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Nice to have
 
 ### Completed Items
@@ -34,18 +34,15 @@ All P1 items complete! ✅
 
 ---
 
-## P2 - Medium (24 active)
+## P2 - Medium (17 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 019 | Decide on Consolidation of spec-schema-domain-model.md | ✅ Done | [Item-019-Prio-P2-✅ Done.md](old/Item-019-Prio-P2-✅%20Done.md) |
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 | 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
-| 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
-| 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
 | 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
 | 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
 | 042 | Implement Compensation Events | 🟢 Ready | [Item-042-Prio-P2-🟢 Ready.md](Item-042-Prio-P2-🟢%20Ready.md) |
@@ -89,39 +86,87 @@ All P1 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
 - **P1 (High):** 19/19 complete (100%) ✅
-- **P2 (Medium):** 10/34 complete (29%)
-- **P3 (Low):** 1/11 complete (9%)
+- **P2 (Medium):** 17/34 complete (50%)
+- **P3 (Low):** 0/4 active (0%)
 
 ### By Status
 - 🟢 Ready: 34
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 38
+- ✅ Done: 40
 
 ---
 
-## ✅ Completed Items (38 total)
+## ✅ Completed Items (40 total)
 
 All completed items are in [backlog/old/](old/):
-- P0: 8 complete
-- P1: 19 complete (including Item-059 ✅)
-- P2: 10 complete (including Item-013 ✅, Item-014 ✅, Item-015 ✅, Item-017 ✅, Item-018 ✅, Item-038 ✅)
-- P3: 1 complete
 
-See the old/ directory for details and completion dates.
+### P0 - Critical (8 items)
+| Item | Title | Status |
+|------|-------|--------|
+| 001 | Setup F# Project Structure with Fable & Web Framework | ✅ Done |
+| 002 | Define Core Data Model (Entities, Attributes, Relationships) | ✅ Done |
+| 003 | Setup SQLite Database & Query Infrastructure | ✅ Done |
+| 004 | Setup OpenTelemetry Observability & Tracing | ✅ Done |
+| 028 | Implement Event Store Architecture | ✅ Done |
+| 029 | Create Command Architecture (Define Commands) | ✅ Done |
+| 030 | Create Event Architecture (Define Events) | ✅ Done |
+| 056 | Setup Projection System Infrastructure | ✅ Done |
+
+### P1 - High (19 items)
+| Item | Title | Status |
+|------|-------|--------|
+| 006 | Define Server Entity Schema | ✅ Done |
+| 007 | Define Integration Entity Schema | ✅ Done |
+| 008 | Define DataEntity Schema | ✅ Done |
+| 009 | Define Application Entity Schema | ✅ Done |
+| 010 | Define Business Element Entity Schema | ✅ Done |
+| 011 | Define Relationship Schema | ✅ Done |
+| 031 | Create Server Command Handlers & Projections | ✅ Done |
+| 032 | Create Integration Command Handlers & Projections | ✅ Done |
+| 033 | Create DataEntity Command Handlers & Projections | ✅ Done |
+| 034 | Create Application Command Handlers & Projections | ✅ Done |
+| 047 | Setup Testing Infrastructure (MSTest, FluentAssertions) | ✅ Done |
+| 049 | Implement API Endpoint Mapping for Server | ✅ Done |
+| 050 | Implement API Endpoint Mapping for Integration | ✅ Done |
+| 051 | Implement API Endpoint Mapping for DataEntity | ✅ Done |
+| 052 | Implement API Endpoint Mapping for Application | ✅ Done |
+| 057 | Create Domain Event JSON Serialization (Thoth) | ✅ Done |
+| 058 | Implement Command Processing Pipeline | ✅ Done |
+| 059 | Implement Event Sourcing Write Path | ✅ Done |
+| 063 | Setup OPA/Rego Authorization Engine | ✅ Done |
+
+### P2 - Medium (13 items)
+| Item | Title | Status |
+|------|-------|--------|
+| 012 | Create Specification Index & Documentation Structure | ✅ Done |
+| 013 | Create Event Sourcing Pattern Specification | ✅ Done |
+| 014 | Create CQRS Pattern Specification | ✅ Done |
+| 015 | Create Projection Pattern Specification | ✅ Done |
+| 016 | Create API Design Specification | ✅ Done |
+| 017 | Create Testing Strategy Specification | ✅ Done |
+| 018 | Create Observability Specification | ✅ Done |
+| 019 | Consolidate spec-schema-domain-model.md | ✅ Done |
+| 037 | Migrate Server Endpoints to Commands | ✅ Done |
+| 038 | Migrate Integration Endpoints to Commands | ✅ Done |
+| 039 | Migrate DataEntity Endpoints to Commands | ✅ Done |
+| 055 | Implement Read Model Projections (Materialized Views) | ✅ Done |
+
+### P3 - Low (1 item)
+| Item | Title | Status |
+|------|-------|--------|
+| 026 | Create Architecture Decision Records (ADRs) | ✅ Done |
+
+See [backlog/old/](old/) directory for detailed completion notes and documentation.
 
 ---
 
 ## 🎯 Next Steps
 
 ### High Priority P2 Items to Consider
-1. **Item-053** - Event Store Observability Instrumentation
-2. **Item-037** - Migrate Server Endpoints to Commands
-3. **Item-065** - API Rate Limiting & Throttling
-4. **Item-066** - Define Performance Thresholds & Latency SLOs
-5. **Item-067** - Add CI Coverage Gates & Artifacts
-
-**Focus:** Observability, command migration, and API hardening
+1. **Item-020** - Create Glossary and Alphabetical Index
+2. **Item-021** - Create Implementation Status Tracker
+3. **Item-053** - Event Store Observability Instrumentation
 
 ---
 
@@ -198,4 +243,4 @@ Each Item file contains:
 - Dependencies
 - Related items
 
-See [Item-001-Prio-P0-✅ Done.md](Item-001-Prio-P0-✅%20Done.md) for example structure.
+See [backlog/old/Item-001-Prio-P0-✅ Done.md](old/Item-001-Prio-P0-✅%20Done.md) for example structure.
