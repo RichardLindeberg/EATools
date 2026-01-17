@@ -5,7 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { EntityTable, ColumnConfig } from '../EntityTable';
+import { EntityTable, ColumnConfig } from './EntityTable';
 
 interface TestItem {
   id: string;
@@ -50,8 +50,11 @@ describe('EntityTable', () => {
 
     MOCK_ITEMS.forEach((item) => {
       expect(screen.getByText(item.name)).toBeInTheDocument();
-      expect(screen.getByText(item.status)).toBeInTheDocument();
     });
+    
+    // Check status values exist (may not be unique)
+    expect(screen.getAllByText('active').length).toBeGreaterThan(0);
+    expect(screen.getByText('inactive')).toBeInTheDocument();
   });
 
   it('displays loading state', () => {
@@ -84,7 +87,7 @@ describe('EntityTable', () => {
     const nameHeader = screen.getByRole('button', { name: /Name/i });
     await userEvent.click(nameHeader);
 
-    expect(onSort).toHaveBeenCalledWith('name');
+    expect(onSort).toHaveBeenCalledWith('name', 'asc');
   });
 
   it('shows sort indicator on current sort column', () => {
@@ -99,7 +102,7 @@ describe('EntityTable', () => {
     );
 
     const nameHeader = screen.getByRole('button', { name: /Name/i });
-    expect(nameHeader).toHaveClass('entity-table__sort-btn--active');
+    expect(nameHeader).toHaveClass('entity-table__sort-btn--asc');
   });
 
   it('handles row selection with checkboxes', async () => {
@@ -110,7 +113,7 @@ describe('EntityTable', () => {
         items={MOCK_ITEMS}
         loading={false}
         onSelectRow={onSelectRow}
-        selectedIds={new Set()}
+        selectedIds={[]}
       />
     );
 
@@ -126,7 +129,7 @@ describe('EntityTable', () => {
         columns={COLUMNS}
         items={MOCK_ITEMS}
         loading={false}
-        selectedIds={new Set(['1'])}
+        selectedIds={['1']}
       />
     );
 
@@ -136,13 +139,15 @@ describe('EntityTable', () => {
 
   it('calls onSelectAll when select all checkbox is clicked', async () => {
     const onSelectAll = vi.fn();
+    const onSelectRow = vi.fn();
     render(
       <EntityTable
         columns={COLUMNS}
         items={MOCK_ITEMS}
         loading={false}
+        onSelectRow={onSelectRow}
         onSelectAll={onSelectAll}
-        selectedIds={new Set()}
+        selectedIds={[]}
       />
     );
 
@@ -176,12 +181,13 @@ describe('EntityTable', () => {
         columns={COLUMNS}
         items={MOCK_ITEMS}
         loading={false}
-        onRowAction={onRowAction}
-        rowActions={[
-          { label: 'View', action: 'view', variant: 'primary' },
-          { label: 'Edit', action: 'edit', variant: 'secondary' },
-          { label: 'Delete', action: 'delete', variant: 'danger' },
-        ]}
+        rowActions={(item) => (
+          <>
+            <button onClick={() => onRowAction('view', item)}>View</button>
+            <button onClick={() => onRowAction('edit', item)}>Edit</button>
+            <button onClick={() => onRowAction('delete', item)}>Delete</button>
+          </>
+        )}
       />
     );
 

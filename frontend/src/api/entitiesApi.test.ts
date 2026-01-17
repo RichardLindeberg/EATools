@@ -3,8 +3,8 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { buildQueryString, getApiClient } from '../../api/entitiesApi';
-import { EntityType } from '../../types/entities';
+import { buildQueryString, getApiClient } from './entitiesApi';
+import { EntityType } from '../types/entities';
 
 describe('buildQueryString', () => {
   it('builds query string with pagination params', () => {
@@ -78,56 +78,56 @@ describe('buildQueryString', () => {
 });
 
 describe('getApiClient', () => {
-  it('returns applicationsApi for EntityType.Application', () => {
-    const client = getApiClient(EntityType.Application);
+  it('returns applicationsApi for EntityType.APPLICATION', () => {
+    const client = getApiClient(EntityType.APPLICATION);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns serversApi for EntityType.Server', () => {
-    const client = getApiClient(EntityType.Server);
+  it('returns serversApi for EntityType.SERVER', () => {
+    const client = getApiClient(EntityType.SERVER);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns integrationsApi for EntityType.Integration', () => {
-    const client = getApiClient(EntityType.Integration);
+  it('returns integrationsApi for EntityType.INTEGRATION', () => {
+    const client = getApiClient(EntityType.INTEGRATION);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns dataEntitiesApi for EntityType.DataEntity', () => {
-    const client = getApiClient(EntityType.DataEntity);
+  it('returns dataEntitiesApi for EntityType.DATA_ENTITY', () => {
+    const client = getApiClient(EntityType.DATA_ENTITY);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns businessCapabilitiesApi for EntityType.BusinessCapability', () => {
-    const client = getApiClient(EntityType.BusinessCapability);
+  it('returns businessCapabilitiesApi for EntityType.BUSINESS_CAPABILITY', () => {
+    const client = getApiClient(EntityType.BUSINESS_CAPABILITY);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns organizationsApi for EntityType.Organization', () => {
-    const client = getApiClient(EntityType.Organization);
+  it('returns organizationsApi for EntityType.ORGANIZATION', () => {
+    const client = getApiClient(EntityType.ORGANIZATION);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns relationsApi for EntityType.Relation', () => {
-    const client = getApiClient(EntityType.Relation);
+  it('returns relationsApi for EntityType.RELATION', () => {
+    const client = getApiClient(EntityType.RELATION);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns applicationServicesApi for EntityType.ApplicationService', () => {
-    const client = getApiClient(EntityType.ApplicationService);
+  it('returns applicationServicesApi for EntityType.APPLICATION_SERVICE', () => {
+    const client = getApiClient(EntityType.APPLICATION_SERVICE);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });
 
-  it('returns applicationInterfacesApi for EntityType.ApplicationInterface', () => {
-    const client = getApiClient(EntityType.ApplicationInterface);
+  it('returns applicationInterfacesApi for EntityType.APPLICATION_INTERFACE', () => {
+    const client = getApiClient(EntityType.APPLICATION_INTERFACE);
     expect(client).toBeDefined();
     expect(client.list).toBeDefined();
   });

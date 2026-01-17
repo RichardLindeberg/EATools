@@ -6,12 +6,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { ApplicationListPage } from '../ApplicationListPage';
-import * as entitiesApi from '../../../api/entitiesApi';
+import { ApplicationListPage } from './ApplicationListPage';
+import * as entitiesApi from '../../api/entitiesApi';
 
-vi.mock('../../../api/entitiesApi');
-vi.mock('../../../hooks/useEntityList');
-vi.mock('../../../hooks/useEntityList', () => ({
+vi.mock('../../api/entitiesApi');
+vi.mock('../../hooks/useEntityList');
+vi.mock('../../hooks/useEntityList', () => ({
   useEntityList: vi.fn(() => ({
     items: [],
     total: 0,
@@ -101,7 +101,7 @@ describe('ApplicationListPage', () => {
 
   it('handles filter changes', async () => {
     const { useEntityList: mockUseEntityList } = await import(
-      '../../../hooks/useEntityList'
+      '../../hooks/useEntityList'
     );
 
     render(

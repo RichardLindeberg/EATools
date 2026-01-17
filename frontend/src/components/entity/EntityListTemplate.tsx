@@ -10,7 +10,7 @@ import { Button } from '../Button/Button';
 import { EntityTable, ColumnConfig } from './EntityTable';
 import { FilterPanel, FilterDefinition } from './FilterPanel';
 import { BulkActionBar } from './BulkActionBar';
-import { Pagination } from '../Pagination/Pagination';
+import { Pagination } from '../Navigation/Pagination';
 import './EntityListTemplate.css';
 
 export interface EntityListTemplateProps<T> {

@@ -5,8 +5,8 @@
 
 import React, { useState } from 'react';
 import { Button } from '../Button/Button';
-import { Input } from '../Input/Input';
-import { Select } from '../Select/Select';
+import { TextInput } from '../Form/TextInput';
+import { Select } from '../Form/Select';
 import './FilterPanel.css';
 
 export interface FilterDefinition {
@@ -105,7 +105,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           <div key={filter.key} className="filter-panel__date-range">
             <label className="filter-panel__label">{filter.label}</label>
             <div className="filter-panel__date-inputs">
-              <Input
+              <TextInput
                 type="date"
                 placeholder="From"
                 value={dateValue?.start || ''}
@@ -117,7 +117,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 }
                 disabled={loading}
               />
-              <Input
+              <TextInput
                 type="date"
                 placeholder="To"
                 value={dateValue?.end || ''}
@@ -139,7 +139,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           <div key={filter.key} className="filter-panel__number-range">
             <label className="filter-panel__label">{filter.label}</label>
             <div className="filter-panel__number-inputs">
-              <Input
+              <TextInput
                 type="number"
                 placeholder="Min"
                 value={numberValue?.min ?? ''}
@@ -151,7 +151,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 }
                 disabled={loading}
               />
-              <Input
+              <TextInput
                 type="number"
                 placeholder="Max"
                 value={numberValue?.max ?? ''}
@@ -170,7 +170,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       case 'search':
       default:
         return (
-          <Input
+          <TextInput
             key={filter.key}
             label={filter.label}
             placeholder={filter.placeholder || 'Search...'}

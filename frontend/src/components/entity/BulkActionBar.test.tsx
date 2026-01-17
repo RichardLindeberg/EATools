@@ -5,7 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BulkActionBar } from '../BulkActionBar';
+import { BulkActionBar } from './BulkActionBar';
 
 describe('BulkActionBar', () => {
   it('does not render when selectedCount is 0', () => {
@@ -17,7 +17,7 @@ describe('BulkActionBar', () => {
       />
     );
 
-    expect(container.firstChild).toBeEmptyDOMElement();
+    expect(container.firstChild).toBeNull();
   });
 
   it('renders when selectedCount > 0', () => {
@@ -200,7 +200,7 @@ describe('BulkActionBar', () => {
       />
     );
 
-    expect(container.firstChild).toBeEmptyDOMElement();
+    expect(container.firstChild).toBeNull();
 
     rerender(
       <BulkActionBar

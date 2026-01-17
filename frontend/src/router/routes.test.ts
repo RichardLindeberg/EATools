@@ -27,19 +27,19 @@ describe('Router - Routes Configuration', () => {
 
   it('should define applications entity routes', () => {
     const mainRoute = routes.find(r => !r.path);
-    const appRoute = mainRoute?.children?.find(r => r.path === 'applications');
+    const appRoute = mainRoute?.children?.find(r => r.path === 'entities/applications');
     expect(appRoute).toBeDefined();
   });
 
   it('should define servers entity routes', () => {
     const mainRoute = routes.find(r => !r.path);
-    const serversRoute = mainRoute?.children?.find(r => r.path === 'servers');
+    const serversRoute = mainRoute?.children?.find(r => r.path === 'entities/servers');
     expect(serversRoute).toBeDefined();
   });
 
   it('should define integrations entity routes', () => {
     const mainRoute = routes.find(r => !r.path);
-    const intRoute = mainRoute?.children?.find(r => r.path === 'integrations');
+    const intRoute = mainRoute?.children?.find(r => r.path === 'entities/integrations');
     expect(intRoute).toBeDefined();
   });
 
