@@ -1,11 +1,11 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (27 Active, 45 Complete)  
-> **Progress:** 45/72 complete (63%)  
+> **Total Items:** 88 (54 Active, 30 Complete)  
+> **Progress:** 30/88 complete (34%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
-**In Progress:** None
+**Ready to Start:** 33 items | **Blocked:** 14 items | **In Progress:** 0
 
 ---
 
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-0-active)** (0 active, 19 complete) - All complete! 🎉
-- **[P2 - Medium](#p2---medium-16-active)** (16 active) - Should be planned
-- **[P3 - Low](#p3---low-10-active)** (10 active) - Nice to have
+- **[P1 - High](#p1---high-11-active)** (11 active, 19 complete) - UI development in progress
+- **[P2 - Medium](#p2---medium-33-active)** (33 active) - Core backend, infrastructure, testing
+- **[P3 - Low](#p3---low-10-active)** (10 active) - Enhancements, documentation, integrations
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-32-total)** (32 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-30-total)** (30 items) - See backlog/old/ directory
 
 ---
 
@@ -28,26 +28,42 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (0 active)
+## P1 - High (11 active)
 
-All P1 items complete! ✅
+| ID | Title | Status | Files |
+|----|-------|--------|-------|
+| 059 | Implement Event Sourcing Read Path & Query Service | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
+| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
+| 075 | Frontend React Project Setup | 🟢 Ready | [Item-075-Prio-P1-🟢 Ready.md](Item-075-Prio-P1-🟢%20Ready.md) |
+| 076 | Core Component Library | 🔴 Blocked | [Item-076-Prio-P1-🔴 Blocked.md](Item-076-Prio-P1-🔴%20Blocked.md) |
+| 077 | Authentication Pages & Login Flow | 🔴 Blocked | [Item-077-Prio-P1-🔴 Blocked.md](Item-077-Prio-P1-🔴%20Blocked.md) |
+| 078 | Routing & Navigation Structure | 🔴 Blocked | [Item-078-Prio-P1-🔴 Blocked.md](Item-078-Prio-P1-🔴%20Blocked.md) |
+| 079 | Entity List Pages (Server, Integration, DataEntity, App, Business) | 🔴 Blocked | [Item-079-Prio-P1-🔴 Blocked.md](Item-079-Prio-P1-🔴%20Blocked.md) |
+| 080 | Entity Detail & View Pages | 🔴 Blocked | [Item-080-Prio-P1-🔴 Blocked.md](Item-080-Prio-P1-🔴%20Blocked.md) |
+| 081 | Entity Create/Edit Forms with Validation | 🔴 Blocked | [Item-081-Prio-P1-🔴 Blocked.md](Item-081-Prio-P1-🔴%20Blocked.md) |
+| 082 | Advanced UI Patterns (Wizards, Modals, Confirmations) | 🔴 Blocked | [Item-082-Prio-P1-🔴 Blocked.md](Item-082-Prio-P1-🔴%20Blocked.md) |
+| 083 | Frontend Testing Framework & Unit Tests | 🔴 Blocked | [Item-083-Prio-P1-🔴 Blocked.md](Item-083-Prio-P1-🔴%20Blocked.md) |
 
 ---
 
-## P2 - Medium (16 active)
+## P2 - Medium (33 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
-| 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
+| 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
+| 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
+| 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
+| 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
 | 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
 | 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
 | 042 | Implement Compensation Events | 🟢 Ready | [Item-042-Prio-P2-🟢 Ready.md](Item-042-Prio-P2-🟢%20Ready.md) |
 | 043 | Create Data Migration Strategy from CRUD to Event-Sourced | 🟢 Ready | [Item-043-Prio-P2-🟢 Ready.md](Item-043-Prio-P2-🟢%20Ready.md) |
 | 044 | Create Event Sourcing Test Suite | 🟢 Ready | [Item-044-Prio-P2-🟢 Ready.md](Item-044-Prio-P2-🟢%20Ready.md) |
 | 048 | Fix F# Code Standards Violations in Backend | 🟢 Ready | [Item-048-Prio-P2-🟢 Ready.md](Item-048-Prio-P2-🟢%20Ready.md) |
+| 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
 | 060 | Range & Temporal Constraint Validation | 🟢 Ready | [Item-060-Prio-P2-🟢 Ready.md](Item-060-Prio-P2-🟢%20Ready.md) |
 | 061 | Soft Delete Implementation Across All Entities | 🟢 Ready | [Item-061-Prio-P2-🟢 Ready.md](Item-061-Prio-P2-🟢%20Ready.md) |
 | 062 | Created/Modified Timestamp Tracking | 🟢 Ready | [Item-062-Prio-P2-🟢 Ready.md](Item-062-Prio-P2-🟢%20Ready.md) |
@@ -59,7 +75,13 @@ All P1 items complete! ✅
 | 070 | Metrics Label Cardinality & PII Guardrails | 🟢 Ready | [Item-070-Prio-P2-🟢 Ready.md](Item-070-Prio-P2-🟢%20Ready.md) |
 | 071 | Error Contract & Validation Coverage | 🟢 Ready | [Item-071-Prio-P2-🟢 Ready.md](Item-071-Prio-P2-🟢%20Ready.md) |
 | 072 | Data Cleanup & Idempotency Tests | 🟢 Ready | [Item-072-Prio-P2-🟢 Ready.md](Item-072-Prio-P2-🟢%20Ready.md) |
-| 073 | Performance Smoke Hooks (Non-Failing) | 🟢 Ready | [Item-073-Prio-P2-🟢 Ready.md](Item-073-Prio-P2-🟢%20Ready.md) |
+| 073 | Performance Smoke Hooks (Non-Failing) | 🔴 Blocked | [Item-073-Prio-P2-🔴 Blocked.md](Item-073-Prio-P2-🔴%20Blocked.md) |
+| 084 | Backend Authentication Endpoints | 🟢 Ready | [Item-084-Prio-P2-🟢 Ready.md](Item-084-Prio-P2-🟢%20Ready.md) |
+| 085 | WebSocket Real-Time Updates & Sync | 🔴 Blocked | [Item-085-Prio-P2-🔴 Blocked.md](Item-085-Prio-P2-🔴%20Blocked.md) |
+| 086 | Advanced Authorization OPA/Rego Policies | 🔴 Blocked | [Item-086-Prio-P2-🔴 Blocked.md](Item-086-Prio-P2-🔴%20Blocked.md) |
+| 087 | Bulk Operations & Batch Mutations | 🔴 Blocked | [Item-087-Prio-P2-🔴 Blocked.md](Item-087-Prio-P2-🔴%20Blocked.md) |
+| 088 | Advanced Search & Filtering | 🔴 Blocked | [Item-088-Prio-P2-🔴 Blocked.md](Item-088-Prio-P2-🔴%20Blocked.md) |
+| 089 | Export & Import Functionality | 🔴 Blocked | [Item-089-Prio-P2-🔴 Blocked.md](Item-089-Prio-P2-🔴%20Blocked.md) |
 
 ---
 
@@ -75,7 +97,6 @@ All P1 items complete! ✅
 | 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
 | 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
 | 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P3-🟢 Ready.md](Item-054-Prio-P3-🟢%20Ready.md) |
-| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P3-🟢 Ready.md](Item-064-Prio-P3-🟢%20Ready.md) |
 | 074 | Contract Drift Detection vs OpenAPI | 🟢 Ready | [Item-074-Prio-P3-🟢 Ready.md](Item-074-Prio-P3-🟢%20Ready.md) |
 
 ---
@@ -84,19 +105,24 @@ All P1 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
-- **P1 (High):** 19/19 complete (100%) ✅
-- **P2 (Medium):** 18/34 complete (53%)
-- **P3 (Low):** 0/4 active (0%)
+- **P1 (High):** 8/19 complete (42%) - UI development in progress
+- **P2 (Medium):** 13/46 complete (28%)
+- **P3 (Low):** 1/15 complete (7%)
 
 ### By Status
-- 🟢 Ready: 34
-- 🔴 Blocked: 0
-- 🟡 In Progress: 0
-- ✅ Done: 40
+- 🟢 Ready: 33 items
+- 🔴 Blocked: 14 items (dependencies blocking UI development and advanced features)
+- 🟡 In Progress: 0 items
+- ✅ Done: 30 items
+
+### Dependency Summary
+- **11 items** blocked by previous items in sequence (UI pipeline)
+- **3 items** blocked by backend features (Items 084, 086, 087)
+- **Ready items**: 33 items with no blocking dependencies
 
 ---
 
-## ✅ Completed Items (40 total)
+## ✅ Completed Items (30 total)
 
 All completed items are in [backlog/old/](old/):
 
@@ -112,15 +138,9 @@ All completed items are in [backlog/old/](old/):
 | 030 | Create Event Architecture (Define Events) | ✅ Done |
 | 056 | Setup Projection System Infrastructure | ✅ Done |
 
-### P1 - High (19 items)
+### P1 - High (8 items)
 | Item | Title | Status |
 |------|-------|--------|
-| 006 | Define Server Entity Schema | ✅ Done |
-| 007 | Define Integration Entity Schema | ✅ Done |
-| 008 | Define DataEntity Schema | ✅ Done |
-| 009 | Define Application Entity Schema | ✅ Done |
-| 010 | Define Business Element Entity Schema | ✅ Done |
-| 011 | Define Relationship Schema | ✅ Done |
 | 031 | Create Server Command Handlers & Projections | ✅ Done |
 | 032 | Create Integration Command Handlers & Projections | ✅ Done |
 | 033 | Create DataEntity Command Handlers & Projections | ✅ Done |
@@ -129,11 +149,6 @@ All completed items are in [backlog/old/](old/):
 | 049 | Implement API Endpoint Mapping for Server | ✅ Done |
 | 050 | Implement API Endpoint Mapping for Integration | ✅ Done |
 | 051 | Implement API Endpoint Mapping for DataEntity | ✅ Done |
-| 052 | Implement API Endpoint Mapping for Application | ✅ Done |
-| 057 | Create Domain Event JSON Serialization (Thoth) | ✅ Done |
-| 058 | Implement Command Processing Pipeline | ✅ Done |
-| 059 | Implement Event Sourcing Write Path | ✅ Done |
-| 063 | Setup OPA/Rego Authorization Engine | ✅ Done |
 
 ### P2 - Medium (13 items)
 | Item | Title | Status |
@@ -152,6 +167,18 @@ All completed items are in [backlog/old/](old/):
 | 039 | Migrate DataEntity Endpoints to Commands | ✅ Done |
 | 055 | Implement Read Model Projections (Materialized Views) | ✅ Done |
 
+### P1 - High (3 items)
+| Item | Title | Status |
+|------|-------|--------|
+| 052 | Implement API Endpoint Mapping for Application | ✅ Done |
+| 057 | Create Domain Event JSON Serialization (Thoth) | ✅ Done |
+| 058 | Implement Command Processing Pipeline | ✅ Done |
+
+### P1 - High (1 item)
+| Item | Title | Status |
+|------|-------|--------|
+| 059 | Implement Event Sourcing Write Path | ✅ Done |
+
 ### P3 - Low (1 item)
 | Item | Title | Status |
 |------|-------|--------|
@@ -163,10 +190,20 @@ See [backlog/old/](old/) directory for detailed completion notes and documentati
 
 ## 🎯 Next Steps
 
-### High Priority P2 Items to Consider
-1. **Item-020** - Create Glossary and Alphabetical Index
-2. **Item-021** - Create Implementation Status Tracker
-3. **Item-053** - Event Store Observability Instrumentation
+### Immediate - Ready to Begin
+1. **Item-075** (P1) - Frontend React Project Setup - Unblocks entire UI pipeline
+2. **Item-084** (P2) - Backend Authentication Endpoints - Independent backend work
+
+### High Priority - After Frontend Setup Complete
+1. **Item-076** (P1) - Core Component Library (blocked by 075)
+2. **Item-077** (P1) - Authentication Pages (blocked by 075, 076)
+3. **Item-059** (P1) - Event Sourcing Read Path (independent)
+
+### Other Backend Work (Independent)
+- **Item-020-025** (P2-P3) - Documentation and glossary items
+- **Item-027, 037-044** (P2) - Event sourcing enhancements
+- **Item-048** (P2) - F# code standards fixes
+- **Item-053-072** (P2-P3) - Infrastructure, testing, observability
 
 ---
 
@@ -194,11 +231,32 @@ Use [TEMPLATE.md](TEMPLATE.md) when creating new backlog items. The template inc
 
 ### File ID Ranges
 - **001-004:** P0 Critical (core data model fixes)
+- **006-011:** P1 High (entity schemas - completed)
+- **012-026:** P1-P3 (specifications and planning)
+- **027-044:** P2-P3 (migrations, enhancements, testing)
 - **028-030:** P0 Critical (event sourcing foundations)
-- **005-011:** P1 High (specifications and patterns)
-- **031-036:** P1 High (command migrations & projections)
-- **012-022, 027, 037-044:** P2 Medium (enhancements, migrations, testing)
-- **023-026, 045-046:** P3 Low (tooling, docs, integrations)
+- **031-063:** P1-P2 (command handlers, projections, auth, testing)
+- **064-089:** P1-P3 (auth, performance, observability, UI development)
+
+---
+
+## 📋 UI Development Phases
+
+### Phase 1 - MVP Frontend (Items 075-083)
+**Target Priority:** P1 (High)  
+**Status:** 1 Ready, 8 Blocked (sequential dependency chain)  
+**Timeline:** Estimated 40-50 days of effort
+
+- **Item-075:** Frontend Setup (🟢 Ready) - Start here!
+- **Items 076-083:** Sequentially depend on each other
+
+### Phase 2 - Advanced Features (Items 084-089)
+**Target Priority:** P2 (Medium)  
+**Status:** 1 Ready, 5 Blocked  
+**Timeline:** Estimated 20-25 days of effort
+
+- **Item-084:** Backend Auth (🟢 Ready) - Can start independently
+- **Items 085-089:** Depend on Phase 1 completion + specific backend items
 
 ---
 
@@ -213,23 +271,29 @@ Use [TEMPLATE.md](TEMPLATE.md) when creating new backlog items. The template inc
 
 ## How to Use This Backlog
 
+## How to Use This Backlog
+
 ### For Developers
-1. Browse this INDEX to find work items
-2. Open the specific Item file for detailed requirements
-3. Mark status as 🟡 In Progress when starting
-4. Update acceptance criteria as you complete work
-5. Mark as ✅ Done when finished
+1. Browse this INDEX to find work items by priority and status
+2. **Ready (🟢)** items have no dependencies - start here!
+3. **Blocked (🔴)** items show which items they depend on - wait for dependencies
+4. Open the specific Item file for detailed requirements, acceptance criteria, and effort estimates
+5. Mark status as 🟡 In Progress when starting
+6. Update acceptance criteria as you complete work
+7. Mark as ✅ Done when finished and move file to `old/` directory
 
 ### For Project Managers
-1. Check progress at a glance (20/65 complete)
-2. Identify blocked items (dependencies)
-3. Plan sprints by priority
-4. Track effort estimates
+1. Check progress at a glance (30/88 complete = 34%)
+2. Identify blocked items and their blocking dependencies
+3. Plan sprints by priority - P1 items include UI frontend work
+4. Track effort estimates for planning
+5. UI development is sequential - Item-075 is the first start
 
 ### For Architects
 1. Review P0-P1 items for architectural guidance
-2. Check related specifications in /spec folder
+2. Check P1 items (059, 064) for backend architecture work
 3. Reference implementation decisions in Item files
+4. See `/spec/` folder for formal specifications
 
 ---
 

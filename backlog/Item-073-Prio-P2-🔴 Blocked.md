@@ -1,6 +1,6 @@
 # Item-073: Performance Smoke Hooks (Non-Failing)
 
-**Status:** 🟢 Ready  
+**Status:** � Blocked  
 **Priority:** P2 - MEDIUM  
 **Effort:** 2-3 hours  
 **Created:** 2026-01-08  
