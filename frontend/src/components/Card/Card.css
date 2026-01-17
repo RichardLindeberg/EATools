@@ -1,0 +1,67 @@
+/**
+ * Card Component Styles
+ */
+
+.card {
+  background-color: var(--color-background);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+/* Shadow elevations */
+.card--sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.card--md {
+  box-shadow: var(--shadow-md);
+}
+
+.card--lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Hoverable state */
+.card--hoverable {
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+/* Clickable state */
+.card--clickable {
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.card__header {
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-background-alt);
+}
+
+.card__body {
+  padding: var(--spacing-4);
+}
+
+.card__footer {
+  padding: var(--spacing-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-background-alt);
+}

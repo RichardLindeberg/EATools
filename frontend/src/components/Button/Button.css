@@ -1,0 +1,196 @@
+/**
+ * Button Component Styles
+ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+
+  /* Focus styles for accessibility */
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1), 0 0 0 5px #0066cc;
+  }
+
+  /* Disabled state */
+  &:disabled,
+  &.button--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover,
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+/* ========== SIZE VARIANTS ========== */
+
+.button--sm {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-sm);
+  height: 2rem;
+}
+
+.button--md {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-base);
+  height: 2.5rem;
+}
+
+.button--lg {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-lg);
+  height: 3rem;
+}
+
+/* ========== VARIANT STYLES ========== */
+
+/* Primary Button */
+.button--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    transform: scale(0.98);
+  }
+}
+
+/* Secondary Button */
+.button--secondary {
+  background-color: var(--color-secondary-lighter);
+  color: var(--color-secondary-dark);
+  border-color: var(--color-secondary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* Tertiary Button */
+.button--tertiary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-lighter);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* Danger Button */
+.button--danger {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  border-color: var(--color-danger);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-danger-dark);
+    border-color: var(--color-danger-dark);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* Ghost Button */
+.button--ghost {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border-color: transparent;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-gray-100);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* ========== FULL WIDTH ========== */
+
+.button--full-width {
+  width: 100%;
+}
+
+/* ========== ICON STYLES ========== */
+
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+
+  &--left {
+    margin-right: var(--spacing-1);
+  }
+
+  &--right {
+    margin-left: var(--spacing-1);
+  }
+}
+
+/* ========== SPINNER ========== */
+
+.button__spinner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+.button:has(.button__spinner) .button__text {
+  opacity: 0;
+}

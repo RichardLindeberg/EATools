@@ -21,11 +21,17 @@ This is a critical dependency for all entity pages, forms, and advanced UI patte
 ## Affected Files
 
 **Create:**
-- `frontend/src/components/Button/Button.tsx` - Primary button component (5 variants)
-- `frontend/src/components/Button/Button.test.tsx` - Button tests
+- `frontend/src/styles/tokens.css` - Design tokens ✅ CREATED
+- `frontend/src/components/Button/Button.tsx` - Primary button component ✅ CREATED
+- `frontend/src/components/Button/Button.css` - Button styles ✅ CREATED
+- `frontend/src/components/Button/Button.test.tsx` - Button tests ✅ CREATED
+- `frontend/src/components/Form/TextInput.tsx` - Text input component ✅ CREATED
+- `frontend/src/components/Form/TextInput.css` - TextInput styles ✅ CREATED
+- `frontend/src/components/Card/Card.tsx` - Card component ✅ CREATED
+- `frontend/src/components/Card/Card.css` - Card styles ✅ CREATED
+- `frontend/src/components/index.ts` - Component exports ✅ CREATED
 - `frontend/src/components/Table/Table.tsx` - Data table component
 - `frontend/src/components/Table/Table.test.tsx` - Table tests
-- `frontend/src/components/Form/TextInput.tsx` - Text input component
 - `frontend/src/components/Form/Select.tsx` - Select dropdown
 - `frontend/src/components/Form/Checkbox.tsx` - Checkbox component
 - `frontend/src/components/Form/DatePicker.tsx` - Date picker
