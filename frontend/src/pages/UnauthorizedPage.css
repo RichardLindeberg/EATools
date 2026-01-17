@@ -1,0 +1,13 @@
+.unauthorized-page {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.unauthorized-page .error-code {
+  color: var(--color-error);
+}
+
+.error-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
+  margin-top: var(--spacing-md);
+}

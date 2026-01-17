@@ -1,11 +1,11 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 88 (57 Active, 31 Complete)  
-> **Progress:** 32/88 complete (36%)  
+> **Total Items:** 88 (55 Active, 33 Complete)  
+> **Progress:** 34/88 complete (39%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
-**Ready to Start:** 38 items | **Blocked:** 7 items | **In Progress:** 0
+**Ready to Start:** 38 items | **Blocked:** 6 items | **In Progress:** 0
 
 ---
 
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-9-active)** (9 active, 21 complete) - Component library complete! 🎉
-- **[P2 - Medium](#p2---medium-33-active)** (33 active) - Core backend, infrastructure, testing
+- **[P1 - High](#p1---high-8-active)** (8 active, 22 complete) - Auth system complete! 🎉
+- **[P2 - Medium](#p2---medium-33 active)** (33 active) - Core backend, infrastructure, testing
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Enhancements, documentation, integrations
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-31-total)** (31 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-32-total)** (32 items) - See backlog/old/ directory
 
 ---
 
@@ -28,14 +28,14 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (9 active)
+## P1 - High (8 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 075 | Frontend React Project Setup | ✅ Done | [Item-075-Prio-P1-✅ Done.md](Item-075-Prio-P1-✅%20Done.md) |
 | 076 | Core Component Library | ✅ Done | [Item-076-Prio-P1-✅ Done.md](Item-076-Prio-P1-✅%20Done.md) |
-| 077 | Authentication Pages & Login Flow | 🟢 Ready | [Item-077-Prio-P1-🟢 Ready.md](Item-077-Prio-P1-🟢%20Ready.md) |
-| 078 | Routing & Navigation Structure | 🟢 Ready | [Item-078-Prio-P1-🟢 Ready.md](Item-078-Prio-P1-🟢%20Ready.md) |
+| 077 | Authentication Pages & Login Flow | ✅ Done | [Item-077-Prio-P1-✅ Done.md](Item-077-Prio-P1-✅%20Done.md) |
+| 078 | Routing & Navigation Structure | ✅ Done | [Item-078-Prio-P1-✅ Done.md](Item-078-Prio-P1-✅%20Done.md) |
 | 079 | Entity List Pages (Server, Integration, DataEntity, App, Business) | 🟢 Ready | [Item-079-Prio-P1-🟢 Ready.md](Item-079-Prio-P1-🟢%20Ready.md) |
 | 080 | Entity Detail & View Pages | 🟢 Ready | [Item-080-Prio-P1-🟢 Ready.md](Item-080-Prio-P1-🟢%20Ready.md) |
 | 081 | Entity Create/Edit Forms with Validation | 🟢 Ready | [Item-081-Prio-P1-🟢 Ready.md](Item-081-Prio-P1-🟢%20Ready.md) |
