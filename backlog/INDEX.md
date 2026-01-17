@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
-> **Last Updated:** 2026-01-08  
-> **Total Items:** 73 (43 Active, 30 Complete)  
-> **Progress:** 30/73 complete (41%)  
+> **Last Updated:** 2026-01-17  
+> **Total Items:** 72 (41 Active, 31 Complete)  
+> **Progress:** 31/72 complete (43%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-2-active)** (2 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-33-active)** (33 active) - Should be planned
-- **[P3 - Low](#p3---low-8-active)** (8 active) - Nice to have
+- **[P1 - High](#p1---high-1-active)** (1 active) - Should be done this sprint
+- **[P2 - Medium](#p2---medium-31-active)** (31 active) - Should be planned
+- **[P3 - Low](#p3---low-9-active)** (9 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-30-total)** (30 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-31-total)** (31 items) - See backlog/old/ directory and ✅ Done files
 
 ---
 
@@ -28,16 +28,15 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (2 active)
+## P1 - High (1 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
-| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
 
 ---
 
-## P2 - Medium (33 active)
+## P2 - Medium (31 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -77,18 +76,18 @@ All P0 items complete! ✅
 
 ---
 
-## P3 - Low (8 active)
+## P3 - Low (9 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 023 | Fix Agent Configuration Errors | 🟢 Ready | [Item-023-Prio-P3-🟢 Ready.md](Item-023-Prio-P3-🟢%20Ready.md) |
-| 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P3-🟢 Ready.md](Item-035-Prio-P3-🟢%20Ready.md) |
-| 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P3-🟢 Ready.md](Item-036-Prio-P3-🟢%20Ready.md) |
 | 024 | Document Dual Database Environment Strategy | 🟢 Ready | [Item-024-Prio-P3-🟢 Ready.md](Item-024-Prio-P3-🟢%20Ready.md) |
 | 025 | Create Architecture Decision Records (ADRs) | 🟢 Ready | [Item-025-Prio-P3-🟢 Ready.md](Item-025-Prio-P3-🟢%20Ready.md) |
-| 026 | Create Backlog Item Template | � In Progress | [Item-026-Prio-P3-🟡 In Progress.md](Item-026-Prio-P3-🟡%20In%20Progress.md) |
+| 035 | Implement Snapshot System | 🟢 Ready | [Item-035-Prio-P3-🟢 Ready.md](Item-035-Prio-P3-🟢%20Ready.md) |
+| 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P3-🟢 Ready.md](Item-036-Prio-P3-🟢%20Ready.md) |
 | 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
 | 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
+| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P3-🟢 Ready.md](Item-064-Prio-P3-🟢%20Ready.md) |
 | 074 | Contract Drift Detection vs OpenAPI | 🟢 Ready | [Item-074-Prio-P3-🟢 Ready.md](Item-074-Prio-P3-🟢%20Ready.md) |
 
 ---
@@ -97,38 +96,42 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
-- **P1 (High):** 18/20 complete (90%)
-- **P2 (Medium):** 3/36 complete (8%)
-- **P3 (Low):** 1/9 complete (11%)
+- **P1 (High):** 18/19 complete (95%)
+- **P2 (Medium):** 4/35 complete (11%)
+- **P3 (Low):** 1/10 complete (10%)
+
 ### By Status
-- 🟢 Ready: 42
+- 🟢 Ready: 41
 - 🔴 Blocked: 0
-- 🟡 In Progress: 1
-- ✅ Done: 30
+- 🟡 In Progress: 0
+- ✅ Done: 31
 
 ---
 
-## ✅ Completed Items (30 total)
+## ✅ Completed Items (31 total)
 
-All completed items are in [backlog/old/](old/) or current directory:
-- P0: 8
-- P1: 18
-- P2: 3
-- P3: 1
+All completed items are in [backlog/old/](old/):
+- P0: 8 complete
+- P1: 18 complete
+- P2: 4 complete
+- P3: 1 complete
 
-See the files directly for details and completion dates.
+See the old/ directory for details and completion dates.
 
 ---
 
 ## 🎯 Next Steps
 
-Focus P1 items: 058, 059, 064.
 ### Recommended Next Sprint (P1 Items)
-1. **Item-056** - Required Fields Enforcement 
-2. **Item-057** - Unique Constraints & Cycle Detection
-3. **Item-064** - API Authentication & Authorization Framework
+1. **Item-059** - Lifecycle Transitions Validation
 
-**Focus:** Continue with validation and security improvements
+### High Priority P2 Items to Consider
+1. **Item-053** - Event Store Observability Instrumentation
+2. **Item-054** - Observability Alert Rules & Incident Response
+3. **Item-037** - Migrate Server Endpoints to Commands
+4. **Item-065** - API Rate Limiting & Throttling
+
+**Focus:** Validation, observability, and command migration
 
 ---
 

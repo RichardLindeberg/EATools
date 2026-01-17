@@ -1,7 +1,7 @@
 # Item-064: API Authentication & Authorization Framework
 
 **Status:** 🟢 Ready  
-**Priority:** P1 - HIGH  
+**Priority:** P3 - LOW  
 **Effort:** 8-10 hours  
 **Created:** 2026-01-07  
 **Owner:** TBD
