@@ -1,11 +1,11 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 88 (54 Active, 30 Complete)  
-> **Progress:** 30/88 complete (34%)  
+> **Total Items:** 88 (57 Active, 31 Complete)  
+> **Progress:** 32/88 complete (36%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
-**Ready to Start:** 33 items | **Blocked:** 14 items | **In Progress:** 0
+**Ready to Start:** 38 items | **Blocked:** 7 items | **In Progress:** 0
 
 ---
 
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-11-active)** (11 active, 19 complete) - UI development in progress
+- **[P1 - High](#p1---high-9-active)** (9 active, 21 complete) - Component library complete! 🎉
 - **[P2 - Medium](#p2---medium-33-active)** (33 active) - Core backend, infrastructure, testing
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Enhancements, documentation, integrations
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-30-total)** (30 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-31-total)** (31 items) - See backlog/old/ directory
 
 ---
 
@@ -28,21 +28,19 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (11 active)
+## P1 - High (9 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 059 | Implement Event Sourcing Read Path & Query Service | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
-| 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P1-🟢 Ready.md](Item-064-Prio-P1-🟢%20Ready.md) |
-| 075 | Frontend React Project Setup | 🟢 Ready | [Item-075-Prio-P1-🟢 Ready.md](Item-075-Prio-P1-🟢%20Ready.md) |
-| 076 | Core Component Library | 🔴 Blocked | [Item-076-Prio-P1-🔴 Blocked.md](Item-076-Prio-P1-🔴%20Blocked.md) |
-| 077 | Authentication Pages & Login Flow | 🔴 Blocked | [Item-077-Prio-P1-🔴 Blocked.md](Item-077-Prio-P1-🔴%20Blocked.md) |
-| 078 | Routing & Navigation Structure | 🔴 Blocked | [Item-078-Prio-P1-🔴 Blocked.md](Item-078-Prio-P1-🔴%20Blocked.md) |
-| 079 | Entity List Pages (Server, Integration, DataEntity, App, Business) | 🔴 Blocked | [Item-079-Prio-P1-🔴 Blocked.md](Item-079-Prio-P1-🔴%20Blocked.md) |
-| 080 | Entity Detail & View Pages | 🔴 Blocked | [Item-080-Prio-P1-🔴 Blocked.md](Item-080-Prio-P1-🔴%20Blocked.md) |
-| 081 | Entity Create/Edit Forms with Validation | 🔴 Blocked | [Item-081-Prio-P1-🔴 Blocked.md](Item-081-Prio-P1-🔴%20Blocked.md) |
-| 082 | Advanced UI Patterns (Wizards, Modals, Confirmations) | 🔴 Blocked | [Item-082-Prio-P1-🔴 Blocked.md](Item-082-Prio-P1-🔴%20Blocked.md) |
-| 083 | Frontend Testing Framework & Unit Tests | 🔴 Blocked | [Item-083-Prio-P1-🔴 Blocked.md](Item-083-Prio-P1-🔴%20Blocked.md) |
+| 075 | Frontend React Project Setup | ✅ Done | [Item-075-Prio-P1-✅ Done.md](Item-075-Prio-P1-✅%20Done.md) |
+| 076 | Core Component Library | ✅ Done | [Item-076-Prio-P1-✅ Done.md](Item-076-Prio-P1-✅%20Done.md) |
+| 077 | Authentication Pages & Login Flow | 🟢 Ready | [Item-077-Prio-P1-🟢 Ready.md](Item-077-Prio-P1-🟢%20Ready.md) |
+| 078 | Routing & Navigation Structure | 🟢 Ready | [Item-078-Prio-P1-🟢 Ready.md](Item-078-Prio-P1-🟢%20Ready.md) |
+| 079 | Entity List Pages (Server, Integration, DataEntity, App, Business) | 🟢 Ready | [Item-079-Prio-P1-🟢 Ready.md](Item-079-Prio-P1-🟢%20Ready.md) |
+| 080 | Entity Detail & View Pages | 🟢 Ready | [Item-080-Prio-P1-🟢 Ready.md](Item-080-Prio-P1-🟢%20Ready.md) |
+| 081 | Entity Create/Edit Forms with Validation | 🟢 Ready | [Item-081-Prio-P1-🟢 Ready.md](Item-081-Prio-P1-🟢%20Ready.md) |
+| 082 | Advanced UI Patterns (Wizards, Modals, Confirmations) | 🟢 Ready | [Item-082-Prio-P1-🟢 Ready.md](Item-082-Prio-P1-🟢%20Ready.md) |
+| 083 | Frontend Testing Framework & Unit Tests | 🟢 Ready | [Item-083-Prio-P1-🟢 Ready.md](Item-083-Prio-P1-🟢%20Ready.md) |
 
 ---
 
@@ -110,9 +108,9 @@ All P0 items complete! ✅
 - **P3 (Low):** 1/15 complete (7%)
 
 ### By Status
-- 🟢 Ready: 33 items
-- 🔴 Blocked: 14 items (dependencies blocking UI development and advanced features)
-- 🟡 In Progress: 0 items
+- 🟢 Ready: 32 items
+- 🔴 Blocked: 13 items (dependencies blocking UI development)
+- 🟡 In Progress: 2 items (Item-075, Item-076)
 - ✅ Done: 30 items
 
 ### Dependency Summary
@@ -190,14 +188,14 @@ See [backlog/old/](old/) directory for detailed completion notes and documentati
 
 ## 🎯 Next Steps
 
-### Immediate - Ready to Begin
-1. **Item-075** (P1) - Frontend React Project Setup - Unblocks entire UI pipeline
-2. **Item-084** (P2) - Backend Authentication Endpoints - Independent backend work
+### Currently In Progress
+1. **Item-075** (P1) - Frontend React Project Setup - 🟡 In Progress
+2. **Item-076** (P1) - Core Component Library - 🟡 In Progress (Phase 1 started)
 
-### High Priority - After Frontend Setup Complete
-1. **Item-076** (P1) - Core Component Library (blocked by 075)
-2. **Item-077** (P1) - Authentication Pages (blocked by 075, 076)
-3. **Item-059** (P1) - Event Sourcing Read Path (independent)
+### High Priority - Next Steps
+1. **Item-076** (P1) - Continue Component Library (Phase 2: Navigation, Phase 3: Data Display)
+2. **Item-077** (P1) - Authentication Pages (blocked by 076 completion)
+3. **Item-084** (P2) - Backend Authentication Endpoints - Independent backend work
 
 ### Other Backend Work (Independent)
 - **Item-020-025** (P2-P3) - Documentation and glossary items

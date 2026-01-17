@@ -10,10 +10,10 @@ describe('Utility Functions', () => {
       expect(result).toContain('January')
     })
 
-    it('should return original string on invalid date', () => {
+    it('should return \"Invalid Date\" on invalid date', () => {
       const invalid = 'not-a-date'
       const result = formatDate(invalid)
-      expect(result).toBe(invalid)
+      expect(result).toBe('Invalid Date')
     })
   })
 

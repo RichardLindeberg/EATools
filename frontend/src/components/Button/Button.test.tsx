@@ -41,7 +41,7 @@ describe('Button Component', () => {
   })
 
   it('handles click events', () => {
-    const handleClick = expect.fn()
+    const handleClick = vi.fn()
     render(<Button onClick={handleClick}>Click</Button>)
     screen.getByRole('button').click()
     expect(handleClick).toHaveBeenCalled()

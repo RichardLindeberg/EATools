@@ -1,0 +1,119 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  background-color: var(--neutral-white);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table--loading,
+.table__loading,
+.table__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-12);
+  color: var(--neutral-500);
+  font-size: var(--font-size-base);
+}
+
+.table__head {
+  background-color: var(--neutral-50);
+  border-bottom: 2px solid var(--neutral-200);
+}
+
+.table__header {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--neutral-700);
+  white-space: nowrap;
+}
+
+.table__header--left {
+  text-align: left;
+}
+
+.table__header--center {
+  text-align: center;
+}
+
+.table__header--right {
+  text-align: right;
+}
+
+.table__header--sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-base);
+}
+
+.table__header--sortable:hover {
+  background-color: var(--neutral-100);
+}
+
+.table__header--sortable:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+}
+
+.table__body {
+  background-color: var(--neutral-white);
+}
+
+.table__row {
+  border-bottom: 1px solid var(--neutral-200);
+  transition: background-color var(--transition-base);
+}
+
+.table__row:last-child {
+  border-bottom: none;
+}
+
+.table--striped .table__body .table__row:nth-child(even) {
+  background-color: var(--neutral-50);
+}
+
+.table--hoverable .table__body .table__row:hover {
+  background-color: var(--primary-50);
+}
+
+.table__row--clickable {
+  cursor: pointer;
+}
+
+.table__row--clickable:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+}
+
+.table__cell {
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--neutral-900);
+}
+
+.table__cell--left {
+  text-align: left;
+}
+
+.table__cell--center {
+  text-align: center;
+}
+
+.table__cell--right {
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table__header,
+  .table__cell {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+}

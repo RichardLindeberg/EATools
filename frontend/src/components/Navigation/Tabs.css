@@ -1,0 +1,106 @@
+.tabs {
+  display: flex;
+}
+
+.tabs--horizontal {
+  flex-direction: column;
+}
+
+.tabs--vertical {
+  flex-direction: row;
+}
+
+.tabs__list {
+  display: flex;
+  border-bottom: 2px solid var(--neutral-200);
+  gap: var(--spacing-1);
+}
+
+.tabs--vertical .tabs__list {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 2px solid var(--neutral-200);
+  min-width: 12rem;
+}
+
+.tabs__tab {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.tabs--vertical .tabs__tab {
+  border-bottom: none;
+  border-right: 2px solid transparent;
+  margin-bottom: 0;
+  margin-right: -2px;
+  justify-content: flex-start;
+}
+
+.tabs__tab:hover:not(:disabled) {
+  color: var(--neutral-900);
+  background-color: var(--neutral-50);
+}
+
+.tabs__tab:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.tabs__tab--active {
+  color: var(--primary-600);
+  border-bottom-color: var(--primary-600);
+}
+
+.tabs--vertical .tabs__tab--active {
+  border-bottom-color: transparent;
+  border-right-color: var(--primary-600);
+  background-color: var(--primary-50);
+}
+
+.tabs__tab--disabled {
+  color: var(--neutral-400);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.tabs__tab-icon {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-base);
+}
+
+.tabs__tab-label {
+  line-height: var(--line-height-tight);
+}
+
+.tabs__tab-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--spacing-1);
+  background-color: var(--neutral-200);
+  color: var(--neutral-700);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tabs__tab--active .tabs__tab-badge {
+  background-color: var(--primary-600);
+  color: var(--neutral-white);
+}

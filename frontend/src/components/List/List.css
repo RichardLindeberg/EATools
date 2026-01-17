@@ -1,0 +1,119 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--neutral-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--neutral-200);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  transition: background-color var(--transition-base);
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.list__item:last-child {
+  border-bottom: none;
+}
+
+.list--dense .list__item {
+  padding: var(--spacing-3);
+  gap: var(--spacing-2);
+}
+
+.list--hoverable .list__item:hover:not(.list__item--disabled) {
+  background-color: var(--neutral-50);
+}
+
+.list__item--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.list__item--clickable:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.list__item--clickable:active {
+  background-color: var(--neutral-100);
+}
+
+.list__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.list__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--neutral-600);
+  font-size: var(--font-size-xl);
+}
+
+.list--dense .list__item-icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--font-size-lg);
+}
+
+.list__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.list__item-primary {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--neutral-900);
+  line-height: var(--line-height-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list--dense .list__item-primary {
+  font-size: var(--font-size-sm);
+}
+
+.list__item-secondary {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+  line-height: var(--line-height-tight);
+  margin-top: var(--spacing-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list--dense .list__item-secondary {
+  font-size: var(--font-size-xs);
+  margin-top: 0;
+}
+
+.list__item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+}
+
+.list__divider {
+  height: 1px;
+  background-color: var(--neutral-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
