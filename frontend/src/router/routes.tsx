@@ -20,7 +20,18 @@ import { HomePage } from '../pages/HomePage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { UnauthorizedPage } from '../pages/UnauthorizedPage';
 
-// Placeholder pages for entities (will be replaced with actual components in future items)
+// Pages - Entities
+import { ApplicationListPage } from '../pages/entities/ApplicationListPage';
+import { ServerListPage } from '../pages/entities/ServerListPage';
+import { IntegrationListPage } from '../pages/entities/IntegrationListPage';
+import { DataEntityListPage } from '../pages/entities/DataEntityListPage';
+import { BusinessCapabilityListPage } from '../pages/entities/BusinessCapabilityListPage';
+import { OrganizationListPage } from '../pages/entities/OrganizationListPage';
+import { RelationListPage } from '../pages/entities/RelationListPage';
+import { ApplicationServiceListPage } from '../pages/entities/ApplicationServiceListPage';
+import { ApplicationInterfaceListPage } from '../pages/entities/ApplicationInterfaceListPage';
+
+// Placeholder pages for details (will be created in future items)
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div style={{ padding: '2rem' }}>
     <h1>{title}</h1>
@@ -87,13 +98,13 @@ export const routes: RouteObject[] = [
 
       // ===== Applications Routes =====
       {
-        path: 'applications',
+        path: 'entities/applications',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="app:read">
-                <PlaceholderPage title="Applications" />
+                <ApplicationListPage />
               </ProtectedRoute>
             ),
           },
@@ -126,13 +137,13 @@ export const routes: RouteObject[] = [
 
       // ===== Servers Routes =====
       {
-        path: 'servers',
+        path: 'entities/servers',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="server:read">
-                <PlaceholderPage title="Servers" />
+                <ServerListPage />
               </ProtectedRoute>
             ),
           },
@@ -165,13 +176,13 @@ export const routes: RouteObject[] = [
 
       // ===== Integrations Routes =====
       {
-        path: 'integrations',
+        path: 'entities/integrations',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="integration:read">
-                <PlaceholderPage title="Integrations" />
+                <IntegrationListPage />
               </ProtectedRoute>
             ),
           },
@@ -204,13 +215,13 @@ export const routes: RouteObject[] = [
 
       // ===== Data Entities Routes =====
       {
-        path: 'data-entities',
+        path: 'entities/data-entities',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="entity:read">
-                <PlaceholderPage title="Data Entities" />
+                <DataEntityListPage />
               </ProtectedRoute>
             ),
           },
@@ -243,13 +254,13 @@ export const routes: RouteObject[] = [
 
       // ===== Business Capabilities Routes =====
       {
-        path: 'business-capabilities',
+        path: 'entities/business-capabilities',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="capability:read">
-                <PlaceholderPage title="Business Capabilities" />
+                <BusinessCapabilityListPage />
               </ProtectedRoute>
             ),
           },
@@ -282,13 +293,13 @@ export const routes: RouteObject[] = [
 
       // ===== Organizations Routes =====
       {
-        path: 'organizations',
+        path: 'entities/organizations',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="org:read">
-                <PlaceholderPage title="Organizations" />
+                <OrganizationListPage />
               </ProtectedRoute>
             ),
           },
@@ -321,13 +332,13 @@ export const routes: RouteObject[] = [
 
       // ===== Relations Routes =====
       {
-        path: 'relations',
+        path: 'entities/relations',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="relation:read">
-                <PlaceholderPage title="Relations" />
+                <RelationListPage />
               </ProtectedRoute>
             ),
           },
@@ -360,13 +371,13 @@ export const routes: RouteObject[] = [
 
       // ===== Application Services Routes =====
       {
-        path: 'application-services',
+        path: 'entities/application-services',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="service:read">
-                <PlaceholderPage title="Application Services" />
+                <ApplicationServiceListPage />
               </ProtectedRoute>
             ),
           },
@@ -399,13 +410,13 @@ export const routes: RouteObject[] = [
 
       // ===== Application Interfaces Routes =====
       {
-        path: 'application-interfaces',
+        path: 'entities/application-interfaces',
         children: [
           {
             index: true,
             element: (
               <ProtectedRoute requiredPermission="interface:read">
-                <PlaceholderPage title="Application Interfaces" />
+                <ApplicationInterfaceListPage />
               </ProtectedRoute>
             ),
           },

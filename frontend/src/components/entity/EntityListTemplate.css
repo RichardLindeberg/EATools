@@ -1,0 +1,155 @@
+/**
+ * EntityListTemplate Styles
+ */
+
+.entity-list-template {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Header */
+.entity-list-template__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.entity-list-template__title-section {
+  flex: 1;
+}
+
+.entity-list-template__title {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.entity-list-template__description {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Error Message */
+.entity-list-template__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.entity-list-template__error-icon {
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-error);
+}
+
+.entity-list-template__error-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+  line-height: 1.5;
+}
+
+/* Table Container */
+.entity-list-template__table-container {
+  min-height: 400px;
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Loading State */
+.entity-list-template__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: var(--spacing-md);
+}
+
+.entity-list-template__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary-600);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.entity-list-template__loading p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Empty State */
+.entity-list-template__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.entity-list-template__empty p {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+/* Pagination */
+.entity-list-template__pagination {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-md) 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .entity-list-template {
+    gap: var(--spacing-md);
+  }
+
+  .entity-list-template__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+  }
+
+  .entity-list-template__header button {
+    width: 100%;
+  }
+
+  .entity-list-template__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .entity-list-template__table-container {
+    min-height: auto;
+  }
+
+  .entity-list-template__loading,
+  .entity-list-template__empty {
+    min-height: 300px;
+  }
+}

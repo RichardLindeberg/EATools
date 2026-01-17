@@ -1,0 +1,112 @@
+.entity-table {
+  width: 100%;
+}
+
+.entity-table__wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+}
+
+.entity-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.entity-table__header {
+  background: var(--color-background-alt);
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.entity-table__header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.entity-table__sort-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: 0;
+  font-size: var(--font-size-md);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.entity-table__sort-btn:hover {
+  opacity: 1;
+}
+
+.entity-table__sort-btn--asc {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+.entity-table__sort-btn--desc {
+  color: var(--color-primary);
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+.entity-table__cell {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.entity-table__row {
+  transition: background-color 0.2s;
+}
+
+.entity-table__row:hover {
+  background-color: var(--color-background);
+}
+
+.entity-table__row--selected {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.entity-table__row--selected:hover {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.entity-table__checkbox-col {
+  width: 40px;
+  text-align: center;
+}
+
+.entity-table__checkbox-col input {
+  cursor: pointer;
+}
+
+.entity-table__actions-col {
+  width: 120px;
+  text-align: center;
+}
+
+.entity-table__loading,
+.entity-table__empty {
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+}
+
+@media (max-width: 768px) {
+  .entity-table__cell {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .entity-table__header {
+    padding: var(--spacing-sm);
+  }
+}
