@@ -83,6 +83,7 @@ let main args =
         @ ApplicationServicesEndpoints.routes
         @ ApplicationInterfacesEndpoints.routes
         @ ServersEndpoints.routes
+        @ DocumentationEndpoints.routes
         @ IntegrationsEndpoints.routes
         @ OrganizationsEndpoints.routes
         @ BusinessCapabilitiesEndpoints.routes

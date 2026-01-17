@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (28 Active, 44 Complete)  
-> **Progress:** 44/72 complete (61%)  
+> **Total Items:** 72 (27 Active, 45 Complete)  
+> **Progress:** 45/72 complete (63%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -14,7 +14,7 @@
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
 - **[P1 - High](#p1---high-0-active)** (0 active, 19 complete) - All complete! 🎉
-- **[P2 - Medium](#p2---medium-17-active)** (17 active) - Should be planned
+- **[P2 - Medium](#p2---medium-16-active)** (16 active) - Should be planned
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Nice to have
 
 ### Completed Items
@@ -34,14 +34,13 @@ All P1 items complete! ✅
 
 ---
 
-## P2 - Medium (17 active)
+## P2 - Medium (16 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
-| 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 | 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
 | 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
 | 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
@@ -86,7 +85,7 @@ All P1 items complete! ✅
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
 - **P1 (High):** 19/19 complete (100%) ✅
-- **P2 (Medium):** 17/34 complete (50%)
+- **P2 (Medium):** 18/34 complete (53%)
 - **P3 (Low):** 0/4 active (0%)
 
 ### By Status
@@ -147,6 +146,7 @@ All completed items are in [backlog/old/](old/):
 | 017 | Create Testing Strategy Specification | ✅ Done |
 | 018 | Create Observability Specification | ✅ Done |
 | 019 | Consolidate spec-schema-domain-model.md | ✅ Done |
+| 027 | API Markdown Rendering and OpenAPI Specification Display | ✅ Done |
 | 037 | Migrate Server Endpoints to Commands | ✅ Done |
 | 038 | Migrate Integration Endpoints to Commands | ✅ Done |
 | 039 | Migrate DataEntity Endpoints to Commands | ✅ Done |

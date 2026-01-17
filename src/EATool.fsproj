@@ -103,6 +103,8 @@
     <Compile Include="Api/HealthEndpoint.fs" />
     <Compile Include="Api/MetricsEndpoint.fs" />
     <Compile Include="Api/Instrumentation.fs" />
+    <Compile Include="Api/MarkdownRenderer.fs" />
+    <Compile Include="Api/DocumentationEndpoints.fs" />
     <Compile Include="Api/Endpoints.fs" />
     <Compile Include="Api/ApplicationsEndpoints.fs" />
     <Compile Include="Api/ApplicationServicesEndpoints.fs" />
@@ -118,6 +120,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Infrastructure/Migrations/*.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="openapi.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
