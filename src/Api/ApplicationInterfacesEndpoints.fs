@@ -124,6 +124,7 @@ module ApplicationInterfacesEndpoints =
             GET >=> route "/application-interfaces" >=> fun next ctx -> task {
                 let page = ctx.TryGetQueryStringValue "page" |> Option.bind (fun s -> match Int32.TryParse s with | true, v -> Some v | _ -> None) |> Option.defaultValue 1
                 let limit = ctx.TryGetQueryStringValue "limit" |> Option.bind (fun s -> match Int32.TryParse s with | true, v -> Some v | _ -> None) |> Option.defaultValue 50
+                let search = ctx.TryGetQueryStringValue "search" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let appId = ctx.TryGetQueryStringValue "application_id" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let status = ctx.TryGetQueryStringValue "status" |> Option.bind statusFromString
                 let pageParam = if page < 1 then 1 else page

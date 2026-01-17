@@ -590,6 +590,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
         - in: query
           name: source_app_id
           schema:
@@ -695,6 +696,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
+        - in: query
+          name: parent_id
+          schema:
+            type: string
+          description: Filter by parent capability ID
       responses:
         '200':
           description: List business capabilities
@@ -978,6 +985,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
         - in: query
           name: source_id
           schema:
@@ -1368,6 +1376,10 @@ paths:
     get:
       tags: [Webhooks]
       summary: List webhooks
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: List webhooks
@@ -1472,6 +1484,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
         - in: query
           name: business_capability_id
           schema:
@@ -1638,6 +1651,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/search'
         - in: query
           name: application_id
           schema:

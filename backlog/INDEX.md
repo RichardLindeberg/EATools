@@ -1,8 +1,8 @@
 # EATool - Backlog Index
 
 > **Last Updated:** 2026-01-17  
-> **Total Items:** 72 (41 Active, 31 Complete)  
-> **Progress:** 31/72 complete (43%)  
+> **Total Items:** 72 (39 Active, 33 Complete)  
+> **Progress:** 33/72 complete (46%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
 **In Progress:** None
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-1-active)** (1 active) - Should be done this sprint
-- **[P2 - Medium](#p2---medium-31-active)** (31 active) - Should be planned
-- **[P3 - Low](#p3---low-9-active)** (9 active) - Nice to have
+- **[P1 - High](#p1---high-0-active)** (0 active, 19 complete) - All complete! 🎉
+- **[P2 - Medium](#p2---medium-30-active)** (30 active) - Should be planned
+- **[P3 - Low](#p3---low-10-active)** (10 active) - Nice to have
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-31-total)** (31 items) - See backlog/old/ directory and ✅ Done files
+- **[View Completed Items](#-completed-items-32-total)** (32 items) - See backlog/old/ directory
 
 ---
 
@@ -28,19 +28,16 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (1 active)
+## P1 - High (0 active)
 
-| ID | Title | Status | Files |
-|----|-------|--------|-------|
-| 059 | Lifecycle Transitions Validation | 🟢 Ready | [Item-059-Prio-P1-🟢 Ready.md](Item-059-Prio-P1-🟢%20Ready.md) |
+All P1 items complete! ✅
 
 ---
 
-## P2 - Medium (31 active)
+## P2 - Medium (29 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 013 | Standardize Query Parameter Patterns Across Endpoints | 🟢 Ready | [Item-013-Prio-P2-🟢 Ready.md](Item-013-Prio-P2-🟢%20Ready.md) |
 | 014 | Add Missing API Documentation Files | 🟢 Ready | [Item-014-Prio-P2-🟢 Ready.md](Item-014-Prio-P2-🟢%20Ready.md) |
 | 015 | Expand Relation Validation Matrix | 🟢 Ready | [Item-015-Prio-P2-🟢 Ready.md](Item-015-Prio-P2-🟢%20Ready.md) |
 | 017 | Create Data Migration Strategy Specification | 🟢 Ready | [Item-017-Prio-P2-🟢 Ready.md](Item-017-Prio-P2-🟢%20Ready.md) |
@@ -51,7 +48,6 @@ All P0 items complete! ✅
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
 | 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
 | 053 | Event Store Observability Instrumentation | 🟢 Ready | [Item-053-Prio-P2-🟢 Ready.md](Item-053-Prio-P2-🟢%20Ready.md) |
-| 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P2-🟢 Ready.md](Item-054-Prio-P2-🟢%20Ready.md) |
 | 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
 | 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
 | 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
@@ -76,7 +72,7 @@ All P0 items complete! ✅
 
 ---
 
-## P3 - Low (9 active)
+## P3 - Low (10 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
@@ -87,6 +83,7 @@ All P0 items complete! ✅
 | 036 | Create AuditLog as Event Projection | 🟢 Ready | [Item-036-Prio-P3-🟢 Ready.md](Item-036-Prio-P3-🟢%20Ready.md) |
 | 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
 | 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
+| 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P3-🟢 Ready.md](Item-054-Prio-P3-🟢%20Ready.md) |
 | 064 | API Authentication & Authorization Framework | 🟢 Ready | [Item-064-Prio-P3-🟢 Ready.md](Item-064-Prio-P3-🟢%20Ready.md) |
 | 074 | Contract Drift Detection vs OpenAPI | 🟢 Ready | [Item-074-Prio-P3-🟢 Ready.md](Item-074-Prio-P3-🟢%20Ready.md) |
 
@@ -96,24 +93,24 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
-- **P1 (High):** 18/19 complete (95%)
-- **P2 (Medium):** 4/35 complete (11%)
-- **P3 (Low):** 1/10 complete (10%)
+- **P1 (High):** 19/19 complete (100%) ✅
+- **P2 (Medium):** 5/34 complete (15%)
+- **P3 (Low):** 1/11 complete (9%)
 
 ### By Status
-- 🟢 Ready: 41
+- 🟢 Ready: 39
 - 🔴 Blocked: 0
 - 🟡 In Progress: 0
-- ✅ Done: 31
+- ✅ Done: 33
 
 ---
 
-## ✅ Completed Items (31 total)
+## ✅ Completed Items (33 total)
 
 All completed items are in [backlog/old/](old/):
 - P0: 8 complete
-- P1: 18 complete
-- P2: 4 complete
+- P1: 19 complete (including Item-059 ✅)
+- P2: 5 complete (including Item-013 ✅)
 - P3: 1 complete
 
 See the old/ directory for details and completion dates.
@@ -122,16 +119,14 @@ See the old/ directory for details and completion dates.
 
 ## 🎯 Next Steps
 
-### Recommended Next Sprint (P1 Items)
-1. **Item-059** - Lifecycle Transitions Validation
-
 ### High Priority P2 Items to Consider
 1. **Item-053** - Event Store Observability Instrumentation
-2. **Item-054** - Observability Alert Rules & Incident Response
-3. **Item-037** - Migrate Server Endpoints to Commands
-4. **Item-065** - API Rate Limiting & Throttling
+2. **Item-037** - Migrate Server Endpoints to Commands
+3. **Item-065** - API Rate Limiting & Throttling
+4. **Item-066** - Define Performance Thresholds & Latency SLOs
+5. **Item-067** - Add CI Coverage Gates & Artifacts
 
-**Focus:** Validation, observability, and command migration
+**Focus:** Observability, command migration, and API hardening
 
 ---
 

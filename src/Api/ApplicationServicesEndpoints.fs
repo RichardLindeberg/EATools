@@ -121,6 +121,7 @@ module ApplicationServicesEndpoints =
             GET >=> route "/application-services" >=> fun next ctx -> task {
                 let page = ctx.TryGetQueryStringValue "page" |> Option.bind (fun s -> match Int32.TryParse s with | true, v -> Some v | _ -> None) |> Option.defaultValue 1
                 let limit = ctx.TryGetQueryStringValue "limit" |> Option.bind (fun s -> match Int32.TryParse s with | true, v -> Some v | _ -> None) |> Option.defaultValue 50
+                let search = ctx.TryGetQueryStringValue "search" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let bcId = ctx.TryGetQueryStringValue "business_capability_id" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let pageParam = if page < 1 then 1 else page
                 let limitParam = if limit < 1 || limit > 200 then 50 else limit

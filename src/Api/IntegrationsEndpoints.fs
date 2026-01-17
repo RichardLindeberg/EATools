@@ -14,6 +14,7 @@ module IntegrationsEndpoints =
             GET >=> route "/integrations" >=> fun next ctx -> task {
                 let page = ctx.TryGetQueryStringValue "page" |> Option.bind (fun s -> try Some (int s) with _ -> None) |> Option.defaultValue 1
                 let limit = ctx.TryGetQueryStringValue "limit" |> Option.bind (fun s -> try Some (int s) with _ -> None) |> Option.defaultValue 50
+                let search = ctx.TryGetQueryStringValue "search" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let source = ctx.TryGetQueryStringValue "source_app_id" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
                 let target = ctx.TryGetQueryStringValue "target_app_id" |> Option.filter (fun s -> not (String.IsNullOrWhiteSpace s))
 
