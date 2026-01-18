@@ -1,5 +1,36 @@
 # Copilot Instructions for EATool
 
+## Backlog Workflow & Agent Prompt
+
+All agents must follow this when working with the backlog.
+
+### Workflow Rules
+- Status lifecycle: 🟢 Ready → 🟡 In Progress → ✅ Done.
+- Never create new files in `backlog/old/`. Always move the existing item file there when marking it ✅ Done.
+- Keep only one live file per item. Avoid duplicates (e.g., Ready and Done copies in `backlog/`).
+- After any status change, update `backlog/INDEX.md` totals, sections, and navigation to reflect the new state.
+- File naming pattern: `Item-{id}-Prio-{Pn}-{STATUS}.md` where STATUS ∈ {🟢 Ready, 🟡 In Progress, 🔴 Blocked, ✅ Done}.
+
+### Required Actions per Step
+1. Create new item:
+    - Add the file in `backlog/` with status 🟢 Ready.
+    - Add a link in `backlog/INDEX.md` under the correct priority section.
+2. Start work:
+    - Update the same file’s status to 🟡 In Progress (do not move).
+    - Reflect the change in `backlog/INDEX.md` status counts and “Currently In Progress” list.
+3. Complete work:
+    - Update the file’s status to ✅ Done.
+    - Move the file from `backlog/` to `backlog/old/` (do not create a new file).
+    - Remove the item from Active sections; add it to the Completed totals in `backlog/INDEX.md`.
+
+### Agent Prompt (use verbatim)
+"When editing the backlog:
+- Do not create new files under backlog/old; move completed items there.
+- Follow status lifecycle: Ready → In Progress → Done.
+- On completion: update status to Done, move the file to backlog/old, and update backlog/INDEX.md counts and sections.
+- Ensure only one status file exists per item in backlog.
+- Keep links and navigation in backlog/INDEX.md accurate after changes."
+
 ## Project Overview
 
 EATool is an Enterprise Architecture management tool built with F# .NET 10, using:

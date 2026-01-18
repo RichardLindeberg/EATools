@@ -1,0 +1,233 @@
+/**
+ * EntityHeader Styles
+ */
+
+.entity-header {
+  padding: 1.5rem 2rem;
+  background-color: var(--color-background-primary, #ffffff);
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* Breadcrumbs */
+.entity-breadcrumbs {
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumb-link {
+  color: var(--color-primary, #007bff);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-link:hover {
+  color: var(--color-primary-dark, #0056b3);
+  text-decoration: underline;
+}
+
+.breadcrumb-current {
+  color: var(--color-text-secondary, #666);
+}
+
+.breadcrumb-separator {
+  color: var(--color-text-tertiary, #999);
+}
+
+/* Header Main Section */
+.entity-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.entity-header-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.entity-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text-primary, #333);
+}
+
+.entity-subtitle {
+  margin: 0.5rem 0 0 0;
+  color: var(--color-text-secondary, #666);
+  font-size: 1rem;
+}
+
+/* Badges */
+.entity-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.entity-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.entity-badge-default {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.entity-badge-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.entity-badge-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.entity-badge-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.entity-badge-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Actions */
+.entity-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.entity-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.entity-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.entity-action-primary {
+  background-color: var(--color-primary, #007bff);
+  color: white;
+  border-color: var(--color-primary, #007bff);
+}
+
+.entity-action-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark, #0056b3);
+  border-color: var(--color-primary-dark, #0056b3);
+}
+
+.entity-action-secondary {
+  background-color: white;
+  color: var(--color-text-primary, #333);
+  border-color: var(--color-border, #ccc);
+}
+
+.entity-action-secondary:hover:not(:disabled) {
+  background-color: var(--color-background-secondary, #f8f9fa);
+  border-color: var(--color-text-secondary, #666);
+}
+
+.entity-action-danger {
+  background-color: white;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.entity-action-danger:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.action-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .entity-header {
+    padding: 1rem;
+  }
+
+  .entity-header-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .entity-actions {
+    width: 100%;
+  }
+
+  .entity-action {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .entity-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .entity-header {
+    background-color: var(--color-background-primary, #1e1e1e);
+    border-bottom-color: var(--color-border, #444);
+  }
+
+  .entity-title {
+    color: var(--color-text-primary, #e0e0e0);
+  }
+
+  .entity-subtitle {
+    color: var(--color-text-secondary, #aaa);
+  }
+
+  .entity-action-secondary {
+    background-color: transparent;
+    color: var(--color-text-primary, #e0e0e0);
+  }
+
+  .entity-action-secondary:hover:not(:disabled) {
+    background-color: var(--color-background-secondary, #2d2d2d);
+  }
+}

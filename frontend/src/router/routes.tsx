@@ -20,7 +20,7 @@ import { HomePage } from '../pages/HomePage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { UnauthorizedPage } from '../pages/UnauthorizedPage';
 
-// Pages - Entities
+// Pages - Entities (List Pages)
 import { ApplicationListPage } from '../pages/entities/ApplicationListPage';
 import { ServerListPage } from '../pages/entities/ServerListPage';
 import { IntegrationListPage } from '../pages/entities/IntegrationListPage';
@@ -31,7 +31,18 @@ import { RelationListPage } from '../pages/entities/RelationListPage';
 import { ApplicationServiceListPage } from '../pages/entities/ApplicationServiceListPage';
 import { ApplicationInterfaceListPage } from '../pages/entities/ApplicationInterfaceListPage';
 
-// Placeholder pages for details (will be created in future items)
+// Pages - Entities (Detail Pages)
+import { ApplicationDetailPage } from '../pages/entities/ApplicationDetailPage';
+import { ServerDetailPage } from '../pages/entities/ServerDetailPage';
+import { IntegrationDetailPage } from '../pages/entities/IntegrationDetailPage';
+import { DataEntityDetailPage } from '../pages/entities/DataEntityDetailPage';
+import { BusinessCapabilityDetailPage } from '../pages/entities/BusinessCapabilityDetailPage';
+import { OrganizationDetailPage } from '../pages/entities/OrganizationDetailPage';
+import { RelationDetailPage } from '../pages/entities/RelationDetailPage';
+import { ApplicationServiceDetailPage } from '../pages/entities/ApplicationServiceDetailPage';
+import { ApplicationInterfaceDetailPage } from '../pages/entities/ApplicationInterfaceDetailPage';
+
+// Placeholder pages for forms (will be created in future items)
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div style={{ padding: '2rem' }}>
     <h1>{title}</h1>
@@ -120,7 +131,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="app:read">
-                <PlaceholderPage title="Application Detail" />
+                <ApplicationDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -159,7 +170,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="server:read">
-                <PlaceholderPage title="Server Detail" />
+                <ServerDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -198,7 +209,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="integration:read">
-                <PlaceholderPage title="Integration Detail" />
+                <IntegrationDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -237,7 +248,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="entity:read">
-                <PlaceholderPage title="Data Entity Detail" />
+                <DataEntityDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -276,7 +287,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="capability:read">
-                <PlaceholderPage title="Business Capability Detail" />
+                <BusinessCapabilityDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -315,7 +326,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="org:read">
-                <PlaceholderPage title="Organization Detail" />
+                <OrganizationDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -354,7 +365,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="relation:read">
-                <PlaceholderPage title="Relation Detail" />
+                <RelationDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -393,7 +404,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="service:read">
-                <PlaceholderPage title="Application Service Detail" />
+                <ApplicationServiceDetailPage />
               </ProtectedRoute>
             ),
           },
@@ -432,7 +443,7 @@ export const routes: RouteObject[] = [
             path: ':id',
             element: (
               <ProtectedRoute requiredPermission="interface:read">
-                <PlaceholderPage title="Application Interface Detail" />
+                <ApplicationInterfaceDetailPage />
               </ProtectedRoute>
             ),
           },
