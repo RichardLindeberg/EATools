@@ -1,5 +1,5 @@
 import { useQuery, useMutation, UseQueryResult, UseMutationResult } from '@tanstack/react-query'
-import { apiClient } from './client'
+import { apiClient } from '../api/client'
 import { Entity, PaginatedResponse, QueryParams } from '../types'
 
 // Generic query hook for fetching entities

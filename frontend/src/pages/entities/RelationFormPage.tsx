@@ -184,8 +184,10 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                 type="text"
                 placeholder="Enter target entity ID"
                 {...register('targetEntity')}
+              />
+            </FormFieldWrapper>
           
-              <FormFieldWrapper
+            <FormFieldWrapper
                 label="Confidence"
                 error={errors.confidence?.message}
                 htmlFor="confidence"
