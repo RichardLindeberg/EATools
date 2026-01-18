@@ -52,13 +52,15 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 
 ### Phase 1: Foundation & Shared Components (16-20 hours)
 
-**Form Infrastructure:**
+**Form Infrastructure (CQRS-aware):**
 - [ ] Setup React Hook Form for all forms
 - [ ] Create form validation schemas (Zod or Yup)
 - [ ] Implement server-side validation error mapping (backend errors → form fields)
-- [ ] Create form submission handler with loading states
-- [ ] Implement optimistic updates pattern
-- [ ] Add auto-save functionality (500ms debounce, optional)
+- [ ] Create separate submission paths: Create (POST collection) vs Edit (dispatch commands)
+- [ ] Add command dispatch layer for edits (routes to specific command endpoints per entity)
+- [ ] Handle command errors: 422 (validation) mapped to fields, 403 (forbidden) shown as permission error
+- [ ] Implement optimistic updates cautiously (only where safe); otherwise refetch on success
+- [ ] Add auto-save functionality (optional) — limit to fields that map cleanly to a single command or disable in edit mode for command-based entities
 
 **Shared Components:**
 - [ ] Create EntityFormTemplate (layout, header, actions, sections)
@@ -72,6 +74,18 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Create useFormDirty hook (detects unsaved changes)
 - [ ] Create useRelationshipSearch hook (search for entities to link)
 
+### Phase 1A: Create-Only Forms (MVP - 20-24 hours)
+- [ ] Implement create flows for all 9 entities (POST collection)
+- [ ] Validate inputs and display 422 errors
+- [ ] Redirect to detail page on success
+
+### Phase 1B: Command-Based Edit Flows (24-32 hours)
+- [ ] Applications: implement command-based edits (classification, lifecycle, owner); fallback to legacy PATCH for remaining fields
+- [ ] BusinessCapabilities: implement set/remove parent, update-description commands; fallback to PATCH for remaining fields
+- [ ] Organizations: implement set/remove parent commands; fallback to PATCH for remaining fields
+- [ ] Remaining entities (Servers, Integrations, DataEntities, Relations, ApplicationServices, ApplicationInterfaces): implement PATCH-based edits per openapi.yaml
+- [ ] Centralize diff-based dispatcher and error handling
+
 ### Phase 2: Application Form (8-10 hours)
 - [ ] Create ApplicationFormPage (handles /applications/new and /applications/:id/edit)
 - [ ] Add fields: Name* (text), Description (textarea), Type* (select), Status* (select)
@@ -79,7 +93,11 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, URL format, max lengths
 - [ ] Add relationship selector: Servers (multi-select), Integrations (multi-select)
 - [ ] Handle create (POST /applications)
-- [ ] Handle edit (PATCH /applications/{id})
+- [ ] Handle edits via commands (prefer over legacy PATCH):
+	- Set classification: POST /applications/{id}/commands/set-classification
+	- Transition lifecycle: POST /applications/{id}/commands/transition-lifecycle
+	- Set owner: POST /applications/{id}/commands/set-owner
+	- For remaining fields without commands (e.g., name, description, url, type, status, version), use legacy PATCH /applications/{id} (as per openapi.yaml notes)
 - [ ] Show loading state during submission
 - [ ] Display server validation errors
 - [ ] Redirect to detail page on success
@@ -91,7 +109,7 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add fields: CPU (number), Memory (number), Owner* (select user)
 - [ ] Add validation: Required fields, IP format, positive numbers
 - [ ] Handle create (POST /servers)
-- [ ] Handle edit (PATCH /servers/{id})
+- [ ] Handle edit (PATCH /servers/{id}) — no specific command endpoints defined
 
 ### Phase 4: Integration Form (8-10 hours)
 - [ ] Create IntegrationFormPage
@@ -101,7 +119,7 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, valid JSON for configuration
 - [ ] Add relationship selector: DataEntities (multi-select)
 - [ ] Handle create (POST /integrations)
-- [ ] Handle edit (PATCH /integrations/{id})
+- [ ] Handle edit (PATCH /integrations/{id}) — no specific command endpoints defined
 
 ### Phase 5: DataEntity Form (7-9 hours)
 - [ ] Create DataEntityFormPage
@@ -109,7 +127,7 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add fields: Classification* (select), Schema (JSON editor), Owner* (select user)
 - [ ] Add validation: Required fields, valid JSON for schema
 - [ ] Handle create (POST /data-entities)
-- [ ] Handle edit (PATCH /data-entities/{id})
+- [ ] Handle edit (PATCH /data-entities/{id}) — no specific command endpoints defined
 
 ### Phase 6: BusinessCapability Form (7-9 hours)
 - [ ] Create BusinessCapabilityFormPage
@@ -118,7 +136,11 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, prevent circular parent references
 - [ ] Add relationship selector: Applications (multi-select), Organizations (multi-select)
 - [ ] Handle create (POST /business-capabilities)
-- [ ] Handle edit (PATCH /business-capabilities/{id})
+- [ ] Handle edits via commands (prefer over PATCH where available):
+	- Set parent: POST /business-capabilities/{id}/commands/set-parent
+	- Remove parent: POST /business-capabilities/{id}/commands/remove-parent
+	- Update description: POST /business-capabilities/{id}/commands/update-description
+	- For remaining fields without commands (e.g., name, level, owner, status), use PATCH /business-capabilities/{id}
 
 ### Phase 7: Organization Form (6-8 hours)
 - [ ] Create OrganizationFormPage
@@ -126,7 +148,10 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add fields: Owner* (select user), Contact (email, email validation)
 - [ ] Add validation: Required fields, email format, prevent circular parent references
 - [ ] Handle create (POST /organizations)
-- [ ] Handle edit (PATCH /organizations/{id})
+- [ ] Handle edits via commands where applicable:
+	- Set parent: POST /organizations/{id}/commands/set-parent
+	- Remove parent: POST /organizations/{id}/commands/remove-parent
+	- For remaining fields without commands, use PATCH /organizations/{id}
 
 ### Phase 8: Relation Form (6-8 hours)
 - [ ] Create RelationFormPage
@@ -135,7 +160,7 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, valid JSON for metadata
 - [ ] Implement dynamic entity selector (select entity type, then select specific entity)
 - [ ] Handle create (POST /relations)
-- [ ] Handle edit (PATCH /relations/{id})
+- [ ] Handle edit (PATCH /relations/{id}) — no specific command endpoints defined
 
 ### Phase 9: ApplicationService Form (6-8 hours)
 - [ ] Create ApplicationServiceFormPage
@@ -143,7 +168,7 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add fields: Endpoint (text, URL validation), Status* (select)
 - [ ] Add validation: Required fields, URL format
 - [ ] Handle create (POST /application-services)
-- [ ] Handle edit (PATCH /application-services/{id})
+- [ ] Handle edit (PATCH /application-services/{id}) — no specific command endpoints defined
 
 ### Phase 10: ApplicationInterface Form (7-9 hours)
 - [ ] Create ApplicationInterfaceFormPage
@@ -152,27 +177,41 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, source ≠ target
 - [ ] Add relationship selector: ApplicationServices (multi-select)
 - [ ] Handle create (POST /application-interfaces)
-- [ ] Handle edit (PATCH /application-interfaces/{id})
+- [ ] Handle edit (PATCH /application-interfaces/{id}) — no specific command endpoints defined
 
 ---
 
 ## Acceptance Criteria
 
-**For Each Entity Form:**
-- [ ] Form displays in create mode (/entities/new) and edit mode (/entities/:id/edit)
+**Create Operations (Commands):**
+- [ ] Create uses POST to collection endpoints with correct create schema
+- [ ] Success returns newly created entity and redirects to detail page
+- [ ] Validation errors (422) map to correct fields with messages
+
+**Edit Operations (Commands vs Legacy PATCH):**
+- [ ] Applications: edits use commands where available; no generic PATCH for classification/lifecycle/owner
+	- set-classification → POST /applications/{id}/commands/set-classification
+	- transition-lifecycle → POST /applications/{id}/commands/transition-lifecycle
+	- set-owner → POST /applications/{id}/commands/set-owner
+	- fields without commands (name, description, url, type, status, version) use legacy PATCH /applications/{id}
+- [ ] BusinessCapabilities: parent/description changes use commands; other fields via PATCH
+	- set-parent → POST /business-capabilities/{id}/commands/set-parent
+	- remove-parent → POST /business-capabilities/{id}/commands/remove-parent
+	- update-description → POST /business-capabilities/{id}/commands/update-description
+- [ ] Organizations: parent changes use commands; other fields via PATCH
+	- set-parent → POST /organizations/{id}/commands/set-parent
+	- remove-parent → POST /organizations/{id}/commands/remove-parent
+- [ ] Servers, Integrations, DataEntities, Relations, ApplicationServices, ApplicationInterfaces: edits via PATCH (no specific command endpoints defined in spec)
+- [ ] Command responses update UI state and invalidate relevant queries
+- [ ] Command validation errors (422) display per-field messages; 403 shows permission error; other errors show friendly message
+
+**Form UX:**
 - [ ] All required fields marked with asterisk (*)
-- [ ] Form validation matches backend requirements
 - [ ] Client-side validation runs on blur and on submit
-- [ ] Server-side validation errors mapped to form fields
-- [ ] Required fields show error if empty
-- [ ] Format validation (email, URL, IP, JSON) works correctly
 - [ ] Relationship selectors allow searching and selecting related entities
-- [ ] Submit button disabled during submission
-- [ ] Loading state shown during submission
-- [ ] Success message shown after successful create/edit
-- [ ] Redirect to detail page after successful submission
-- [ ] Cancel button navigates back to previous page
-- [ ] Unsaved changes prompt shown if navigating away with dirty form
+- [ ] Submit button disabled and shows loading during submission
+- [ ] Success message and redirect to detail page on success
+- [ ] Cancel navigates back; unsaved changes prompt shows when form is dirty
 
 **General:**
 - [ ] All 9 entity forms implemented
@@ -199,6 +238,15 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 
 ## Notes
 
+### CQRS Implementation Notes (Forms)
+- Separate create vs edit flows: create → POST collection; edit → command dispatch where defined
+- Implement a diff-based dispatcher: compare initial entity to edited values; send one or more commands accordingly
+- For entities without command endpoints, use PATCH as defined in openapi.yaml
+- Map backend 422 errors to fields consistently; show 403 with permission guidance
+- Disable auto-save for command-based edits unless each change maps to a single command; otherwise keep manual submit
+- After successful command(s), refetch entity and dependent relationship queries to ensure read model consistency
+
+### General
 - Use React Hook Form for form state management
 - Use Zod or Yup for validation schemas
 - Implement unsaved changes warning with beforeunload event
