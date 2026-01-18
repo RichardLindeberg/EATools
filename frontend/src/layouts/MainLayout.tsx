@@ -6,7 +6,8 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from '../components/Navigation/Header';
-import { Sidebar, SidebarSection, SidebarItem } from '../components/Navigation/Sidebar';
+import { Sidebar } from '../components/Navigation/Sidebar';
+import type { SidebarSection, SidebarItem } from '../components/Navigation/Sidebar';
 import { Breadcrumbs } from '../components/Navigation/Breadcrumbs';
 import { useBreadcrumbs } from '../hooks/useBreadcrumbs';
 import './MainLayout.css';

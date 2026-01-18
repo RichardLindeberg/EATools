@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryParams } from './useQueryParams';
-import { ListResponse, PaginationParams, SortParams, FilterParams, Entity } from '../types/entities';
+import type { ListResponse, PaginationParams, SortParams, FilterParams, Entity } from '../types/entities';
 
 export interface EntityListState<T extends Entity> {
   items: T[];

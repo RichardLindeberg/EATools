@@ -6,11 +6,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EntityListTemplate } from '../../components/entity/EntityListTemplate';
-import { ColumnConfig } from '../../components/entity/EntityTable';
-import { FilterDefinition } from '../../components/entity/FilterPanel';
+import type { ColumnConfig } from '../../components/entity/EntityTable';
+import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { applicationsApi } from '../../api/entitiesApi';
-import { Application } from '../../types/entities';
+import type { Application } from '../../types/entities';
 import './ApplicationListPage.css';
 
 const COLUMNS: ColumnConfig<Application>[] = [

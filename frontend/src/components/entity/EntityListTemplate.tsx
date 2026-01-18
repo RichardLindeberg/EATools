@@ -7,8 +7,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button';
-import { EntityTable, ColumnConfig } from './EntityTable';
-import { FilterPanel, FilterDefinition } from './FilterPanel';
+import { EntityTable } from './EntityTable';
+import type { ColumnConfig } from './EntityTable';
+import { FilterPanel } from './FilterPanel';
+import type { FilterDefinition } from './FilterPanel';
 import { BulkActionBar } from './BulkActionBar';
 import { Pagination } from '../Navigation/Pagination';
 import './EntityListTemplate.css';

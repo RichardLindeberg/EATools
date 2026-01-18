@@ -1,11 +1,11 @@
 # EATool - Backlog Index
 
-> **Last Updated:** 2026-01-17  
-> **Total Items:** 88 (55 Active, 33 Complete)  
-> **Progress:** 34/88 complete (39%)  
+> **Last Updated:** 2026-01-18  
+> **Total Items:** 88 (42 Active, 46 Complete)  
+> **Progress:** 46/88 complete (52%)  
 > **Status Key:** 🔴 Blocked | 🟡 In Progress | 🟢 Ready | ✅ Done
 
-**Ready to Start:** 38 items | **Blocked:** 6 items | **In Progress:** 0
+**Ready to Start:** 37 items | **Blocked:** 6 items | **In Progress:** 0
 
 ---
 
@@ -13,12 +13,12 @@
 
 ### Active Items
 - **[P0 - Critical](#p0---critical-0-active)** (0 active, 8 complete) - All complete! 🎉
-- **[P1 - High](#p1---high-8-active)** (8 active, 22 complete) - Auth system complete! 🎉
-- **[P2 - Medium](#p2---medium-33 active)** (33 active) - Core backend, infrastructure, testing
+- **[P1 - High](#p1---high-4-active)** (4 active, 27 complete) - Entity list pages complete! 🎉
+- **[P2 - Medium](#p2---medium-28-active)** (28 active) - Core backend, infrastructure, testing
 - **[P3 - Low](#p3---low-10-active)** (10 active) - Enhancements, documentation, integrations
 
 ### Completed Items
-- **[View Completed Items](#-completed-items-32-total)** (32 items) - See backlog/old/ directory
+- **[View Completed Items](#-completed-items-46-total)** (46 items) - See backlog/old/ directory
 
 ---
 
@@ -28,15 +28,10 @@ All P0 items complete! ✅
 
 ---
 
-## P1 - High (8 active)
+## P1 - High (4 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
-| 075 | Frontend React Project Setup | ✅ Done | [Item-075-Prio-P1-✅ Done.md](Item-075-Prio-P1-✅%20Done.md) |
-| 076 | Core Component Library | ✅ Done | [Item-076-Prio-P1-✅ Done.md](Item-076-Prio-P1-✅%20Done.md) |
-| 077 | Authentication Pages & Login Flow | ✅ Done | [Item-077-Prio-P1-✅ Done.md](Item-077-Prio-P1-✅%20Done.md) |
-| 078 | Routing & Navigation Structure | ✅ Done | [Item-078-Prio-P1-✅ Done.md](Item-078-Prio-P1-✅%20Done.md) |
-| 079 | Entity List Pages (Server, Integration, DataEntity, App, Business) | 🟢 Ready | [Item-079-Prio-P1-🟢 Ready.md](Item-079-Prio-P1-🟢%20Ready.md) |
 | 080 | Entity Detail & View Pages | 🟢 Ready | [Item-080-Prio-P1-🟢 Ready.md](Item-080-Prio-P1-🟢%20Ready.md) |
 | 081 | Entity Create/Edit Forms with Validation | 🟢 Ready | [Item-081-Prio-P1-🟢 Ready.md](Item-081-Prio-P1-🟢%20Ready.md) |
 | 082 | Advanced UI Patterns (Wizards, Modals, Confirmations) | 🟢 Ready | [Item-082-Prio-P1-🟢 Ready.md](Item-082-Prio-P1-🟢%20Ready.md) |
@@ -44,17 +39,13 @@ All P0 items complete! ✅
 
 ---
 
-## P2 - Medium (33 active)
+## P2 - Medium (28 active)
 
 | ID | Title | Status | Files |
 |----|-------|--------|-------|
 | 020 | Create Glossary and Alphabetical Index | 🟢 Ready | [Item-020-Prio-P2-🟢 Ready.md](Item-020-Prio-P2-🟢%20Ready.md) |
 | 021 | Create Implementation Status Tracker | 🟢 Ready | [Item-021-Prio-P2-🟢 Ready.md](Item-021-Prio-P2-🟢%20Ready.md) |
 | 022 | Consider Consolidation of Small Entity Specifications | 🟢 Ready | [Item-022-Prio-P2-🟢 Ready.md](Item-022-Prio-P2-🟢%20Ready.md) |
-| 027 | API Markdown Rendering and OpenAPI Specification Display | 🟢 Ready | [Item-027-Prio-P2-🟢 Ready.md](Item-027-Prio-P2-🟢%20Ready.md) |
-| 037 | Migrate Server Endpoints to Commands | 🟢 Ready | [Item-037-Prio-P2-🟢 Ready.md](Item-037-Prio-P2-🟢%20Ready.md) |
-| 038 | Migrate Integration Endpoints to Commands | 🟢 Ready | [Item-038-Prio-P2-🟢 Ready.md](Item-038-Prio-P2-🟢%20Ready.md) |
-| 039 | Migrate DataEntity Endpoints to Commands | 🟢 Ready | [Item-039-Prio-P2-🟢 Ready.md](Item-039-Prio-P2-🟢%20Ready.md) |
 | 040 | Implement Event Schema Versioning (Upcasting) | 🟢 Ready | [Item-040-Prio-P2-🟢 Ready.md](Item-040-Prio-P2-🟢%20Ready.md) |
 | 041 | Add Temporal Query Support | 🟢 Ready | [Item-041-Prio-P2-🟢 Ready.md](Item-041-Prio-P2-🟢%20Ready.md) |
 | 042 | Implement Compensation Events | 🟢 Ready | [Item-042-Prio-P2-🟢 Ready.md](Item-042-Prio-P2-🟢%20Ready.md) |
@@ -95,6 +86,7 @@ All P0 items complete! ✅
 | 045 | Update API Documentation for Command Endpoints | 🟢 Ready | [Item-045-Prio-P3-🟢 Ready.md](Item-045-Prio-P3-🟢%20Ready.md) |
 | 046 | Implement Event Bus for Webhooks | 🟢 Ready | [Item-046-Prio-P3-🟢 Ready.md](Item-046-Prio-P3-🟢%20Ready.md) |
 | 054 | Observability Alert Rules & Incident Response | 🟢 Ready | [Item-054-Prio-P3-🟢 Ready.md](Item-054-Prio-P3-🟢%20Ready.md) |
+| 064 | Data Model Governance & Review | 🟢 Ready | [Item-064-Prio-P3-🟢 Ready.md](Item-064-Prio-P3-🟢%20Ready.md) |
 | 074 | Contract Drift Detection vs OpenAPI | 🟢 Ready | [Item-074-Prio-P3-🟢 Ready.md](Item-074-Prio-P3-🟢%20Ready.md) |
 
 ---
@@ -103,15 +95,15 @@ All P0 items complete! ✅
 
 ### By Priority
 - **P0 (Critical):** 8/8 complete (100%) ✅
-- **P1 (High):** 8/19 complete (42%) - UI development in progress
+- **P1 (High):** 9/19 complete (47%) - Entity list pages complete! 🎉
 - **P2 (Medium):** 13/46 complete (28%)
 - **P3 (Low):** 1/15 complete (7%)
 
 ### By Status
-- 🟢 Ready: 32 items
-- 🔴 Blocked: 13 items (dependencies blocking UI development)
-- 🟡 In Progress: 2 items (Item-075, Item-076)
-- ✅ Done: 30 items
+- 🟢 Ready: 37 items
+- 🔴 Blocked: 6 items (dependencies blocking UI development)
+- 🟡 In Progress: 0 items
+- ✅ Done: 45 items
 
 ### Dependency Summary
 - **11 items** blocked by previous items in sequence (UI pipeline)
@@ -120,7 +112,7 @@ All P0 items complete! ✅
 
 ---
 
-## ✅ Completed Items (30 total)
+## ✅ Completed Items (45 total)
 
 All completed items are in [backlog/old/](old/):
 
@@ -136,7 +128,7 @@ All completed items are in [backlog/old/](old/):
 | 030 | Create Event Architecture (Define Events) | ✅ Done |
 | 056 | Setup Projection System Infrastructure | ✅ Done |
 
-### P1 - High (8 items)
+### P1 - High (9 items)
 | Item | Title | Status |
 |------|-------|--------|
 | 031 | Create Server Command Handlers & Projections | ✅ Done |
@@ -147,6 +139,7 @@ All completed items are in [backlog/old/](old/):
 | 049 | Implement API Endpoint Mapping for Server | ✅ Done |
 | 050 | Implement API Endpoint Mapping for Integration | ✅ Done |
 | 051 | Implement API Endpoint Mapping for DataEntity | ✅ Done |
+| 079 | Implement Entity List Pages (All 9 Types) | ✅ Done |
 
 ### P2 - Medium (13 items)
 | Item | Title | Status |
@@ -189,8 +182,7 @@ See [backlog/old/](old/) directory for detailed completion notes and documentati
 ## 🎯 Next Steps
 
 ### Currently In Progress
-1. **Item-075** (P1) - Frontend React Project Setup - 🟡 In Progress
-2. **Item-076** (P1) - Core Component Library - 🟡 In Progress (Phase 1 started)
+None currently.
 
 ### High Priority - Next Steps
 1. **Item-076** (P1) - Continue Component Library (Phase 2: Navigation, Phase 3: Data Display)

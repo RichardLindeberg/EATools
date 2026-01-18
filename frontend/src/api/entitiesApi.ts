@@ -6,7 +6,7 @@
  */
 
 import axios from 'axios';
-import {
+import type {
   Application,
   DataEntity,
   Server,
@@ -17,21 +17,28 @@ import {
   ApplicationService,
   ApplicationInterface,
   ListResponse,
-  EntityType,
 } from '../types/entities';
+import { EntityType } from '../types/entities';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 /**
  * Build query string from parameters
  * Supports pagination (skip/take), sorting, filtering, and search
+ * Converts skip/take to page/limit for backend compatibility
  */
 export const buildQueryString = (params: Record<string, any> = {}): string => {
   const queryParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
-      if (typeof value === 'object') {
+      // Convert skip/take to page/limit
+      if (key === 'skip' && typeof value === 'number' && params.take) {
+        const page = Math.floor(value / params.take) + 1;
+        queryParams.append('page', String(page));
+      } else if (key === 'take') {
+        queryParams.append('limit', String(value));
+      } else if (typeof value === 'object') {
         // Handle nested objects for filters
         Object.entries(value).forEach(([nestedKey, nestedValue]) => {
           if (nestedValue !== undefined && nestedValue !== null && nestedValue !== '') {

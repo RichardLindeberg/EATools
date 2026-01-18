@@ -3,7 +3,7 @@
  * Defines all application routes with their paths, components, and access requirements
  */
 
-import { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import { ProtectedRoute } from '../components/auth/ProtectedRoute';
 
 // Layouts

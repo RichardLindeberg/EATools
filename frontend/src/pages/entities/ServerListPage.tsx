@@ -6,11 +6,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EntityListTemplate } from '../../components/entity/EntityListTemplate';
-import { ColumnConfig } from '../../components/entity/EntityTable';
-import { FilterDefinition } from '../../components/entity/FilterPanel';
+import type { ColumnConfig } from '../../components/entity/EntityTable';
+import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { serversApi } from '../../api/entitiesApi';
-import { Server } from '../../types/entities';
+import type { Server } from '../../types/entities';
 import './ServerListPage.css';
 
 const COLUMNS: ColumnConfig<Server>[] = [
