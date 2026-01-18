@@ -203,11 +203,14 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                   {...register('confidence', { valueAsNumber: true })}
                 />
               </FormFieldWrapper>
-              />
-            </FormFieldWrapper>
+            </div>
+          </div>
+
+          <div className="entity-form-section">
+            <h3 className="entity-form-section-title">Relationship Type</h3>
 
             <FormFieldWrapper
-              label="Relationship Type"
+              label="Type"
               required
               error={errors.type?.message}
               htmlFor="type"
@@ -217,6 +220,9 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                 type="text"
                 placeholder="e.g., Owns, Integrates, Processes"
                 {...register('type')}
+              />
+            </FormFieldWrapper>
+          </div>
 
           <div className="entity-form-section">
             <h3 className="entity-form-section-title">Effective Dates</h3>
@@ -239,8 +245,9 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
               </FormFieldWrapper>
             </div>
           </div>
-              />
-            </FormFieldWrapper>
+
+          <div className="entity-form-section">
+            <h3 className="entity-form-section-title">Direction</h3>
 
             <FormFieldWrapper
               label="Direction"
@@ -255,23 +262,26 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
             </FormFieldWrapper>
           </div>
 
-          <FormFieldWrapper
-            label="Description"
-            error={errors.description?.message}
-            htmlFor="description"
-          >
-            <textarea
-              id="description"
-              placeholder="Describe the relationship..."
-              {...register('description')}
-            />
-          </FormFieldWrapper>
-        </div>
+          <div className="entity-form-section">
+            <h3 className="entity-form-section-title">Description</h3>
 
-        <div className="entity-form-section">
-          <h3 className="entity-form-section-title">Relationship Properties</h3>
+            <FormFieldWrapper
+              label="Description"
+              error={errors.description?.message}
+              htmlFor="description"
+            >
+              <textarea
+                id="description"
+                placeholder="Describe the relationship..."
+                {...register('description')}
+              />
+            </FormFieldWrapper>
+          </div>
 
-          <div className="entity-form-section-grid">
+          <div className="entity-form-section">
+            <h3 className="entity-form-section-title">Relationship Properties</h3>
+
+            <div className="entity-form-section-grid">
             <FormFieldWrapper
               label="Strength"
               error={errors.strength?.message}
@@ -294,8 +304,8 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                 <option value="N:N">N:N (Many to Many)</option>
               </select>
             </FormFieldWrapper>
+            </div>
           </div>
-        </div>
       </EntityFormTemplate>
 
       <DiscardChangesModal
