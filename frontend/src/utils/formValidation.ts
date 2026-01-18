@@ -201,10 +201,10 @@ export type RelationFormData = z.infer<typeof RelationFormSchema>;
  */
 export function getValidationErrors(error: z.ZodError): Record<string, string> {
   const errors: Record<string, string> = {};
-  error.errors.forEach((err) => {
-    const path = err.path.join('.');
+  error.issues.forEach((issue) => {
+    const path = issue.path.join('.');
     if (path) {
-      errors[path] = err.message;
+      errors[path] = issue.message;
     }
   });
   return errors;
