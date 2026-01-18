@@ -53,7 +53,9 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 - [ ] Configure React Testing Library
 - [ ] Configure Playwright for E2E tests
 - [ ] Setup test utilities (render helpers, mock data factories)
-- [ ] Create MSW (Mock Service Worker) for API mocking
+- [ ] Create MSW (Mock Service Worker) for API mocking with CQRS routes:
+      - GET query endpoints for list/detail/relationships
+      - Command endpoints (POST /{id}/commands/*, DELETE with approval_id & reason)
 - [ ] Configure test coverage reporting (>80% target)
 - [ ] Add test scripts to package.json (test, test:watch, test:coverage)
 - [ ] Setup CI pipeline for automated testing
@@ -80,10 +82,11 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 - [ ] useAuth hook tests (login, logout, token refresh, permissions)
 - [ ] useEntityList hook tests (fetch, filter, sort, paginate)
 - [ ] useEntityDetail hook tests (fetch by ID, loading, error states)
-- [ ] useEntityForm hook tests (create, edit, validation, submission)
-- [ ] useAutoSave hook tests (debounce, draft save, recovery)
+- [ ] useEntityForm hook tests (create via POST, edit via commands/PATCH fallback)
+- [ ] useEntityCommand hook tests (command routing, 422 mapping, 403 handling, query invalidation)
+- [ ] useAutoSave hook tests (CQRS constraints: no multi-command auto-save)
 - [ ] useInfiniteScroll hook tests (load more, pagination)
-- [ ] useRetry hook tests (exponential backoff, max retries)
+- [ ] useRetry hook tests (queries retried; commands retried only if idempotent)
 - [ ] useQueryParams hook tests (read, write, sync with URL)
 
 **Coverage Target:** >85% for hooks
@@ -102,26 +105,28 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 - [ ] Login flow test (enter credentials, submit, redirect to home)
 - [ ] Entity list page tests (fetch entities, pagination, filtering, sorting)
 - [ ] Entity detail page tests (fetch entity, display, relationships tab)
-- [ ] Entity create flow test (fill form, submit, redirect to detail)
-- [ ] Entity edit flow test (load form, modify fields, submit, update)
-- [ ] Entity delete flow test (click delete, confirm modal, redirect to list)
+- [ ] Entity create flow test (fill form, submit via POST, redirect to detail)
+- [ ] Entity edit flow test (applications/business-capabilities/organizations use commands; others use PATCH)
+- [ ] Verify correct command endpoints are called (classification/lifecycle/owner/parent/description) with MSW assertions
+- [ ] Entity delete flow test (confirm modal captures approval_id + reason; DELETE called with both; redirect to list)
 - [ ] Protected route tests (redirect to login if not authenticated)
 - [ ] Permission-based tests (hide/disable actions without permission)
-- [ ] Error handling tests (404, 403, 500 responses)
+- [ ] Error handling tests (404, 403, 422, 500 responses)
 
 **Coverage Target:** >70% for pages
 
 ### Phase 6: E2E Tests with Playwright (12-16 hours)
 **Critical user journeys:**
 - [ ] E2E: User registration and login
-- [ ] E2E: Create application → view detail → edit → delete
+- [ ] E2E: Create application → view detail → edit classification via command → transition lifecycle via command → delete with approval
+- [ ] E2E: Create business capability → set parent via command → remove parent → update description via command
 - [ ] E2E: Create server → link to application → verify relationship
 - [ ] E2E: Search entities → filter results → navigate to detail
-- [ ] E2E: Bulk select entities → bulk delete → confirm success
-- [ ] E2E: Form validation errors → fix errors → submit successfully
+- [ ] E2E: Bulk select entities → bulk delete (approval for each) → confirm success
+- [ ] E2E: Form validation errors (422) → fix errors → submit successfully
 - [ ] E2E: Token expiration → auto-refresh → continue operation
 - [ ] E2E: Session timeout → warning modal → extend session
-- [ ] E2E: Network error → retry → success
+- [ ] E2E: Network error (queries) → retry → success
 
 **Coverage:** 10-15 critical user journeys
 
@@ -164,15 +169,22 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 
 **Integration Tests:**
 - [ ] All critical user workflows tested
-- [ ] API integration mocked correctly
-- [ ] Error scenarios tested
+- [ ] API integration mocked correctly (queries + commands)
+- [ ] Error scenarios tested (404, 403, 422, 500)
 - [ ] Loading states tested
+- [ ] Command dispatch verified: correct endpoints hit for edits/deletes
 
 **E2E Tests:**
 - [ ] 10-15 critical user journeys tested end-to-end
 - [ ] Tests run in CI pipeline
 - [ ] Tests run against local backend
 - [ ] Flaky tests identified and fixed
+
+**CQRS Compliance:**
+- [ ] Tests assert that applications do not use generic PATCH for classification/lifecycle/owner
+- [ ] Business capabilities and organizations use parent/description command endpoints
+- [ ] Delete flows require and pass approval_id + reason
+- [ ] Query invalidation occurs after successful commands
 
 **Accessibility:**
 - [ ] 0 axe-core violations
@@ -211,6 +223,8 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 - Write tests alongside feature development when possible
 - Use TDD (Test-Driven Development) for complex logic
 - Mock backend API calls consistently (MSW)
+  - Include handlers for command endpoints and DELETE with approval parameters
+  - Assert request bodies (commands) and query params (approval_id, reason)
 - Test with realistic data volumes
 - Run tests in CI on every commit
 - Monitor test execution time (optimize slow tests)

@@ -10,17 +10,12 @@ tags: [ui, workflows, entities, patterns]
 
 ## 1. Purpose & Scope
 
-This specification defines the UI workflows for managing each entity type in the EA Tool system. It provides detailed interaction flows and screen layouts for:
-
-- Applications
-- Servers
-- Integrations
-- DataEntities
-- BusinessCapabilities
-- Relations
-- Organizations
-- ApplicationServices
-- ApplicationInterfaces
+This specification defines the UI workflows for managing each entity type in the EA Tool system using a **CQRS-driven architecture**. It covers:
+- **List workflows**: Query-based entity retrieval and filtering
+- **Detail workflows**: Query-based entity viewing with relationships
+- **Create workflows**: Command-based entity creation (POST)
+- **Edit workflows**: Command-based updates routed to specific command endpoints per entity
+- **Delete workflows**: Command-based deletion with approval requirements
 
 Each workflow includes list views, detail views, create/edit forms, and related entity management.
 
@@ -46,13 +41,19 @@ All entity detail views include:
 - **Audit trail**: Show change history
 
 ### Form Pattern
-All create/edit forms include:
+All create/edit forms follow CQRS patterns:
+- **Create**: POST to collection endpoint (e.g., `POST /applications`)
+- **Edit**: Route to specific command endpoints where defined; fallback to PATCH for other fields
+  - **Applications**: classification, lifecycle, owner → commands; others → PATCH
+  - **BusinessCapabilities & Organizations**: parent, description → commands; others → PATCH
+  - **Other entities**: All edits → PATCH (no specific commands defined)
+- **Delete**: Modal captures approval_id + reason, dispatches `DELETE /entity/{id}?approval_id={id}&reason={reason}`
 - **Required field marker**: * for required fields
 - **Field validation**: Real-time validation with error messages
 - **Type-specific fields**: Per entity type
 - **Relationship selector**: For entity references
 - **Save/Cancel buttons**: Standard form actions
-- **Autosave indicator**: Show save status
+- **Autosave indicator**: Show save status (respects CQRS: no auto-dispatch for multi-command edits)
 
 ## 3. Application Management Workflow
 
@@ -101,18 +102,54 @@ Description           [Textarea]
 Owner *              [User select]
 Status *             [Active/Inactive/Deprecated radio]
 Environment *        [Prod/Staging/Dev/Test select]
+Type *               [Select]
 Technology Stack     [Multi-select tags]
 Department           [Select]
 Business Owner       [User select]
 Critical Flag        [Checkbox]
+URL                  [Text input, URL validation]
+
+Create Flow:
+- POST /applications with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /applications/{id}
+- User edits and clicks Save
+- For fields: classification, lifecycle, owner → dispatch command endpoints
+- For other fields → PATCH /applications/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /applications/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to applications list
+- On 409: show conflict error (has references)
+- On 403: show permission error
 
 Validation:
 - Name: Required, 2-100 chars, unique
 - Owner: Required, valid user
 - Environment: Required, one of enum
 - Status: Required, one of enum
+- URL: If provided, valid URL format
 
 [Cancel] [Save] [+ Save & Create Another]
+```
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Classification" → POST /applications/{id}/commands/set-classification
+- "Lifecycle" → POST /applications/{id}/commands/transition-lifecycle
+- "Owner" → POST /applications/{id}/commands/set-owner
+- All others → PATCH /applications/{id}
 ```
 
 ## 4. Server Management Workflow
@@ -157,12 +194,44 @@ Backup Schedule    [Select: Never/Daily/Weekly/Monthly]
 Description        [Textarea]
 Tags               [Multi-select]
 
+Create Flow:
+- POST /servers with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /servers/{id}
+- User edits and clicks Save
+- All fields → PATCH /servers/{id} (no specific server commands)
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /servers/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to servers list
+- On 409: show conflict error (has applications deployed)
+- On 403: show permission error
+
 Validation:
-- Name: Required, 2-100 chars
+- Name: Required, 2-100 chars, unique
 - Host: Required, valid hostname
 - IP: Optional, valid IPv4/IPv6
-- Environment: Required
-- OS Type: Required
+- Environment: Required, one of enum
+- OS Type: Required, one of enum
+- Owner: Required, valid user
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- All fields → PATCH /servers/{id}
+- (Servers have no specific command endpoints)
 ```
 
 ## 5. Integration Management Workflow
@@ -210,10 +279,49 @@ Error Threshold %       [Number]
 Retry Policy            [Select]
 Tags                    [Multi-select]
 
+Create Flow:
+- POST /integrations with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /integrations/{id}
+- User edits and clicks Save
+- All fields → PATCH /integrations/{id} (no specific integration commands)
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /integrations/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to integrations list
+- On 409: show conflict error (integration in use)
+- On 403: show permission error
+
 Data Contract:
 + Add Mapping
   Source Field > Target Field
   Transformation Rule
+
+Validation:
+- Name: Required, 2-100 chars, unique
+- Source System: Required, valid system
+- Target System: Required, valid system
+- Protocol: Required, one of enum
+- Frequency: Required, one of enum
+- Owner: Required, valid user
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- All fields → PATCH /integrations/{id}
+- (Integrations have no specific command endpoints)
 ```
 
 ## 6. DataEntity Management Workflow
@@ -266,11 +374,47 @@ Backup Frequency        [Select]
 Compliance Rules        [Multi-select]
 Tags                    [Multi-select]
 
+Create Flow:
+- POST /data-entities with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /data-entities/{id}
+- User edits and clicks Save
+- All fields → PATCH /data-entities/{id} (no specific data-entity commands)
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /data-entities/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to data-entities list
+- On 409: show conflict error (data entity in use by systems)
+- On 403: show permission error
+
 Schema Editor:
 + Add Column
   Name | Type | Nullable | Description | Sensitive
 
-[Cancel] [Save]
+Validation:
+- Name: Required, 2-100 chars, unique
+- Owner: Required, valid department
+- Classification: Required, one of enum
+- System of Record: Required, valid system
+- Retention Period: Required, positive integer
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- All fields → PATCH /dataentities/{id}
+- (DataEntities have no specific command endpoints)
 ```
 
 ## 7. Business Capability Management Workflow
@@ -302,7 +446,303 @@ Data:
 - Timeline, Status
 ```
 
-## 8. Relationship Management Workflow
+### Create/Edit Form: Business Capability
+```
+Name *                    [Text input]
+Description               [Textarea]
+Owner *                  [Department select]
+Status *                 [Enum: Planned/Building/Active/Retiring]
+Strategic Value          [Enum: Critical/High/Medium/Low]
+Architecture Style       [Enum: Microservice/Monolith/Hybrid]
+Current State            [Text input]
+Target State             [Text input]
+Performance KPI          [Text input]
+Timeline                 [Date range]
+Supporting Applications  [Multi-select]
+
+Create Flow:
+- POST /business-capabilities with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /business-capabilities/{id}
+- User edits and clicks Save
+- For fields: parent, description → dispatch command endpoints (set-parent, remove-parent, update-description)
+- For other fields → PATCH /business-capabilities/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /business-capabilities/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to business-capabilities list
+- On 409: show conflict error (supporting applications exist)
+- On 403: show permission error
+
+Validation:
+- Name: Required, 2-100 chars, unique
+- Owner: Required, valid department
+- Status: Required, one of enum
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Parent" (relationship) → POST /business-capabilities/{id}/commands/set-parent
+- "Parent" removal → POST /business-capabilities/{id}/commands/remove-parent
+- "Description" → POST /business-capabilities/{id}/commands/update-description
+- All others → PATCH /business-capabilities/{id}
+```
+
+## 8. Organization Management Workflow
+
+### List View: Organizations
+```
+Filters:
+- Status: Active, Inactive, Pending
+- Owner: Parent org filter
+- Type: Department, Team, etc.
+```
+
+### Detail View: Organization
+```
+Tabs:
+- Overview: Organization properties
+- Members: Team members
+- Applications: Owned applications
+- Relationships: Parent/child organizations
+- Audit: History
+
+Data:
+- Name, Description
+- Owner, Parent Organization
+- Status, Type
+- Member Count
+- Owned Applications Count
+```
+
+### Create/Edit Form: Organization
+```
+Name *                    [Text input]
+Description               [Textarea]
+Owner *                  [User select]
+Status *                 [Enum: Active/Inactive/Pending]
+Type                     [Enum: Department/Team/Division]
+Parent Organization      [Org select - for hierarchy]
+Tags                     [Multi-select]
+
+Create Flow:
+- POST /organizations with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /organizations/{id}
+- User edits and clicks Save
+- For fields: parent → dispatch command endpoints (set-parent, remove-parent)
+- For other fields → PATCH /organizations/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /organizations/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to organizations list
+- On 409: show conflict error (has members or applications)
+- On 403: show permission error
+
+Validation:
+- Name: Required, 2-100 chars, unique
+- Owner: Required, valid user
+- Status: Required, one of enum
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Parent Organization" → POST /organizations/{id}/commands/set-parent
+- "Parent Organization" removal → POST /organizations/{id}/commands/remove-parent
+- All others → PATCH /organizations/{id}
+```
+
+## 9. Application Service Management Workflow
+
+### List View: Application Services
+```
+Filters:
+- Status: Available, Unavailable, Deprecated
+- Application: Filter by parent application
+- Type: Synchronous, Asynchronous, Webhook
+- Owner: Team filter
+```
+
+### Detail View: Application Service
+```
+Tabs:
+- Overview: Service properties
+- Contract: Service contract/interface
+- Consumers: Systems consuming service
+- Performance: SLA, latency metrics
+- Audit: History
+
+Data:
+- Name, Description
+- Application, Type
+- Status, Owner
+- Service Contract
+- Consumer Count
+```
+
+### Create/Edit Form: Application Service
+```
+Name *                    [Text input]
+Description               [Textarea]
+Application *            [Application select]
+Type *                   [Enum: Synchronous/Asynchronous/Webhook]
+Status *                 [Enum: Available/Unavailable/Deprecated]
+Owner *                  [User select]
+Service Contract         [Text/Code editor]
+SLA %                    [Number: 99.0-99.99%]
+Timeout (ms)             [Number input]
+Retry Policy             [Select]
+Tags                     [Multi-select]
+
+Create Flow:
+- POST /application-services with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /application-services/{id}
+- User edits and clicks Save
+- For fields: type, business-capability → dispatch command endpoints (update, set-business-capability)
+- For other fields → PATCH /application-services/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /application-services/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to application-services list
+- On 409: show conflict error (has consumers)
+- On 403: show permission error
+
+Validation:
+- Name: Required, 2-100 chars, unique
+- Application: Required, valid application
+- Type: Required, one of enum
+- Owner: Required, valid user
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Type" or other core fields → POST /application-services/{id}/commands/update
+- "Business Capability" → POST /application-services/{id}/commands/set-business-capability
+- All other fields → PATCH /application-services/{id}
+```
+
+## 10. Application Interface Management Workflow
+
+### List View: Application Interfaces
+```
+Filters:
+- Status: Active, Inactive, Deprecated
+- Type: REST, SOAP, GraphQL, Message Queue
+- Application: Filter by app
+- Owner: Team filter
+```
+
+### Detail View: Application Interface
+```
+Tabs:
+- Overview: Interface properties
+- Endpoints: API endpoints/methods
+- Integrations: Connected integrations
+- Performance: Metrics and monitoring
+- Audit: History
+
+Data:
+- Name, Description
+- Application, Type
+- Status, Owner
+- Protocol, Version
+- Endpoint Count
+```
+
+### Create/Edit Form: Application Interface
+```
+Name *                    [Text input]
+Description               [Textarea]
+Application *            [Application select]
+Type *                   [Enum: REST/SOAP/GraphQL/Message]
+Protocol *               [Enum: HTTP/HTTPS/AMQP/etc]
+Status *                 [Enum: Active/Inactive/Deprecated]
+Owner *                  [User select]
+Base URL                 [Text input, URL validation]
+API Version              [Text input]
+Rate Limit               [Number per time unit]
+Authentication Type      [Select]
+Tags                     [Multi-select]
+
+Create Flow:
+- POST /application-interfaces with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /application-interfaces/{id}
+- User edits and clicks Save
+- For fields: type, service, status → dispatch command endpoints (update, set-service, deprecate, retire)
+- For other fields → PATCH /application-interfaces/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /application-interfaces/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to application-interfaces list
+- On 409: show conflict error (has integrations)
+- On 403: show permission error
+
+Validation:
+- Name: Required, 2-100 chars, unique
+- Application: Required, valid application
+- Type: Required, one of enum
+- Protocol: Required, one of enum
+- Owner: Required, valid user
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Type" or core fields → POST /application-interfaces/{id}/commands/update
+- "Service" → POST /application-interfaces/{id}/commands/set-service
+- "Status" to deprecated → POST /application-interfaces/{id}/commands/deprecate
+- "Status" to retired → POST /application-interfaces/{id}/commands/retire
+- All other fields → PATCH /application-interfaces/{id}
+```
 
 ### List View: Relations
 ```
@@ -341,10 +781,48 @@ Description       [Textarea]
 Strength         [Required/Optional]
 Cardinality      [1:1, 1:N, N:N]
 
-[Cancel] [Save]
+Create Flow:
+- POST /relations with form data
+- On 201: redirect to detail page
+- On 422: display validation errors per field
+
+Edit Flow:
+- Load entity via GET /relations/{id}
+- User edits and clicks Save
+- For fields: confidence, effective dates, description → dispatch command endpoints
+- For other fields → PATCH /relations/{id}
+- On 200: refetch entity, display success toast
+- On 422: display validation errors
+- On 403: show permission denied error
+
+Delete Flow:
+- Delete button → confirmation modal
+- Modal prompts for:
+  - Approval ID (context/approver reference)
+  - Reason (user-provided deletion reason)
+- On confirm: DELETE /relations/{id}?approval_id={id}&reason={reason}
+- On 204: redirect to relations list
+- On 409: show conflict error (related to other entities)
+- On 403: show permission error
+
+Validation:
+- Source Entity: Required, valid entity ID
+- Target Entity: Required, valid entity ID, not same as source
+- Type: Required, one of enum
+- Direction: Required, one of enum
+
+[Cancel] [Save] [+ Save & Create Another]
+
+**Command Dispatch (Edit Mode):**
+```
+When user modifies:
+- "Confidence" → POST /relations/{id}/commands/update-confidence
+- "Effective Dates" → POST /relations/{id}/commands/set-effective-dates
+- "Description" → POST /relations/{id}/commands/update-description
+- All others → PATCH /relations/{id}
 ```
 
-## 9. Cross-Cutting Workflows
+## 12. Cross-Cutting Workflows
 
 ### Search Across All Entities
 ```
@@ -410,7 +888,7 @@ Filters:
 - Action type filter
 ```
 
-## 10. Validation Criteria
+## 13. Validation Criteria
 
 Entity-specific workflows must include:
 - [ ] List views with search, filter, sort, pagination
@@ -424,7 +902,7 @@ Entity-specific workflows must include:
 - [ ] Error handling and recovery
 - [ ] Mobile responsive layout
 
-## 11. Related Specifications
+## 14. Related Specifications
 
 - [spec-design-ui-architecture.md](spec-design-ui-architecture.md) - Design system and component library
 - [spec-tool-error-handling.md](spec-tool-error-handling.md) - Error display and recovery

@@ -10,7 +10,7 @@
 
 ## Problem Statement
 
-The basic entity CRUD operations are functional, but the application needs advanced UI patterns to improve user experience, handle complex workflows, and optimize performance. These patterns include dynamic forms, auto-save, loading states, error recovery, conflict resolution, and performance optimizations.
+The basic read/query and command-based write operations are functional under our CQRS architecture, but the application needs advanced UI patterns to improve user experience, handle complex workflows, and optimize performance. These patterns include dynamic forms, auto-save (with CQRS safeguards), loading states, error recovery, conflict resolution, and performance optimizations.
 
 Without these patterns, users experience slower performance, data loss on errors, confusion during long operations, and poor handling of edge cases as specified in [spec-ui-advanced-patterns.md](../spec/spec-ui-advanced-patterns.md).
 
@@ -70,6 +70,8 @@ Without these patterns, users experience slower performance, data loss on errors
 - [ ] Add "Discard draft" action
 - [ ] Handle conflicts between auto-saved drafts and server data
 - [ ] Add timestamps to drafts
+- [ ] CQRS constraints: disable auto-save for edits that span multiple commands; allow auto-save only when mapping to a single idempotent command or to create drafts client-side
+- [ ] Do not auto-dispatch non-idempotent commands during auto-save; require explicit user submit
 - [ ] Test with slow network conditions
 
 ### Phase 3: Loading States & Skeletons (8-10 hours)
@@ -86,17 +88,19 @@ Without these patterns, users experience slower performance, data loss on errors
 ### Phase 4: Error Recovery (8-12 hours)
 - [ ] Implement React Error Boundary for component crashes
 - [ ] Create error fallback UI with retry button
-- [ ] Implement retry logic with exponential backoff (1s, 2s, 4s, 8s)
+- [ ] Implement retry logic with exponential backoff (1s, 2s, 4s, 8s) for queries
+- [ ] Commands: retry only when idempotency is guaranteed (idempotency key) and safe to repeat; otherwise surface error
 - [ ] Add network error detection and recovery
 - [ ] Implement offline mode detection
-- [ ] Add request queueing for offline operations
-- [ ] Sync queued operations when back online
+- [ ] Add request queueing for offline operations (queries only). For commands, queue only if idempotency keys are used and business rules allow.
+- [ ] Sync queued operations when back online (respect ordering, backoff)
 - [ ] Display error messages with actionable recovery options
 - [ ] Add error logging (console and optional external service)
 
 ### Phase 5: Optimistic Updates (6-8 hours)
-- [ ] Implement optimistic update pattern for delete operations
-- [ ] Implement optimistic update for status changes
+- [ ] Implement optimistic update pattern for safe, reversible changes (e.g., client UI state)
+- [ ] Delete operations: show pending state; do not remove permanently until server confirms `DELETE /entities/{id}?approval_id&reason`
+- [ ] Implement optimistic update for status changes that map to a single command and can be rolled back; otherwise use loading indicators
 - [ ] Add rollback on failure
 - [ ] Show inline loading indicators during optimistic updates
 - [ ] Add toast notifications on success/failure
@@ -120,10 +124,19 @@ Without these patterns, users experience slower performance, data loss on errors
 - [ ] Show errors inline (failed items)
 - [ ] Implement undo for bulk operations (optional)
 - [ ] Add export progress for large datasets
+- [ ] Prefer backend bulk endpoints when available; otherwise dispatch sequential commands with rate limiting and backoff
+- [ ] For deletes requiring approval, ensure each command includes `approval_id` and `reason` and report per-item results
 
 ---
 
 ## Acceptance Criteria
+
+**CQRS Compliance:**
+- [ ] Advanced patterns respect query vs command separation
+- [ ] Auto-save never triggers multiple commands silently; non-idempotent commands require explicit submit
+- [ ] Retry/backoff applies to queries by default; commands only when idempotent
+- [ ] Optimistic updates do not violate business rules; deletes await server confirmation (approval_id + reason)
+- [ ] Bulk operations use server bulk APIs when available; otherwise sequential commands with progress and error handling
 
 **Dynamic Forms:**
 - [ ] Fields show/hide based on other field values
@@ -147,13 +160,14 @@ Without these patterns, users experience slower performance, data loss on errors
 
 **Error Recovery:**
 - [ ] Component errors caught and displayed with retry
-- [ ] Network errors trigger automatic retry with backoff
+- [ ] Network errors trigger automatic retry with backoff (queries)
+- [ ] Command errors (422/403) display actionable guidance; no automatic retry unless idempotent
 - [ ] Offline mode detected and displayed to user
 - [ ] Operations queue and sync when back online
 - [ ] Error messages actionable and user-friendly
 
 **Optimistic Updates:**
-- [ ] UI updates immediately on user action
+- [ ] UI updates immediately only for safe, reversible updates; commands show pending state when needed
 - [ ] Rollback happens on failure
 - [ ] Loading indicators subtle
 - [ ] Success/failure feedback provided
@@ -169,6 +183,7 @@ Without these patterns, users experience slower performance, data loss on errors
 - [ ] Users can pause/cancel operations
 - [ ] Errors displayed for failed items
 - [ ] Success feedback provided on completion
+- [ ] Approval-requiring deletes capture and pass approval_id and reason per item
 
 **Performance:**
 - [ ] Page load <3s (as per spec)
@@ -202,3 +217,6 @@ Without these patterns, users experience slower performance, data loss on errors
 - Consider adding performance monitoring (Web Vitals)
 - Test with throttled network (Chrome DevTools)
 - Add retry limits to prevent infinite loops
+ - Separate concerns: queries (GET) vs commands (POST/DELETE) in all advanced patterns
+ - Use idempotency keys for command retries where supported; otherwise avoid auto-retry
+ - Invalidate and refetch affected queries after successful commands to sync read models

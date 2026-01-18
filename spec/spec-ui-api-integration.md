@@ -10,7 +10,13 @@ tags: [ui, api, integration, frontend]
 
 ## 1. Purpose & Scope
 
-This specification defines how the UI (frontend) integrates with the backend API to fetch data, submit forms, handle errors, and manage state. It covers request/response patterns, error handling, caching strategies, and real-time updates.
+This specification defines how the UI (frontend) integrates with the backend API using a **CQRS (Command Query Responsibility Segregation)** pattern. It covers:
+- **Queries**: Read-only data retrieval (GET endpoints)
+- **Commands**: Write operations (POST, DELETE endpoints with specific command routing)
+- Request/response patterns, error handling, caching strategies, and real-time updates
+- Per-entity command endpoint routing and approval requirements
+
+**Key Principle**: Queries and Commands are separated. Queries fetch data; Commands dispatch specific business operations.
 
 ## 2. API Base Configuration
 
@@ -222,16 +228,72 @@ Content-Type: application/json
 }
 ```
 
-## 6. Update Entity Endpoint Pattern
+## 6. Update Entity Endpoint Pattern (CQRS - Commands)
 
-### Request
+### Command Routing by Entity Type
+
+**Applications:** Specific commands with business rule enforcement
 ```typescript
-PATCH /api/{entity}/{id}
-Content-Type: application/json
-
+// Set Classification (with justification)
+POST /api/applications/{id}/commands/set-classification
 {
-  "name": "Updated Application",
-  "status": "inactive"
+  "classification": "confidential",
+  "reason": "Contains customer financial data"
+}
+
+// Transition Lifecycle (state machine)
+POST /api/applications/{id}/commands/transition-lifecycle
+{
+  "target_lifecycle": "deprecated",
+  "sunset_date": "2026-06-01"
+}
+
+// Set Owner
+POST /api/applications/{id}/commands/set-owner
+{
+  "owner_id": "user-456"
+}
+
+// For other fields (name, description, version, type, status, url), use legacy PATCH
+PATCH /api/applications/{id}
+{
+  "name": "Updated Name",
+  "description": "New description"
+}
+```
+
+**BusinessCapabilities & Organizations:** Parent relationship commands
+```typescript
+// Set Parent (establishes hierarchy)
+POST /api/business-capabilities/{id}/commands/set-parent
+{
+  "parent_id": "bc-parent-001"
+}
+
+// Remove Parent
+POST /api/business-capabilities/{id}/commands/remove-parent
+{}
+
+// Update Description (BusinessCapabilities only)
+POST /api/business-capabilities/{id}/commands/update-description
+{
+  "description": "Updated description"
+}
+
+// For other fields, use legacy PATCH
+PATCH /api/business-capabilities/{id}
+{
+  "name": "Updated Name",
+  "level": "level-2"
+}
+```
+
+**Servers, Integrations, DataEntities, Relations, ApplicationServices, ApplicationInterfaces:** Generic PATCH (no specific commands defined)
+```typescript
+PATCH /api/servers/{id}
+{
+  "name": "Updated Server Name",
+  "hostname": "new-host.example.com"
 }
 ```
 
@@ -240,24 +302,77 @@ Content-Type: application/json
 {
   "data": {
     "id": "app-001",
-    "name": "Updated Application",
-    "status": "inactive",
+    "name": "Application Name",
+    "status": "active",
+    "classification": "confidential",
+    "lifecycle": "deprecated",
     "modified": "2026-01-17T13:00:00Z"
   },
   "timestamp": "2026-01-17T13:00:00Z"
 }
 ```
 
-## 7. Delete Entity Endpoint Pattern
-
-### Request
-```typescript
-DELETE /api/{entity}/{id}
+### Response (Validation Error - 422)
+Commands may return validation errors. Map to form fields for display.
+```json
+{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Validation failed",
+    "validationErrors": [
+      {
+        "field": "classification",
+        "message": "Invalid classification value",
+        "code": "INVALID_VALUE"
+      }
+    ],
+    "traceId": "trace-123456"
+  }
+}
 ```
+
+### Response (Authorization Error - 403)
+```json
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You do not have permission to transition lifecycle for this entity",
+    "traceId": "trace-123456"
+  }
+}
+```
+
+## 7. Delete Entity Endpoint Pattern (CQRS - Commands)
+
+### Request (with Approval)
+All deletes require approval context for audit and authorization:
+```typescript
+DELETE /api/{entity}/{id}?approval_id={approval_id}&reason={reason}
+
+Examples:
+DELETE /api/applications/app-001?approval_id=app-123&reason=No longer in use
+DELETE /api/servers/srv-001?approval_id=app-456&reason=Decommissioned infrastructure
+```
+
+**Required Query Parameters:**
+- `approval_id`: ID of the approver or approval context (for audit trail)
+- `reason`: User-provided reason for deletion (for compliance)
 
 ### Response (Success - 204)
 ```
 No content
+```
+
+### Response (Missing Approval - 400)
+```json
+{
+  "error": {
+    "code": "MISSING_REQUIRED_PARAMETER",
+    "message": "approval_id and reason are required for delete operations",
+    "missingParams": ["approval_id", "reason"],
+    "traceId": "trace-123456"
+  }
+}
 ```
 
 ### Response (Conflict - 409)
@@ -270,6 +385,17 @@ No content
       "integrations": 5,
       "servers": 2
     },
+    "traceId": "trace-123456"
+  }
+}
+```
+
+### Response (Authorization Error - 403)
+```json
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You do not have permission to delete this entity",
     "traceId": "trace-123456"
   }
 }

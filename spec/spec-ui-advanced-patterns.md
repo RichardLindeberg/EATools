@@ -12,6 +12,231 @@ tags: [patterns, forms, modals, notifications, loading, advanced]
 
 This specification defines complex UI patterns for advanced features like dynamic forms, multi-step workflows, loading states, error recovery, and advanced interactions.
 
+**CQRS Architecture Alignment:**
+This specification is designed to work within the CQRS (Command Query Responsibility Segregation) pattern where:
+- **Queries** are read-only operations using GET endpoints
+- **Commands** are write operations using POST command endpoints or DELETE with approval context
+- The patterns defined here must respect CQRS boundaries to ensure predictable, auditable system behavior
+
+## 1.1 CQRS Constraints on Advanced Patterns
+
+### Auto-Save Pattern Constraints
+```typescript
+// CONSTRAINT: Auto-save must NOT silently dispatch multiple commands
+
+// ❌ WRONG: Auto-save attempts to save all field changes immediately
+const useAutoSaveWrong = (formValues) => {
+  const { mutate: saveField } = useMutation((field, value) => 
+    dispatchCommand(`/entity/${id}/commands/set-${field}`, value)
+  );
+  
+  useEffect(() => {
+    // Dangerous: Could dispatch set-classification + set-owner + set-lifecycle
+    // simultaneously without user awareness
+    Object.entries(formValues).forEach(([field, value]) => {
+      saveField(field, value);
+    });
+  }, [formValues]);
+};
+
+// ✅ CORRECT: Auto-save only for single, idempotent operations or drafts
+const useAutoSaveCorrect = (formValues) => {
+  const { mutate: saveDraft } = useMutation((data) => 
+    saveFormDraft(data) // Draft is local/idempotent, not a command
+  );
+  
+  useEffect(() => {
+    // Safe: Draft is ephemeral, not a command dispatch
+    debounce(() => saveDraft(formValues), 5000);
+  }, [formValues]);
+};
+
+// Behavior:
+// - Auto-save permitted only for:
+//   a) Draft saves (local state, no server commands)
+//   b) Single idempotent commands (e.g., update description via update-description command)
+// - Auto-save NOT permitted for:
+//   a) Multiple simultaneous commands (e.g., set-classification + set-owner)
+//   b) Non-idempotent commands without explicit user confirmation
+// - Multi-field edits require explicit Submit button
+```
+
+### Retry Logic Constraints (Queries vs Commands)
+```typescript
+// CONSTRAINT: Queries auto-retry on failure; Commands only retry if idempotent
+
+// ✅ CORRECT: Queries auto-retry
+const useEntityDetail = (entityId: string) => {
+  return useQuery({
+    queryKey: ['entity', entityId],
+    queryFn: () => getEntity(entityId),
+    retry: 3, // Auto-retry up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
+  });
+};
+
+// ✅ CORRECT: Commands only retry with idempotency key
+const useEntityCommand = (entityId: string) => {
+  return useMutation({
+    mutationFn: (command) => dispatchCommand(entityId, command),
+    retry: (failureCount, error) => {
+      // Only retry if idempotent (has idempotency key) and retriable error
+      return (
+        command.idempotencyKey &&
+        (error.status === 408 || error.status === 429 || error.status === 500)
+      );
+    }
+  });
+};
+
+// Behavior:
+// - Queries: Automatic exponential backoff retry (up to 30s)
+// - Commands: Retry only if:
+//   a) Command is marked idempotent (e.g., idempotency key provided)
+//   b) Error is retriable (timeout, rate limit, server error)
+// - Non-idempotent commands: No retry; show error immediately
+```
+
+### Optimistic Updates Constraints
+```typescript
+// CONSTRAINT: Optimistic updates only for safe, reversible changes; deletes await confirmation
+
+// ✅ CORRECT: Optimistic update for description (reversible)
+const useUpdateDescription = (entityId: string) => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (newDescription) => 
+      dispatchCommand(entityId, 'update-description', { description: newDescription }),
+    onMutate: async (newDescription) => {
+      // Optimistically update local cache (safe because reversible)
+      await queryClient.cancelQueries(['entity', entityId]);
+      const previousEntity = queryClient.getQueryData(['entity', entityId]);
+      queryClient.setQueryData(['entity', entityId], (old) => ({
+        ...old,
+        description: newDescription
+      }));
+      return previousEntity;
+    },
+    onError: (error, variables, previousEntity) => {
+      // Rollback on error
+      queryClient.setQueryData(['entity', entityId], previousEntity);
+      showError('Failed to update description');
+    }
+  });
+};
+
+// ❌ WRONG: Optimistic delete (irreversible)
+const useDeleteWrong = (entityId: string) => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: () => deleteEntity(entityId),
+    onMutate: () => {
+      // WRONG: Optimistically removing from cache could hide data if delete fails
+      queryClient.removeQueries(['entity', entityId]);
+    }
+  });
+};
+
+// ✅ CORRECT: Delete waits for server confirmation
+const useDeleteCorrect = (entityId: string) => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (approvalData) => 
+      deleteEntity(entityId, approvalData.approvalId, approvalData.reason),
+    onSuccess: () => {
+      // Only remove from cache after DELETE succeeds (204 response)
+      queryClient.removeQueries(['entity', entityId]);
+      showSuccess('Entity deleted');
+    },
+    onError: (error) => {
+      if (error.status === 409) {
+        showError('Cannot delete: entity has dependencies');
+      } else {
+        showError('Delete failed');
+      }
+    }
+  });
+};
+
+// Behavior:
+// - Optimistic updates: Permitted only for safe, field-level changes (description, tags, etc.)
+// - Optimistic deletes: NOT permitted; delete operations await server confirmation
+// - All optimistic updates must have rollback on error
+```
+
+### Bulk Operations Constraints
+```typescript
+// CONSTRAINT: Bulk operations prefer backend bulk APIs; manual sequential commands use backoff
+
+// ✅ CORRECT: Use backend bulk endpoint if available
+const useBulkDeleteWithApproval = (entityIds: string[]) => {
+  return useMutation({
+    mutationFn: (approvalData) =>
+      // Assumes backend has /bulk/delete endpoint
+      bulkDeleteEntities(entityIds, approvalData.approvalId, approvalData.reason),
+    onSuccess: () => {
+      showSuccess(`Deleted ${entityIds.length} entities`);
+      // Invalidate list queries
+      queryClient.invalidateQueries(['entities']);
+    }
+  });
+};
+
+// ✅ CORRECT: Manual sequential commands with backoff
+const useBulkCommandSequential = (entityIds: string[], commandName: string) => {
+  const [progress, setProgress] = useState({ current: 0, total: entityIds.length });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  return useMutation({
+    mutationFn: async (commandData) => {
+      const results: any[] = [];
+      const errs: Record<string, string> = {};
+      
+      for (let i = 0; i < entityIds.length; i++) {
+        const entityId = entityIds[i];
+        try {
+          setProgress({ current: i + 1, total: entityIds.length });
+          const result = await dispatchCommand(entityId, commandName, commandData);
+          results.push(result);
+          
+          // Exponential backoff between commands to avoid overwhelming server
+          if (i < entityIds.length - 1) {
+            await sleep(Math.min(100 * (2 ** i), 5000));
+          }
+        } catch (error) {
+          errs[entityId] = error.message;
+        }
+      }
+      
+      if (Object.keys(errs).length > 0) {
+        setErrors(errs);
+        throw new Error(`${Object.keys(errs).length} operations failed`);
+      }
+      return results;
+    }
+  });
+};
+
+// ❌ WRONG: Dispatching all commands simultaneously
+const useBulkCommandWrong = (entityIds: string[]) => {
+  return useMutation({
+    mutationFn: (commandData) =>
+      // Dangerous: All commands fire at once, could overwhelm server
+      Promise.all(
+        entityIds.map(id => dispatchCommand(id, 'set-status', commandData))
+      )
+  });
+};
+
+// Behavior:
+// - Preferred: Use backend bulk/batch endpoints if available
+// - Manual sequential: Dispatch commands with exponential backoff (100ms → 5s max)
+// - Never fire all commands simultaneously without rate limiting
+```
+
 ## 2. Dynamic Forms
 
 ### Conditional Field Visibility
