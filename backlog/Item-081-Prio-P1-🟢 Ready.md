@@ -160,7 +160,11 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, valid JSON for metadata
 - [ ] Implement dynamic entity selector (select entity type, then select specific entity)
 - [ ] Handle create (POST /relations)
-- [ ] Handle edit (PATCH /relations/{id}) — no specific command endpoints defined
+- [ ] Handle edits via commands where available:
+	- Confidence changes: POST /relations/{id}/commands/update-confidence
+	- Effective dates changes: POST /relations/{id}/commands/set-effective-dates
+	- Description changes: POST /relations/{id}/commands/update-description
+	- For remaining fields, use PATCH /relations/{id}
 
 ### Phase 9: ApplicationService Form (6-8 hours)
 - [ ] Create ApplicationServiceFormPage
@@ -168,7 +172,11 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add fields: Endpoint (text, URL validation), Status* (select)
 - [ ] Add validation: Required fields, URL format
 - [ ] Handle create (POST /application-services)
-- [ ] Handle edit (PATCH /application-services/{id}) — no specific command endpoints defined
+- [ ] Handle edits via commands where available:
+	- Type/core field changes: POST /application-services/{id}/commands/update
+	- Business capability changes: POST /application-services/{id}/commands/set-business-capability
+	- Consumer additions: POST /application-services/{id}/commands/add-consumer
+	- For remaining fields, use PATCH /application-services/{id}
 
 ### Phase 10: ApplicationInterface Form (7-9 hours)
 - [ ] Create ApplicationInterfaceFormPage
@@ -177,7 +185,12 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Add validation: Required fields, source ≠ target
 - [ ] Add relationship selector: ApplicationServices (multi-select)
 - [ ] Handle create (POST /application-interfaces)
-- [ ] Handle edit (PATCH /application-interfaces/{id}) — no specific command endpoints defined
+- [ ] Handle edits via commands where available:
+	- Type/core field changes: POST /application-interfaces/{id}/commands/update
+	- Service changes: POST /application-interfaces/{id}/commands/set-service
+	- Deprecation (status→deprecated): POST /application-interfaces/{id}/commands/deprecate
+	- Retirement (status→retired): POST /application-interfaces/{id}/commands/retire
+	- For remaining fields, use PATCH /application-interfaces/{id}
 
 ---
 
@@ -201,7 +214,20 @@ Without create/edit forms, users cannot add new entities or modify existing ones
 - [ ] Organizations: parent changes use commands; other fields via PATCH
 	- set-parent → POST /organizations/{id}/commands/set-parent
 	- remove-parent → POST /organizations/{id}/commands/remove-parent
-- [ ] Servers, Integrations, DataEntities, Relations, ApplicationServices, ApplicationInterfaces: edits via PATCH (no specific command endpoints defined in spec)
+- [ ] Relations: specific commands for confidence/dates/description; other fields via PATCH
+	- update-confidence → POST /relations/{id}/commands/update-confidence
+	- set-effective-dates → POST /relations/{id}/commands/set-effective-dates
+	- update-description → POST /relations/{id}/commands/update-description
+- [ ] ApplicationServices: commands for update/capability/consumer; other fields via PATCH
+	- update → POST /application-services/{id}/commands/update
+	- set-business-capability → POST /application-services/{id}/commands/set-business-capability
+	- add-consumer → POST /application-services/{id}/commands/add-consumer
+- [ ] ApplicationInterfaces: commands for update/service/deprecate/retire; other fields via PATCH
+	- update → POST /application-interfaces/{id}/commands/update
+	- set-service → POST /application-interfaces/{id}/commands/set-service
+	- deprecate → POST /application-interfaces/{id}/commands/deprecate
+	- retire → POST /application-interfaces/{id}/commands/retire
+- [ ] Servers, Integrations, DataEntities: edits via PATCH (no specific command endpoints defined)
 - [ ] Command responses update UI state and invalidate relevant queries
 - [ ] Command validation errors (422) display per-field messages; 403 shows permission error; other errors show friendly message
 

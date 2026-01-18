@@ -107,7 +107,10 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 - [ ] Entity detail page tests (fetch entity, display, relationships tab)
 - [ ] Entity create flow test (fill form, submit via POST, redirect to detail)
 - [ ] Entity edit flow test (applications/business-capabilities/organizations use commands; others use PATCH)
-- [ ] Verify correct command endpoints are called (classification/lifecycle/owner/parent/description) with MSW assertions
+- [ ] Verify correct command endpoints are called (classification/lifecycle/owner/parent/description/confidence/effective-dates) with MSW assertions
+- [ ] Relations command tests: update-confidence, set-effective-dates, update-description commands verified
+- [ ] ApplicationServices command tests: update, set-business-capability, add-consumer commands verified
+- [ ] ApplicationInterfaces command tests: update, set-service, deprecate, retire commands verified
 - [ ] Entity delete flow test (confirm modal captures approval_id + reason; DELETE called with both; redirect to list)
 - [ ] Protected route tests (redirect to login if not authenticated)
 - [ ] Permission-based tests (hide/disable actions without permission)
@@ -182,8 +185,12 @@ Testing must cover unit tests, integration tests, accessibility compliance (WCAG
 
 **CQRS Compliance:**
 - [ ] Tests assert that applications do not use generic PATCH for classification/lifecycle/owner
-- [ ] Business capabilities and organizations use parent/description command endpoints
-- [ ] Delete flows require and pass approval_id + reason
+- [ ] Tests assert that business capabilities use set-parent, remove-parent, update-description commands
+- [ ] Tests assert that organizations use set-parent, remove-parent commands
+- [ ] Tests assert that relations use update-confidence, set-effective-dates, update-description commands
+- [ ] Tests assert that application-services use update, set-business-capability, add-consumer commands
+- [ ] Tests assert that application-interfaces use update, set-service, deprecate, retire commands
+- [ ] Delete flows require and pass approval_id + reason parameters
 - [ ] Query invalidation occurs after successful commands
 
 **Accessibility:**

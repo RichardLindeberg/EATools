@@ -157,6 +157,9 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Add actions: Edit, Delete
 - [ ] Connect to GET /relations/{id} (query)
 - [ ] Setup DELETE /relations/{id}?approval_id={id}&reason={reason} command dispatch
+- [ ] Setup POST /relations/{id}/commands/update-confidence command dispatch (edit form)
+- [ ] Setup POST /relations/{id}/commands/set-effective-dates command dispatch (edit form)
+- [ ] Setup POST /relations/{id}/commands/update-description command dispatch (edit form)
 
 ### Phase 9: ApplicationService Detail Page (4-6 hours)
 - [ ] Create ApplicationServiceDetailPage
@@ -166,6 +169,9 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Add actions: Edit, Delete
 - [ ] Connect to GET /application-services/{id} (query)
 - [ ] Setup DELETE /application-services/{id}?approval_id={id}&reason={reason} command dispatch
+- [ ] Setup POST /application-services/{id}/commands/update command dispatch (edit form)
+- [ ] Setup POST /application-services/{id}/commands/set-business-capability command dispatch (edit form)
+- [ ] Setup POST /application-services/{id}/commands/add-consumer command dispatch (edit form)
 
 ### Phase 10: ApplicationInterface Detail Page (4-6 hours)
 - [ ] Create ApplicationInterfaceDetailPage
@@ -175,6 +181,10 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Add actions: Edit, Delete
 - [ ] Connect to GET /application-interfaces/{id} (query)
 - [ ] Setup DELETE /application-interfaces/{id}?approval_id={id}&reason={reason} command dispatch
+- [ ] Setup POST /application-interfaces/{id}/commands/update command dispatch (edit form)
+- [ ] Setup POST /application-interfaces/{id}/commands/set-service command dispatch (edit form)
+- [ ] Setup POST /application-interfaces/{id}/commands/deprecate command dispatch (edit form)
+- [ ] Setup POST /application-interfaces/{id}/commands/retire command dispatch (edit form)
 
 ---
 
@@ -190,11 +200,28 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Delete button shows confirmation modal with approval_id and reason fields
 - [ ] Delete operations dispatch to `DELETE /entities/{id}?approval_id={id}&reason={reason}`
 - [ ] Edit form routes to appropriate command endpoints based on field changes:
-  - Classification changes → `POST /applications/{id}/commands/set-classification`
-  - Lifecycle changes → `POST /applications/{id}/commands/transition-lifecycle`
-  - Owner changes → `POST /*/commands/set-owner`
-  - Parent changes → `POST /*/commands/set-parent` or `/*/commands/remove-parent`
-  - Description changes → `POST /*/commands/update-description`
+  - Applications:
+    - Classification changes → `POST /applications/{id}/commands/set-classification`
+    - Lifecycle changes → `POST /applications/{id}/commands/transition-lifecycle`
+    - Owner changes → `POST /applications/{id}/commands/set-owner`
+  - BusinessCapabilities:
+    - Parent changes → `POST /business-capabilities/{id}/commands/set-parent` or `/commands/remove-parent`
+    - Description changes → `POST /business-capabilities/{id}/commands/update-description`
+  - Organizations:
+    - Parent changes → `POST /organizations/{id}/commands/set-parent` or `/commands/remove-parent`
+  - Relations:
+    - Confidence changes → `POST /relations/{id}/commands/update-confidence`
+    - Effective dates changes → `POST /relations/{id}/commands/set-effective-dates`
+    - Description changes → `POST /relations/{id}/commands/update-description`
+  - ApplicationServices:
+    - Core field changes → `POST /application-services/{id}/commands/update`
+    - Business capability changes → `POST /application-services/{id}/commands/set-business-capability`
+    - Consumer additions → `POST /application-services/{id}/commands/add-consumer`
+  - ApplicationInterfaces:
+    - Core field changes → `POST /application-interfaces/{id}/commands/update`
+    - Service changes → `POST /application-interfaces/{id}/commands/set-service`
+    - Deprecation → `POST /application-interfaces/{id}/commands/deprecate`
+    - Retirement → `POST /application-interfaces/{id}/commands/retire`
 - [ ] Command responses return updated entity state
 - [ ] Command validation errors (422) display field-level error details
 - [ ] Authorization failures (403) display clear error messages
