@@ -13,8 +13,9 @@ describe('buildQueryString', () => {
       take: 10,
     });
 
-    expect(query).toContain('skip=0');
-    expect(query).toContain('take=10');
+    // skip/take are converted to page/limit
+    expect(query).toContain('page=1');
+    expect(query).toContain('limit=10');
   });
 
   it('builds query string with sort params', () => {
@@ -63,8 +64,10 @@ describe('buildQueryString', () => {
       type: 'test',
     });
 
-    expect(query).toContain('skip=20');
-    expect(query).toContain('take=25');
+    // skip 20 with take 25 = page 1 (0-24), but since skip=20, page should be calculated
+    // skip=20, take=25: page = floor(20/25) + 1 = 0 + 1 = 1
+    expect(query).toContain('page=1');
+    expect(query).toContain('limit=25');
     expect(query).toContain('sort=id');
     expect(query).toContain('order=desc');
     expect(query).toContain('search=query');
