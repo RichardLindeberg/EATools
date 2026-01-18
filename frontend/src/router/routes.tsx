@@ -42,6 +42,17 @@ import { RelationDetailPage } from '../pages/entities/RelationDetailPage';
 import { ApplicationServiceDetailPage } from '../pages/entities/ApplicationServiceDetailPage';
 import { ApplicationInterfaceDetailPage } from '../pages/entities/ApplicationInterfaceDetailPage';
 
+// Pages - Entities (Form Pages)
+import { ApplicationFormPage } from '../pages/entities/ApplicationFormPage';
+import { ServerFormPage } from '../pages/entities/ServerFormPage';
+import { IntegrationFormPage } from '../pages/entities/IntegrationFormPage';
+import { DataEntityFormPage } from '../pages/entities/DataEntityFormPage';
+import { BusinessCapabilityFormPage } from '../pages/entities/BusinessCapabilityFormPage';
+import { OrganizationFormPage } from '../pages/entities/OrganizationFormPage';
+import { ApplicationServiceFormPage } from '../pages/entities/ApplicationServiceFormPage';
+import { ApplicationInterfaceFormPage } from '../pages/entities/ApplicationInterfaceFormPage';
+import { RelationFormPage } from '../pages/entities/RelationFormPage';
+
 // Placeholder pages for forms (will be created in future items)
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div style={{ padding: '2rem' }}>
@@ -123,7 +134,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="app:create">
-                <PlaceholderPage title="Create Application" />
+                <ApplicationFormPage />
               </ProtectedRoute>
             ),
           },
@@ -139,7 +150,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="app:update">
-                <PlaceholderPage title="Edit Application" />
+                <ApplicationFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -162,7 +173,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="server:create">
-                <PlaceholderPage title="Create Server" />
+                 <ServerFormPage />
               </ProtectedRoute>
             ),
           },
@@ -178,7 +189,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="server:update">
-                <PlaceholderPage title="Edit Server" />
+                 <ServerFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -201,7 +212,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="integration:create">
-                <PlaceholderPage title="Create Integration" />
+                 <IntegrationFormPage />
               </ProtectedRoute>
             ),
           },
@@ -217,7 +228,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="integration:update">
-                <PlaceholderPage title="Edit Integration" />
+                 <IntegrationFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -240,7 +251,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="entity:create">
-                <PlaceholderPage title="Create Data Entity" />
+                 <DataEntityFormPage />
               </ProtectedRoute>
             ),
           },
@@ -256,7 +267,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="entity:update">
-                <PlaceholderPage title="Edit Data Entity" />
+                 <DataEntityFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -279,7 +290,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="capability:create">
-                <PlaceholderPage title="Create Business Capability" />
+                 <BusinessCapabilityFormPage />
               </ProtectedRoute>
             ),
           },
@@ -295,7 +306,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="capability:update">
-                <PlaceholderPage title="Edit Business Capability" />
+                 <BusinessCapabilityFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -318,7 +329,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="org:create">
-                <PlaceholderPage title="Create Organization" />
+                 <OrganizationFormPage />
               </ProtectedRoute>
             ),
           },
@@ -334,7 +345,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="org:update">
-                <PlaceholderPage title="Edit Organization" />
+                 <OrganizationFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -357,7 +368,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="relation:create">
-                <PlaceholderPage title="Create Relation" />
+                 <RelationFormPage />
               </ProtectedRoute>
             ),
           },
@@ -373,7 +384,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="relation:update">
-                <PlaceholderPage title="Edit Relation" />
+                 <RelationFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -396,7 +407,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="service:create">
-                <PlaceholderPage title="Create Application Service" />
+                 <ApplicationServiceFormPage />
               </ProtectedRoute>
             ),
           },
@@ -412,7 +423,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="service:update">
-                <PlaceholderPage title="Edit Application Service" />
+                 <ApplicationServiceFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
@@ -435,7 +446,7 @@ export const routes: RouteObject[] = [
             path: 'new',
             element: (
               <ProtectedRoute requiredPermission="interface:create">
-                <PlaceholderPage title="Create Application Interface" />
+                 <ApplicationInterfaceFormPage />
               </ProtectedRoute>
             ),
           },
@@ -451,7 +462,7 @@ export const routes: RouteObject[] = [
             path: ':id/edit',
             element: (
               <ProtectedRoute requiredPermission="interface:update">
-                <PlaceholderPage title="Edit Application Interface" />
+                 <ApplicationInterfaceFormPage isEdit={true} />
               </ProtectedRoute>
             ),
           },
