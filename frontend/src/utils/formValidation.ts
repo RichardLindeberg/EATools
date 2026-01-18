@@ -38,7 +38,10 @@ export const ApplicationFormSchema = z.object({
   name: NameFieldSchema,
   description: DescriptionFieldSchema,
   owner: z.string().uuid('Owner must be a valid user ID'),
-  status: z.enum(['Active', 'Inactive', 'Deprecated']),
+  lifecycle: z.enum(['planned', 'active', 'deprecated', 'retired']),
+  classification: z.enum(['public', 'internal', 'confidential', 'restricted']),
+  classificationReason: z.string().optional().or(z.literal('')),
+  sunsetDate: z.string().optional().or(z.literal('')),
   environment: z.enum(['Production', 'Staging', 'Development', 'Test']),
   type: z.string().min(1, 'Type is required'),
   technologyStack: z.array(z.string()).optional().default([]),
@@ -147,6 +150,8 @@ export const ApplicationServiceFormSchema = z.object({
   sla: SLAFieldSchema.optional(),
   timeout: z.number().min(0).optional(),
   retryPolicy: z.string().optional(),
+  businessCapabilityId: z.string().optional(),
+  consumerAppId: z.string().optional(),
   tags: z.array(z.string()).optional().default([]),
 });
 
@@ -158,12 +163,13 @@ export const ApplicationInterfaceFormSchema = z.object({
   application: z.string().min(1, 'Application is required'),
   type: z.enum(['REST', 'SOAP', 'GraphQL', 'Message']),
   protocol: z.enum(['HTTP', 'HTTPS', 'AMQP', 'JMS', 'Kafka', 'WebSocket']),
-  status: z.enum(['Active', 'Inactive', 'Deprecated']),
+  status: z.enum(['active', 'deprecated', 'retired']),
   owner: z.string().uuid('Owner must be a valid user ID'),
   baseUrl: URLFieldSchema,
   apiVersion: z.string().optional(),
   rateLimit: z.number().min(0).optional(),
   authenticationType: z.string().optional(),
+  serviceIds: z.array(z.string()).optional().default([]),
   tags: z.array(z.string()).optional().default([]),
 });
 
@@ -178,6 +184,13 @@ export const RelationFormSchema = z.object({
   description: DescriptionFieldSchema,
   strength: z.enum(['Required', 'Optional']).optional(),
   cardinality: z.enum(['1:1', '1:N', 'N:N']).optional(),
+  confidence: z
+    .number()
+    .min(0, 'Confidence must be at least 0')
+    .max(1, 'Confidence must be at most 1')
+    .optional(),
+  effectiveFrom: z.string().optional().or(z.literal('')),
+  effectiveTo: z.string().optional().or(z.literal('')),
 });
 
 export type RelationFormData = z.infer<typeof RelationFormSchema>;

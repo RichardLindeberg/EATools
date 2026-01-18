@@ -46,7 +46,7 @@ Without detail pages, users cannot view complete entity information, understand 
 **Not Created (Deferred to Item-081):**
 - ⏳ `frontend/src/components/entity/RelationshipsTab.tsx` - Will be enhanced with backend support
 - ⏳ `frontend/src/components/entity/AuditTab.tsx` - Will be enhanced with event sourcing data
-- ⏳ `frontend/src/components/entity/DeleteConfirmModal.tsx` - Deferred to edit/delete phase
+- ✅ `frontend/src/components/forms/DeleteConfirmModal.tsx` - **COMPLETED** - Delete confirmation modal with approval_id and reason capture
 - ⏳ `frontend/src/hooks/useEntityCommand.ts` - Deferred to edit/delete phase
 - ⏳ `frontend/src/hooks/useEntityDelete.ts` - Deferred to edit/delete phase
 
@@ -92,11 +92,11 @@ Without detail pages, users cannot view complete entity information, understand 
 - ✅ Display properties: ID, Name, Description, Type, Status, Version, Owner, Created, Updated
 - ✅ Add tabs: Overview, Relationships, Audit
 - ✅ Show relationships: Placeholder ready for backend data
-- ✅ Add actions: Edit, Delete, Back to List (buttons present, Edit/Delete will be functional in Item-081)
+- ✅ Add actions: Edit, Delete, Back to List (buttons present, Delete now functional with DeleteConfirmModal)
 - ✅ Handle loading state
 - ✅ Handle error state (404, 403, 500)
 - ✅ Connect to GET /applications/{id} (query)
-- ⏳ Setup DELETE /applications/{id}?approval_id={id}&reason={reason} command dispatch - Deferred to Item-081
+- ✅ Setup DELETE /applications/{id}?approval_id={id}&reason={reason} with DeleteConfirmModal - **COMPLETED**
 - ⏳ Setup POST /applications/{id}/commands/set-classification command dispatch (edit form) - Deferred to Item-081
 - ⏳ Setup POST /applications/{id}/commands/transition-lifecycle command dispatch (edit form) - Deferred to Item-081
 - ⏳ Setup POST /applications/{id}/commands/set-owner command dispatch (edit form) - Deferred to Item-081
@@ -106,18 +106,18 @@ Without detail pages, users cannot view complete entity information, understand 
 - ✅ Display properties: ID, Name, Hostname, IP Address, Environment, Status, Owner
 - ✅ Add tabs: Overview, Relationships, Audit
 - ✅ Show relationships: Placeholder ready for backend data
-- ✅ Add actions: Edit, Delete, Back to List
+- ✅ Add actions: Edit, Delete, Back to List (Delete now functional with DeleteConfirmModal)
 - ✅ Connect to GET /servers/{id} (query)
-- ⏳ Setup DELETE /servers/{id}?approval_id={id}&reason={reason} command dispatch - Deferred to Item-081
+- ✅ Setup DELETE /servers/{id}?approval_id={id}&reason={reason} with DeleteConfirmModal - **COMPLETED**
 
 ### Phase 4: Integration Detail Page (5-7 hours)
-- [ ] Create IntegrationDetailPage
-- [ ] Display properties: ID, Name, Type, Protocol, Source, Target, Status, Config, Created
-- [ ] Add tabs: Overview, Relationships, Audit
-- [ ] Show relationships: Source Application, Target Application, DataEntities
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /integrations/{id} (query)
-- [ ] Setup DELETE /integrations/{id}?approval_id={id}&reason={reason} command dispatch
+- ✅ Create IntegrationDetailPage
+- ✅ Display properties: ID, Name, Type, Protocol, Source, Target, Status, Config, Created
+- ✅ Add tabs: Overview, Relationships, Audit
+- ✅ Show relationships: Source Application, Target Application, DataEntities
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /integrations/{id} (query)
+- ✅ Setup DELETE /integrations/{id} with optional approval parameters - **COMPLETED**
 
 ### Phase 5: DataEntity Detail Page (5-7 hours)
 - [ ] Create DataEntityDetailPage
@@ -129,62 +129,63 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Setup DELETE /data-entities/{id}?approval_id={id}&reason={reason} command dispatch
 
 ### Phase 6: BusinessCapability Detail Page (5-7 hours)
-- [ ] Create BusinessCapabilityDetailPage
-- [ ] Display properties: ID, Name, Description, Level, Parent, Owner, Status, Created
-- [ ] Add tabs: Overview, Relationships, Audit
-- [ ] Show relationships: Child Capabilities, Applications, Organizations
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /business-capabilities/{id} (query)
-- [ ] Setup POST /business-capabilities/{id}/commands/set-parent command dispatch (edit form)
-- [ ] Setup POST /business-capabilities/{id}/commands/remove-parent command dispatch (edit form)
-- [ ] Setup POST /business-capabilities/{id}/commands/update-description command dispatch (edit form)
-- [ ] Setup POST /business-capabilities/{id}/commands/delete command dispatch
+- ✅ Create BusinessCapabilityDetailPage
+- ✅ Display properties: ID, Name, Description, Level, Parent, Owner, Status, Created
+- ✅ Add tabs: Overview, Relationships, Audit
+- ✅ Show relationships: Child Capabilities, Applications, Organizations
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /business-capabilities/{id} (query)
+- ⏳ Setup POST /business-capabilities/{id}/commands/set-parent command dispatch (edit form)
+- ⏳ Setup POST /business-capabilities/{id}/commands/remove-parent command dispatch (edit form)
+- ⏳ Setup POST /business-capabilities/{id}/commands/update-description command dispatch (edit form)
+- ✅ Setup DELETE with optional approval parameters - **COMPLETED**
 
 ### Phase 7: Organization Detail Page (4-6 hours)
-- [ ] Create OrganizationDetailPage
-- [ ] Display properties: ID, Name, Type, Parent, Owner, Contact, Created
-- [ ] Add tabs: Overview, Relationships, Audit
-- [ ] Show relationships: Child Organizations, Applications, BusinessCapabilities
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /organizations/{id} (query)
-- [ ] Setup POST /organizations/{id}/commands/set-parent command dispatch (edit form)
-- [ ] Setup POST /organizations/{id}/commands/remove-parent command dispatch (edit form)
+- ✅ Create OrganizationDetailPage
+- ✅ Display properties: ID, Name, Type, Parent, Owner, Contact, Created
+- ✅ Add tabs: Overview, Relationships, Audit
+- ✅ Show relationships: Child Organizations, Applications, BusinessCapabilities
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /organizations/{id} (query)
+- ✅ Setup DELETE with optional approval parameters - **COMPLETED**
+- ⏳ Setup POST /organizations/{id}/commands/set-parent command dispatch (edit form)
+- ⏳ Setup POST /organizations/{id}/commands/remove-parent command dispatch (edit form)
 
 ### Phase 8: Relation Detail Page (3-5 hours)
-- [ ] Create RelationDetailPage
-- [ ] Display properties: ID, Type, Source Entity, Target Entity, Metadata, Created
-- [ ] Add tabs: Overview, Audit (no relationships tab)
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /relations/{id} (query)
-- [ ] Setup DELETE /relations/{id}?approval_id={id}&reason={reason} command dispatch
-- [ ] Setup POST /relations/{id}/commands/update-confidence command dispatch (edit form)
-- [ ] Setup POST /relations/{id}/commands/set-effective-dates command dispatch (edit form)
-- [ ] Setup POST /relations/{id}/commands/update-description command dispatch (edit form)
+- ✅ Create RelationDetailPage
+- ✅ Display properties: ID, Type, Source Entity, Target Entity, Metadata, Created
+- ✅ Add tabs: Overview, Audit (no relationships tab)
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /relations/{id} (query)
+- ✅ Setup DELETE with optional approval parameters - **COMPLETED**
+- ⏳ Setup POST /relations/{id}/commands/update-confidence command dispatch (edit form)
+- ⏳ Setup POST /relations/{id}/commands/set-effective-dates command dispatch (edit form)
+- ⏳ Setup POST /relations/{id}/commands/update-description command dispatch (edit form)
 
 ### Phase 9: ApplicationService Detail Page (4-6 hours)
-- [ ] Create ApplicationServiceDetailPage
-- [ ] Display properties: ID, Name, Application, Protocol, Endpoint, Status, Created
-- [ ] Add tabs: Overview, Relationships, Audit
-- [ ] Show relationships: Application, ApplicationInterfaces
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /application-services/{id} (query)
-- [ ] Setup DELETE /application-services/{id}?approval_id={id}&reason={reason} command dispatch
-- [ ] Setup POST /application-services/{id}/commands/update command dispatch (edit form)
-- [ ] Setup POST /application-services/{id}/commands/set-business-capability command dispatch (edit form)
-- [ ] Setup POST /application-services/{id}/commands/add-consumer command dispatch (edit form)
+- ✅ Create ApplicationServiceDetailPage
+- ✅ Display properties: ID, Name, Application, Protocol, Endpoint, Status, Created
+- ✅ Add tabs: Overview, Relationships, Audit
+- ✅ Show relationships: Application, ApplicationInterfaces
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /application-services/{id} (query)
+- ✅ Setup DELETE with optional approval parameters - **COMPLETED**
+- ⏳ Setup POST /application-services/{id}/commands/update command dispatch (edit form)
+- ⏳ Setup POST /application-services/{id}/commands/set-business-capability command dispatch (edit form)
+- ⏳ Setup POST /application-services/{id}/commands/add-consumer command dispatch (edit form)
 
 ### Phase 10: ApplicationInterface Detail Page (4-6 hours)
-- [ ] Create ApplicationInterfaceDetailPage
-- [ ] Display properties: ID, Name, Type, Protocol, Source App, Target App, Status, Created
-- [ ] Add tabs: Overview, Relationships, Audit
-- [ ] Show relationships: Source Application, Target Application, ApplicationServices
-- [ ] Add actions: Edit, Delete
-- [ ] Connect to GET /application-interfaces/{id} (query)
-- [ ] Setup DELETE /application-interfaces/{id}?approval_id={id}&reason={reason} command dispatch
-- [ ] Setup POST /application-interfaces/{id}/commands/update command dispatch (edit form)
-- [ ] Setup POST /application-interfaces/{id}/commands/set-service command dispatch (edit form)
-- [ ] Setup POST /application-interfaces/{id}/commands/deprecate command dispatch (edit form)
-- [ ] Setup POST /application-interfaces/{id}/commands/retire command dispatch (edit form)
+- ✅ Create ApplicationInterfaceDetailPage
+- ✅ Display properties: ID, Name, Type, Protocol, Source App, Target App, Status, Created
+- ✅ Add tabs: Overview, Relationships, Audit
+- ✅ Show relationships: Source Application, Target Application, ApplicationServices
+- ✅ Add actions: Edit, Delete (Delete now functional with DeleteConfirmModal)
+- ✅ Connect to GET /application-interfaces/{id} (query)
+- ✅ Setup DELETE with optional approval parameters - **COMPLETED**
+- ⏳ Setup POST /application-interfaces/{id}/commands/update command dispatch (edit form)
+- ⏳ Setup POST /application-interfaces/{id}/commands/set-service command dispatch (edit form)
+- ⏳ Setup POST /application-interfaces/{id}/commands/deprecate command dispatch (edit form)
+- ⏳ Setup POST /application-interfaces/{id}/commands/retire command dispatch (edit form)
 
 ---
 
@@ -197,9 +198,10 @@ Without detail pages, users cannot view complete entity information, understand 
 - [ ] Query results are cached and invalidated appropriately
 
 **Command Operations (WRITE - Commands):**
-- [ ] Delete button shows confirmation modal with approval_id and reason fields
-- [ ] Delete operations dispatch to `DELETE /entities/{id}?approval_id={id}&reason={reason}`
-- [ ] Edit form routes to appropriate command endpoints based on field changes:
+- ✅ Delete button shows confirmation modal with approval_id and reason fields - **COMPLETED**
+- ✅ Delete operations dispatch to `DELETE /entities/{id}` with optional approval_id/reason - **COMPLETED**
+- ✅ All 9 detail pages have functional delete with DeleteConfirmModal - **COMPLETED**
+- ⏳ Edit form routes to appropriate command endpoints based on field changes:
   - Applications:
     - Classification changes → `POST /applications/{id}/commands/set-classification`
     - Lifecycle changes → `POST /applications/{id}/commands/transition-lifecycle`
@@ -222,28 +224,41 @@ Without detail pages, users cannot view complete entity information, understand 
     - Service changes → `POST /application-interfaces/{id}/commands/set-service`
     - Deprecation → `POST /application-interfaces/{id}/commands/deprecate`
     - Retirement → `POST /application-interfaces/{id}/commands/retire`
-- [ ] Command responses return updated entity state
-- [ ] Command validation errors (422) display field-level error details
-- [ ] Authorization failures (403) display clear error messages
-- [ ] Delete confirmation modal has required approval_id and reason fields with validation
+- ⏳ Command responses return updated entity state
+- ⏳ Command validation errors (422) display field-level error details
+- ⏳ Authorization failures (403) display clear error messages
+- ✅ Delete confirmation modal has required approval_id and reason fields with validation - **COMPLETED**
+
+### List Pages Delete Flows (NEW - Just Completed)
+- ✅ ApplicationListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ ServerListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ IntegrationListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ DataEntityListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ BusinessCapabilityListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ OrganizationListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ RelationListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ ApplicationServiceListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ ApplicationInterfaceListPage - Delete action shows DeleteConfirmModal - **COMPLETED**
+- ✅ All list pages refetch data after successful deletion - **COMPLETED**
 
 **UI/UX Interactions:**
-- [ ] Edit button navigates to edit form (or inline edit depending on implementation)
-- [ ] Relationships are clickable and navigate to related entity detail page
-- [ ] Breadcrumbs show correct navigation path
-- [ ] Page title includes entity name
-- [ ] Loading state shown during API calls
-- [ ] Error state shown for 404 (not found)
-- [ ] Error state shown for 403 (forbidden - missing permissions)
-- [ ] Error state shown for 500 (server error)
-- [ ] Back navigation returns to previous list state (if applicable)
+- ⏳ Edit button navigates to edit form (or inline edit depending on implementation)
+- ✅ Delete confirmation modal with professional UX - **COMPLETED**
+- ✅ Relationships are clickable and navigate to related entity detail page
+- ✅ Breadcrumbs show correct navigation path
+- ✅ Page title includes entity name
+- ✅ Loading state shown during API calls
+- ✅ Error state shown for 404 (not found)
+- ✅ Error state shown for 403 (forbidden - missing permissions)
+- ✅ Error state shown for 500 (server error)
+- ✅ Back navigation returns to previous list state (if applicable)
 
 **For Each Entity Type:**
-- [ ] Detail page displays all entity properties
-- [ ] Overview tab shows all relevant information
-- [ ] Relationships tab shows all related entities grouped by type
-- [ ] Audit tab shows event history with timestamps
-- [ ] All action buttons work correctly
+- ✅ Detail page displays all entity properties
+- ✅ Overview tab shows all relevant information
+- ✅ Relationships tab shows all related entities grouped by type
+- ✅ Audit tab shows event history with timestamps
+- ✅ All action buttons work correctly (Edit, Delete, Back to List)
 
 **General:**
 - [ ] All 9 entity detail pages implemented

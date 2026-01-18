@@ -3,17 +3,21 @@
  * Detail page for BusinessCapability entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { BusinessCapability } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { businessCapabilitiesApi } from '../../api/entitiesApi';
 
 export const BusinessCapabilityDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<BusinessCapability>({
     entityType: EntityType.BUSINESS_CAPABILITY,
@@ -76,26 +80,54 @@ export const BusinessCapabilityDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await businessCapabilitiesApi.delete(id, approvalId, reason);
+      navigate('/entities/business-capabilities');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
-      breadcrumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'Business Capabilities', path: '/entities/business-capabilities' },
-        { label: entity?.name || id },
-      ]}
-      title={entity?.name || 'Business Capability'}
-      badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
-      actions={[
-        { label: 'Edit', onClick: () => navigate(`/entities/business-capabilities/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
-        { label: 'Back to List', onClick: () => navigate('/entities/business-capabilities'), variant: 'secondary' },
-      ]}
-      properties={properties}
-      tabs={tabs}
-      loading={loading}
-      error={error as Error}
-      notFound={isNotFound}
-      forbidden={isForbidden}
-    />
+    <>
+      <EntityDetailTemplate
+        breadcrumbs={[
+          { label: 'Home', path: '/' },
+          { label: 'Business Capabilities', path: '/entities/business-capabilities' },
+          { label: entity?.name || id },
+        ]}
+        title={entity?.name || 'Business Capability'}
+        badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
+        actions={[
+          { label: 'Edit', onClick: () => navigate(`/entities/business-capabilities/${id}/edit`), variant: 'primary' },
+          { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
+          { label: 'Back to List', onClick: () => navigate('/entities/business-capabilities'), variant: 'secondary' },
+        ]}
+        properties={properties}
+        tabs={tabs}
+        loading={loading}
+        error={error as Error}
+        notFound={isNotFound}
+        forbidden={isForbidden}
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entity ? `business capability "${entity.name}"` : 'business capability'}
+        loading={deleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
+    </>
   );
 };

@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { relationsApi } from '../../api/entitiesApi';
 import type { Relation } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './RelationListPage.css';
 
 const COLUMNS: ColumnConfig<Relation>[] = [
@@ -59,6 +60,8 @@ const FILTERS: FilterDefinition[] = [
 export const RelationListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<Relation | null>(null);
 
   const {
     items,
@@ -70,6 +73,7 @@ export const RelationListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       relationsApi.list({
@@ -124,11 +128,29 @@ export const RelationListPage: React.FC = () => {
         navigate(`/entities/relations/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete relation "${item.type}"?`)) {
-          deleteEntity(async () => relationsApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => relationsApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -165,6 +187,14 @@ export const RelationListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `relation "${entityToDelete.type}"` : 'relation'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

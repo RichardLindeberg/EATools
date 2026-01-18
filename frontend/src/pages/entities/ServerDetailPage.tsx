@@ -3,17 +3,21 @@
  * Detail page for Server entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { Server } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { serversApi } from '../../api/entitiesApi';
 
 export const ServerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<Server>({
     entityType: EntityType.SERVER,
@@ -48,6 +52,24 @@ export const ServerDetailPage: React.FC = () => {
       ]
     : [];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await serversApi.delete(id, approvalId, reason);
+      navigate('/entities/servers');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   const tabs = [
     {
       id: 'overview',
@@ -76,8 +98,27 @@ export const ServerDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await serversApi.delete(id, approvalId, reason);
+      navigate('/entities/servers');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Servers', path: '/entities/servers' },
@@ -87,7 +128,7 @@ export const ServerDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/servers/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/servers'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -97,5 +138,13 @@ export const ServerDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
-  );
-};
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entity ? `server "${entity.name}"` : 'server'}
+        loading={deleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
+    </>
+export default ServerDetailPage;

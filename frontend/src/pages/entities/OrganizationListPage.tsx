@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { organizationsApi } from '../../api/entitiesApi';
 import type { Organization } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './OrganizationListPage.css';
 
 const COLUMNS: ColumnConfig<Organization>[] = [
@@ -52,6 +53,8 @@ const FILTERS: FilterDefinition[] = [
 export const OrganizationListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<Organization | null>(null);
 
   const {
     items,
@@ -63,6 +66,7 @@ export const OrganizationListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       organizationsApi.list({
@@ -117,11 +121,29 @@ export const OrganizationListPage: React.FC = () => {
         navigate(`/entities/organizations/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete organization "${item.name}"?`)) {
-          deleteEntity(async () => organizationsApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => organizationsApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -158,6 +180,14 @@ export const OrganizationListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `organization "${entityToDelete.name}"` : 'organization'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

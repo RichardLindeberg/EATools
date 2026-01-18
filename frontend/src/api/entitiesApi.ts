@@ -160,8 +160,10 @@ export const serversApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/servers/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/servers/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -196,8 +198,10 @@ export const integrationsApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/integrations/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/integrations/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -232,8 +236,10 @@ export const dataEntitiesApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/data-entities/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/data-entities/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -268,8 +274,10 @@ export const businessCapabilitiesApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/business-capabilities/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/business-capabilities/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -304,9 +312,9 @@ export const organizationsApi = {
     return response.data;
   },
 
-  async delete(id: string, reason?: string): Promise<void> {
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
     await axios.delete(`${API_BASE_URL}/organizations/${id}`, {
-      params: { reason },
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
     });
   },
 
@@ -359,8 +367,10 @@ export const relationsApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/relations/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/relations/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -395,8 +405,10 @@ export const applicationServicesApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/application-services/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/application-services/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {
@@ -431,8 +443,10 @@ export const applicationInterfacesApi = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/application-interfaces/${id}`);
+  async delete(id: string, approvalId?: string, reason?: string): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/application-interfaces/${id}`, {
+      params: approvalId || reason ? { approval_id: approvalId, reason } : undefined,
+    });
   },
 
   async bulkDelete(ids: string[]): Promise<any> {

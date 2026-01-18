@@ -3,17 +3,21 @@
  * Detail page for DataEntity entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { DataEntity } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { dataEntitiesApi } from '../../api/entitiesApi';
 
 export const DataEntityDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<DataEntity>({
     entityType: EntityType.DATA_ENTITY,
@@ -76,8 +80,27 @@ export const DataEntityDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await dataEntitiesApi.delete(id, approvalId, reason);
+      navigate('/entities/data-entities');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Data Entities', path: '/entities/data-entities' },
@@ -87,7 +110,7 @@ export const DataEntityDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.classification || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/data-entities/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/data-entities'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -97,5 +120,13 @@ export const DataEntityDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
+    <DeleteConfirmModal
+      isOpen={deleteModalOpen}
+      entityLabel={entity ? `data entity "${entity.name}"` : 'data entity'}
+      loading={deleting}
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
+    </>
   );
 };

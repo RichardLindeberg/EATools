@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { dataEntitiesApi } from '../../api/entitiesApi';
 import type { DataEntity } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './DataEntityListPage.css';
 
 const COLUMNS: ColumnConfig<DataEntity>[] = [
@@ -65,6 +66,8 @@ const FILTERS: FilterDefinition[] = [
 export const DataEntityListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<DataEntity | null>(null);
 
   const {
     items,
@@ -76,6 +79,7 @@ export const DataEntityListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       dataEntitiesApi.list({
@@ -130,11 +134,29 @@ export const DataEntityListPage: React.FC = () => {
         navigate(`/entities/data-entities/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete data entity "${item.name}"?`)) {
-          deleteEntity(async () => dataEntitiesApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => dataEntitiesApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -171,6 +193,14 @@ export const DataEntityListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `data entity "${entityToDelete.name}"` : 'data entity'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

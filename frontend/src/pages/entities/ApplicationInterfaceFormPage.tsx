@@ -10,6 +10,7 @@ import { FormFieldWrapper } from '../../components/forms/FormFieldWrapper';
 import { DynamicFieldArray } from '../../components/forms/DynamicFieldArray';
 import { DiscardChangesModal } from '../../components/forms/DiscardChangesModal';
 import { hasUnsavedChanges, deepClone } from '../../utils/formHelpers';
+import { updateApplicationInterfaceWithCommands } from '../../utils/commandDispatcher';
 import './EntityFormPage.css';
 
 interface ApplicationInterfaceFormPageProps {
@@ -36,22 +37,21 @@ export function ApplicationInterfaceFormPage({ isEdit = false }: ApplicationInte
     reset,
   } = useForm<ApplicationInterfaceFormData>({
     resolver: zodResolver(ApplicationInterfaceFormSchema),
-    defaultValues: isEdit
-      ? existingInterface || {}
-      : {
-          name: '',
-          description: '',
-          application: '',
-          type: 'REST',
-          protocol: 'HTTPS',
-          status: 'Active',
-          owner: '',
-          baseUrl: '',
-          apiVersion: '',
-          rateLimit: 1000,
-          authenticationType: 'OAuth2',
-          tags: [],
-        },
+    defaultValues: {
+      name: '',
+      description: '',
+      application: '',
+      type: 'REST',
+      protocol: 'HTTPS',
+      status: 'active',
+      owner: '',
+      baseUrl: '',
+      apiVersion: '',
+      rateLimit: 1000,
+      authenticationType: 'OAuth2',
+      serviceIds: [],
+      tags: [],
+    },
   });
 
   const { field: tagsField } = useController({
@@ -59,28 +59,77 @@ export function ApplicationInterfaceFormPage({ isEdit = false }: ApplicationInte
     name: 'tags',
   });
 
+  const { field: serviceIdsField } = useController({
+    control,
+    name: 'serviceIds',
+  });
+
   const watchedValues = watch();
-  const [originalValues] = useState(() => deepClone(watchedValues));
-  const hasChanges = hasUnsavedChanges(originalValues, watchedValues);
+  const [originalValues, setOriginalValues] = useState<ApplicationInterfaceFormData | null>(null);
+  const hasChanges = originalValues ? hasUnsavedChanges(originalValues, watchedValues) : false;
 
   useEffect(() => {
     if (existingInterface) {
-      reset(existingInterface);
+      const normalized: ApplicationInterfaceFormData = {
+        name: (existingInterface as any).name || '',
+        description: (existingInterface as any).description || '',
+        application: (existingInterface as any).application || '',
+        type: (existingInterface as any).type || 'REST',
+        protocol: (existingInterface as any).protocol || 'HTTPS',
+        status: (existingInterface as any).status || 'active',
+        owner: (existingInterface as any).owner || '',
+        baseUrl: (existingInterface as any).baseUrl || '',
+        apiVersion: (existingInterface as any).apiVersion || '',
+        rateLimit: (existingInterface as any).rateLimit ?? 1000,
+        authenticationType: (existingInterface as any).authenticationType || 'OAuth2',
+        serviceIds: (existingInterface as any).serviceIds || [],
+        tags: (existingInterface as any).tags || [],
+      };
+
+      reset(normalized);
+      setOriginalValues(deepClone(normalized));
     }
   }, [existingInterface, reset]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      const defaults: ApplicationInterfaceFormData = {
+        name: '',
+        description: '',
+        application: '',
+        type: 'REST',
+        protocol: 'HTTPS',
+        status: 'active',
+        owner: '',
+        baseUrl: '',
+        apiVersion: '',
+        rateLimit: 1000,
+        authenticationType: 'OAuth2',
+        serviceIds: [],
+        tags: [],
+      };
+      setOriginalValues(defaults);
+    }
+  }, [isEdit]);
 
   const onSubmit = async (data: ApplicationInterfaceFormData) => {
     try {
       let response;
 
       if (isEdit && id) {
-        response = await apiClient.patch(`/application-interfaces/${id}`, data);
+        const result = await updateApplicationInterfaceWithCommands(
+          id,
+          originalValues || {},
+          data
+        );
+        if ((result as any)?.id) {
+          navigate(`/entities/application-interfaces/${(result as any).id}`);
+        }
       } else {
         response = await apiClient.post('/application-interfaces', data);
-      }
-
-      if (response.data?.id) {
-        navigate(`/entities/application-interfaces/${response.data.id}`);
+        if (response.data?.id) {
+          navigate(`/entities/application-interfaces/${response.data.id}`);
+        }
       }
     } catch (error: any) {
       const errorMessage =
@@ -233,9 +282,9 @@ export function ApplicationInterfaceFormPage({ isEdit = false }: ApplicationInte
               htmlFor="status"
             >
               <select id="status" {...register('status')}>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Deprecated">Deprecated</option>
+                <option value="active">Active</option>
+                <option value="deprecated">Deprecated</option>
+                <option value="retired">Retired</option>
               </select>
             </FormFieldWrapper>
 
@@ -303,6 +352,14 @@ export function ApplicationInterfaceFormPage({ isEdit = false }: ApplicationInte
             onChange={tagsField.onChange}
             placeholder="e.g., public-api, core"
             error={errors.tags?.message}
+          />
+
+          <DynamicFieldArray
+            label="Service IDs"
+            value={serviceIdsField.value || []}
+            onChange={serviceIdsField.onChange}
+            placeholder="service-id-1"
+            error={errors.serviceIds?.message}
           />
         </div>
       </EntityFormTemplate>

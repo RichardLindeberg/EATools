@@ -10,6 +10,7 @@ import { FormFieldWrapper } from '../../components/forms/FormFieldWrapper';
 import { DynamicFieldArray } from '../../components/forms/DynamicFieldArray';
 import { DiscardChangesModal } from '../../components/forms/DiscardChangesModal';
 import { hasUnsavedChanges, deepClone } from '../../utils/formHelpers';
+import { updateApplicationServiceWithCommands } from '../../utils/commandDispatcher';
 import './EntityFormPage.css';
 
 interface ApplicationServiceFormPageProps {
@@ -36,21 +37,21 @@ export function ApplicationServiceFormPage({ isEdit = false }: ApplicationServic
     reset,
   } = useForm<ApplicationServiceFormData>({
     resolver: zodResolver(ApplicationServiceFormSchema),
-    defaultValues: isEdit
-      ? existingService || {}
-      : {
-          name: '',
-          description: '',
-          application: '',
-          type: 'Synchronous',
-          status: 'Available',
-          owner: '',
-          serviceContract: '',
-          sla: 99.9,
-          timeout: 30000,
-          retryPolicy: '',
-          tags: [],
-        },
+    defaultValues: {
+      name: '',
+      description: '',
+      application: '',
+      type: 'Synchronous',
+      status: 'Available',
+      owner: '',
+      serviceContract: '',
+      sla: 99.9,
+      timeout: 30000,
+      retryPolicy: '',
+      businessCapabilityId: '',
+      consumerAppId: '',
+      tags: [],
+    },
   });
 
   const { field: tagsField } = useController({
@@ -59,27 +60,71 @@ export function ApplicationServiceFormPage({ isEdit = false }: ApplicationServic
   });
 
   const watchedValues = watch();
-  const [originalValues] = useState(() => deepClone(watchedValues));
-  const hasChanges = hasUnsavedChanges(originalValues, watchedValues);
+  const [originalValues, setOriginalValues] = useState<ApplicationServiceFormData | null>(null);
+  const hasChanges = originalValues ? hasUnsavedChanges(originalValues, watchedValues) : false;
 
   useEffect(() => {
     if (existingService) {
-      reset(existingService);
+      const normalized: ApplicationServiceFormData = {
+        name: (existingService as any).name || '',
+        description: (existingService as any).description || '',
+        application: (existingService as any).application || '',
+        type: (existingService as any).type || 'Synchronous',
+        status: (existingService as any).status || 'Available',
+        owner: (existingService as any).owner || '',
+        serviceContract: (existingService as any).serviceContract || '',
+        sla: (existingService as any).sla ?? 99.9,
+        timeout: (existingService as any).timeout ?? 30000,
+        retryPolicy: (existingService as any).retryPolicy || '',
+        businessCapabilityId: (existingService as any).businessCapabilityId || '',
+        consumerAppId: '',
+        tags: (existingService as any).tags || [],
+      };
+
+      reset(normalized);
+      setOriginalValues(deepClone(normalized));
     }
   }, [existingService, reset]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      const defaults: ApplicationServiceFormData = {
+        name: '',
+        description: '',
+        application: '',
+        type: 'Synchronous',
+        status: 'Available',
+        owner: '',
+        serviceContract: '',
+        sla: 99.9,
+        timeout: 30000,
+        retryPolicy: '',
+        businessCapabilityId: '',
+        consumerAppId: '',
+        tags: [],
+      };
+      setOriginalValues(defaults);
+    }
+  }, [isEdit]);
 
   const onSubmit = async (data: ApplicationServiceFormData) => {
     try {
       let response;
 
       if (isEdit && id) {
-        response = await apiClient.patch(`/application-services/${id}`, data);
+        const result = await updateApplicationServiceWithCommands(
+          id,
+          originalValues || {},
+          data
+        );
+        if ((result as any)?.id) {
+          navigate(`/entities/application-services/${(result as any).id}`);
+        }
       } else {
         response = await apiClient.post('/application-services', data);
-      }
-
-      if (response.data?.id) {
-        navigate(`/entities/application-services/${response.data.id}`);
+        if (response.data?.id) {
+          navigate(`/entities/application-services/${response.data.id}`);
+        }
       }
     } catch (error: any) {
       const errorMessage =
@@ -258,6 +303,36 @@ export function ApplicationServiceFormPage({ isEdit = false }: ApplicationServic
                 type="text"
                 placeholder="e.g., exponential-backoff"
                 {...register('retryPolicy')}
+              />
+            </FormFieldWrapper>
+          </div>
+
+          <div className="entity-form-section-grid">
+            <FormFieldWrapper
+              label="Business Capability"
+              error={errors.businessCapabilityId?.message}
+              htmlFor="businessCapabilityId"
+              helpText="Optional. Sets capability via command"
+            >
+              <input
+                id="businessCapabilityId"
+                type="text"
+                placeholder="Capability ID"
+                {...register('businessCapabilityId')}
+              />
+            </FormFieldWrapper>
+
+            <FormFieldWrapper
+              label="Add Consumer Application"
+              error={errors.consumerAppId?.message}
+              htmlFor="consumerAppId"
+              helpText="Optional. Adds one consumer via command"
+            >
+              <input
+                id="consumerAppId"
+                type="text"
+                placeholder="Consumer application ID"
+                {...register('consumerAppId')}
               />
             </FormFieldWrapper>
           </div>

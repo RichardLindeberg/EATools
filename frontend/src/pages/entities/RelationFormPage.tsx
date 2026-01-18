@@ -9,6 +9,7 @@ import { EntityFormTemplate } from '../../components/forms/EntityFormTemplate';
 import { FormFieldWrapper } from '../../components/forms/FormFieldWrapper';
 import { DiscardChangesModal } from '../../components/forms/DiscardChangesModal';
 import { hasUnsavedChanges, deepClone } from '../../utils/formHelpers';
+import { updateRelationWithCommands } from '../../utils/commandDispatcher';
 import './EntityFormPage.css';
 
 interface RelationFormPageProps {
@@ -34,42 +35,79 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
     reset,
   } = useForm<RelationFormData>({
     resolver: zodResolver(RelationFormSchema),
-    defaultValues: isEdit
-      ? existingRelation || {}
-      : {
-          sourceEntity: '',
-          targetEntity: '',
-          type: '',
-          direction: 'Unidirectional',
-          properties: {},
-          description: '',
-          strength: 'Required',
-          cardinality: '1:N',
-        },
+    defaultValues: {
+      sourceEntity: '',
+      targetEntity: '',
+      type: '',
+      direction: 'Unidirectional',
+      properties: {},
+      description: '',
+      strength: 'Required',
+      cardinality: '1:N',
+      confidence: 0.5,
+      effectiveFrom: '',
+      effectiveTo: '',
+    },
   });
 
   const watchedValues = watch();
-  const [originalValues] = useState(() => deepClone(watchedValues));
-  const hasChanges = hasUnsavedChanges(originalValues, watchedValues);
+  const [originalValues, setOriginalValues] = useState<RelationFormData | null>(null);
+  const hasChanges = originalValues ? hasUnsavedChanges(originalValues, watchedValues) : false;
 
   useEffect(() => {
     if (existingRelation) {
-      reset(existingRelation);
+      const normalized: RelationFormData = {
+        sourceEntity: (existingRelation as any).sourceEntity || '',
+        targetEntity: (existingRelation as any).targetEntity || '',
+        type: (existingRelation as any).type || '',
+        direction: (existingRelation as any).direction || 'Unidirectional',
+        properties: (existingRelation as any).properties || {},
+        description: (existingRelation as any).description || '',
+        strength: (existingRelation as any).strength || 'Required',
+        cardinality: (existingRelation as any).cardinality || '1:N',
+        confidence: (existingRelation as any).confidence ?? 0.5,
+        effectiveFrom: (existingRelation as any).effective_from || '',
+        effectiveTo: (existingRelation as any).effective_to || '',
+      };
+
+      reset(normalized);
+      setOriginalValues(deepClone(normalized));
     }
   }, [existingRelation, reset]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      const defaults: RelationFormData = {
+        sourceEntity: '',
+        targetEntity: '',
+        type: '',
+        direction: 'Unidirectional',
+        properties: {},
+        description: '',
+        strength: 'Required',
+        cardinality: '1:N',
+        confidence: 0.5,
+        effectiveFrom: '',
+        effectiveTo: '',
+      };
+      setOriginalValues(defaults);
+    }
+  }, [isEdit]);
 
   const onSubmit = async (data: RelationFormData) => {
     try {
       let response;
 
       if (isEdit && id) {
-        response = await apiClient.patch(`/relations/${id}`, data);
+        const result = await updateRelationWithCommands(id, originalValues || {}, data);
+        if ((result as any)?.id) {
+          navigate(`/entities/relations/${(result as any).id}`);
+        }
       } else {
         response = await apiClient.post('/relations', data);
-      }
-
-      if (response.data?.id) {
-        navigate(`/entities/relations/${response.data.id}`);
+        if (response.data?.id) {
+          navigate(`/entities/relations/${response.data.id}`);
+        }
       }
     } catch (error: any) {
       const errorMessage =
@@ -146,6 +184,23 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                 type="text"
                 placeholder="Enter target entity ID"
                 {...register('targetEntity')}
+          
+              <FormFieldWrapper
+                label="Confidence"
+                error={errors.confidence?.message}
+                htmlFor="confidence"
+                helpText="0.0 to 1.0"
+              >
+                <input
+                  id="confidence"
+                  type="number"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  placeholder="0.8"
+                  {...register('confidence', { valueAsNumber: true })}
+                />
+              </FormFieldWrapper>
               />
             </FormFieldWrapper>
 
@@ -160,6 +215,28 @@ export function RelationFormPage({ isEdit = false }: RelationFormPageProps) {
                 type="text"
                 placeholder="e.g., Owns, Integrates, Processes"
                 {...register('type')}
+
+          <div className="entity-form-section">
+            <h3 className="entity-form-section-title">Effective Dates</h3>
+
+            <div className="entity-form-section-grid">
+              <FormFieldWrapper
+                label="Effective From"
+                error={errors.effectiveFrom?.message}
+                htmlFor="effectiveFrom"
+              >
+                <input id="effectiveFrom" type="date" {...register('effectiveFrom')} />
+              </FormFieldWrapper>
+
+              <FormFieldWrapper
+                label="Effective To"
+                error={errors.effectiveTo?.message}
+                htmlFor="effectiveTo"
+              >
+                <input id="effectiveTo" type="date" {...register('effectiveTo')} />
+              </FormFieldWrapper>
+            </div>
+          </div>
               />
             </FormFieldWrapper>
 

@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { serversApi } from '../../api/entitiesApi';
 import type { Server } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './ServerListPage.css';
 
 const COLUMNS: ColumnConfig<Server>[] = [
@@ -65,6 +66,8 @@ const FILTERS: FilterDefinition[] = [
 export const ServerListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<Server | null>(null);
 
   const {
     items,
@@ -76,6 +79,7 @@ export const ServerListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       serversApi.list({
@@ -130,11 +134,29 @@ export const ServerListPage: React.FC = () => {
         navigate(`/entities/servers/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete server "${item.name}"?`)) {
-          deleteEntity(async () => serversApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => serversApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -171,6 +193,14 @@ export const ServerListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `server "${entityToDelete.name}"` : 'server'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

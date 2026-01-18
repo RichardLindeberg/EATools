@@ -3,17 +3,21 @@
  * Detail page for Organization entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { Organization } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { organizationsApi } from '../../api/entitiesApi';
 
 export const OrganizationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<Organization>({
     entityType: EntityType.ORGANIZATION,
@@ -74,8 +78,27 @@ export const OrganizationDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await organizationsApi.delete(id, approvalId, reason);
+      navigate('/entities/organizations');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Organizations', path: '/entities/organizations' },
@@ -85,7 +108,7 @@ export const OrganizationDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.type || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/organizations/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/organizations'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -95,5 +118,13 @@ export const OrganizationDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
+    <DeleteConfirmModal
+      isOpen={deleteModalOpen}
+      entityLabel={entity ? `organization "${entity.name}"` : 'organization'}
+      loading={deleting}
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
+    </>
   );
 };

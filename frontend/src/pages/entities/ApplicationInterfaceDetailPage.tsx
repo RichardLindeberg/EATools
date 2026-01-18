@@ -3,17 +3,21 @@
  * Detail page for ApplicationInterface entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { ApplicationInterface } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { applicationInterfacesApi } from '../../api/entitiesApi';
 
 export const ApplicationInterfaceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<ApplicationInterface>({
     entityType: EntityType.APPLICATION_INTERFACE,
@@ -76,8 +80,27 @@ export const ApplicationInterfaceDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await applicationInterfacesApi.delete(id, approvalId, reason);
+      navigate('/entities/application-interfaces');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Application Interfaces', path: '/entities/application-interfaces' },
@@ -87,7 +110,7 @@ export const ApplicationInterfaceDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/application-interfaces/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/application-interfaces'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -97,5 +120,13 @@ export const ApplicationInterfaceDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
+    <DeleteConfirmModal
+      isOpen={deleteModalOpen}
+      entityLabel={entity ? `application interface "${entity.name}"` : 'application interface'}
+      loading={deleting}
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
+    </>
   );
 };

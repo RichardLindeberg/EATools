@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { businessCapabilitiesApi } from '../../api/entitiesApi';
 import type { BusinessCapability } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './BusinessCapabilityListPage.css';
 
 const COLUMNS: ColumnConfig<BusinessCapability>[] = [
@@ -64,6 +65,8 @@ const FILTERS: FilterDefinition[] = [
 export const BusinessCapabilityListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<BusinessCapability | null>(null);
 
   const {
     items,
@@ -75,6 +78,7 @@ export const BusinessCapabilityListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       businessCapabilitiesApi.list({
@@ -129,11 +133,29 @@ export const BusinessCapabilityListPage: React.FC = () => {
         navigate(`/entities/business-capabilities/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete business capability "${item.name}"?`)) {
-          deleteEntity(async () => businessCapabilitiesApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => businessCapabilitiesApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -170,6 +192,14 @@ export const BusinessCapabilityListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `business capability "${entityToDelete.name}"` : 'business capability'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

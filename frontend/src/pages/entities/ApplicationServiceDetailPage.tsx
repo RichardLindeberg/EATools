@@ -3,17 +3,21 @@
  * Detail page for ApplicationService entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { ApplicationService } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { applicationServicesApi } from '../../api/entitiesApi';
 
 export const ApplicationServiceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<ApplicationService>({
     entityType: EntityType.APPLICATION_SERVICE,
@@ -74,8 +78,27 @@ export const ApplicationServiceDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await applicationServicesApi.delete(id, approvalId, reason);
+      navigate('/entities/application-services');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Application Services', path: '/entities/application-services' },
@@ -85,7 +108,7 @@ export const ApplicationServiceDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/application-services/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/application-services'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -95,5 +118,13 @@ export const ApplicationServiceDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
+    <DeleteConfirmModal
+      isOpen={deleteModalOpen}
+      entityLabel={entity ? `application service "${entity.name}"` : 'application service'}
+      loading={deleting}
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
+    </>
   );
 };

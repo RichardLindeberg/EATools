@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { applicationServicesApi } from '../../api/entitiesApi';
 import type { ApplicationService } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './ApplicationServiceListPage.css';
 
 const COLUMNS: ColumnConfig<ApplicationService>[] = [
@@ -65,6 +66,8 @@ const FILTERS: FilterDefinition[] = [
 export const ApplicationServiceListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<ApplicationService | null>(null);
 
   const {
     items,
@@ -76,6 +79,7 @@ export const ApplicationServiceListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       applicationServicesApi.list({
@@ -130,11 +134,29 @@ export const ApplicationServiceListPage: React.FC = () => {
         navigate(`/entities/application-services/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete service "${item.name}"?`)) {
-          deleteEntity(async () => applicationServicesApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => applicationServicesApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -171,6 +193,14 @@ export const ApplicationServiceListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `application service "${entityToDelete.name}"` : 'application service'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );

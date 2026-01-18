@@ -3,17 +3,21 @@
  * Detail page for Relation entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail } from '../../hooks/useEntityDetail';
 import type { Relation } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { relationsApi } from '../../api/entitiesApi';
 
 export const RelationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<Relation>({
     entityType: EntityType.RELATION,
@@ -63,8 +67,27 @@ export const RelationDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await relationsApi.delete(id, approvalId, reason);
+      navigate('/entities/relations');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
+    <>
+      <EntityDetailTemplate
       breadcrumbs={[
         { label: 'Home', path: '/' },
         { label: 'Relations', path: '/entities/relations' },
@@ -75,7 +98,7 @@ export const RelationDetailPage: React.FC = () => {
       badges={entity ? [{ label: entity.type || 'Unknown', variant: 'info' }] : []}
       actions={[
         { label: 'Edit', onClick: () => navigate(`/entities/relations/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' },
+        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
         { label: 'Back to List', onClick: () => navigate('/entities/relations'), variant: 'secondary' },
       ]}
       properties={properties}
@@ -85,5 +108,13 @@ export const RelationDetailPage: React.FC = () => {
       notFound={isNotFound}
       forbidden={isForbidden}
     />
+    <DeleteConfirmModal
+      isOpen={deleteModalOpen}
+      entityLabel={entity ? `relation "${entity.type}"` : 'relation'}
+      loading={deleting}
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
+    </>
   );
 };

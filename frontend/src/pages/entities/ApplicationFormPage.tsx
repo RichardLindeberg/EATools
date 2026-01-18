@@ -9,7 +9,7 @@ import { EntityFormTemplate } from '../../components/forms/EntityFormTemplate';
 import { FormFieldWrapper } from '../../components/forms/FormFieldWrapper';
 import { DynamicFieldArray } from '../../components/forms/DynamicFieldArray';
 import { DiscardChangesModal } from '../../components/forms/DiscardChangesModal';
-import { hasUnsavedChanges, deepClone } from '../../utils/formHelpers';
+import { hasUnsavedChanges, deepClone, formatDateForInput } from '../../utils/formHelpers';
 import { updateApplicationWithCommands } from '../../utils/commandDispatcher';
 import './EntityFormPage.css';
 
@@ -43,21 +43,22 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
     reset,
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(ApplicationFormSchema),
-    defaultValues: isEdit
-      ? existingApp || {}
-      : {
-          name: '',
-          description: '',
-          owner: '',
-          status: 'Active',
-          environment: 'Development',
-          type: '',
-          technologyStack: [],
-          department: '',
-          businessOwner: '',
-          critical: false,
-          url: '',
-        },
+    defaultValues: {
+      name: '',
+      description: '',
+      owner: '',
+      lifecycle: 'active',
+      classification: 'internal',
+      classificationReason: '',
+      sunsetDate: '',
+      environment: 'Development',
+      type: '',
+      technologyStack: [],
+      department: '',
+      businessOwner: '',
+      critical: false,
+      url: '',
+    },
   });
 
   const { field: technologyStackField } = useController({
@@ -71,8 +72,31 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
   // Update form when existing app loads
   useEffect(() => {
     if (existingApp) {
-      reset(existingApp);
-      setOriginalValues(deepClone(existingApp as ApplicationFormData));
+      const normalized: ApplicationFormData = {
+        name: (existingApp as any).name || '',
+        description: (existingApp as any).description || '',
+        owner: (existingApp as any).owner || '',
+        lifecycle:
+          (existingApp as any).lifecycle || (existingApp as any).status || 'active',
+        classification:
+          (existingApp as any).classification ||
+          (existingApp as any).data_classification ||
+          'internal',
+        classificationReason: '',
+        sunsetDate: (existingApp as any).sunset_date
+          ? formatDateForInput((existingApp as any).sunset_date)
+          : '',
+        environment: (existingApp as any).environment || 'Development',
+        type: (existingApp as any).type || '',
+        technologyStack: (existingApp as any).technologyStack || [],
+        department: (existingApp as any).department || '',
+        businessOwner: (existingApp as any).businessOwner || '',
+        critical: Boolean((existingApp as any).critical) || false,
+        url: (existingApp as any).url || '',
+      };
+
+      reset(normalized);
+      setOriginalValues(deepClone(normalized));
     }
   }, [existingApp, reset]);
 
@@ -82,7 +106,10 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
         name: '',
         description: '',
         owner: '',
-        status: 'Active',
+        lifecycle: 'active',
+        classification: 'internal',
+        classificationReason: '',
+        sunsetDate: '',
         environment: 'Development',
         type: '',
         technologyStack: [],
@@ -96,6 +123,19 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
   }, [isEdit]);
 
   const onSubmit = async (data: ApplicationFormData) => {
+    if (
+      isEdit &&
+      originalValues &&
+      originalValues.classification !== data.classification &&
+      !data.classificationReason
+    ) {
+      setError('classificationReason', {
+        type: 'server',
+        message: 'Reason is required when changing classification',
+      });
+      return;
+    }
+
     try {
       let response;
 
@@ -109,7 +149,8 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
           navigate(`/entities/applications/${result.id}`);
         }
       } else {
-        response = await apiClient.post('/applications', data);
+        const { classificationReason, ...payload } = data;
+        response = await apiClient.post('/applications', payload);
         if (response.data?.id) {
           navigate(`/entities/applications/${response.data.id}`);
         }
@@ -232,15 +273,16 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
 
           <div className="entity-form-section-grid">
             <FormFieldWrapper
-              label="Status"
+              label="Lifecycle State"
               required
-              error={errors.status?.message}
-              htmlFor="status"
+              error={errors.lifecycle?.message}
+              htmlFor="lifecycle"
             >
-              <select id="status" {...register('status')}>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Deprecated">Deprecated</option>
+              <select id="lifecycle" {...register('lifecycle')}>
+                <option value="planned">Planned</option>
+                <option value="active">Active</option>
+                <option value="deprecated">Deprecated</option>
+                <option value="retired">Retired</option>
               </select>
             </FormFieldWrapper>
 
@@ -272,6 +314,44 @@ export function ApplicationFormPage({ isEdit = false }: ApplicationFormPageProps
               />
             </FormFieldWrapper>
           </div>
+
+          <div className="entity-form-section-grid">
+            <FormFieldWrapper
+              label="Classification"
+              required
+              error={errors.classification?.message}
+              htmlFor="classification"
+            >
+              <select id="classification" {...register('classification')}>
+                <option value="public">Public</option>
+                <option value="internal">Internal</option>
+                <option value="confidential">Confidential</option>
+                <option value="restricted">Restricted</option>
+              </select>
+            </FormFieldWrapper>
+
+            <FormFieldWrapper
+              label="Sunset Date"
+              error={errors.sunsetDate?.message}
+              helpText="Optional when transitioning to deprecated"
+              htmlFor="sunsetDate"
+            >
+              <input id="sunsetDate" type="date" {...register('sunsetDate')} />
+            </FormFieldWrapper>
+          </div>
+
+          <FormFieldWrapper
+            label="Classification Change Reason"
+            error={errors.classificationReason?.message}
+            helpText="Required when classification changes"
+            htmlFor="classificationReason"
+          >
+            <textarea
+              id="classificationReason"
+              placeholder="Provide justification for classification change"
+              {...register('classificationReason')}
+            />
+          </FormFieldWrapper>
 
           <FormFieldWrapper
             label="URL"

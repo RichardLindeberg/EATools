@@ -3,17 +3,21 @@
  * Detail page for Application entities
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EntityDetailTemplate } from '../../components/entity/EntityDetailTemplate';
 import type { Property } from '../../components/entity/PropertyGrid';
 import { useEntityDetail, useEntityRelationships } from '../../hooks/useEntityDetail';
 import type { Application } from '../../types/entities';
 import { EntityType } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
+import { applicationsApi } from '../../api/entitiesApi';
 
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const { entity, loading, error, isNotFound, isForbidden } = useEntityDetail<Application>({
     entityType: EntityType.APPLICATION,
@@ -134,12 +138,7 @@ export const ApplicationDetailPage: React.FC = () => {
     },
     {
       label: 'Delete',
-      onClick: () => {
-        if (confirm('Are you sure you want to delete this application?')) {
-          // TODO: Implement delete functionality
-          console.log('Delete application', id);
-        }
-      },
+      onClick: () => setDeleteModalOpen(true),
       variant: 'danger' as const,
     },
     {
@@ -149,23 +148,51 @@ export const ApplicationDetailPage: React.FC = () => {
     },
   ];
 
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!id) return;
+    
+    try {
+      setDeleting(true);
+      await applicationsApi.delete(id, approvalId, reason);
+      navigate('/entities/applications');
+    } catch (err) {
+      console.error('Delete failed:', err);
+      setDeleting(false);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <EntityDetailTemplate
-      breadcrumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'Applications', path: '/entities/applications' },
-        { label: entity?.name || id },
-      ]}
-      title={entity?.name || 'Application'}
-      subtitle={entity?.description}
-      badges={badges}
-      actions={actions}
-      properties={properties}
-      tabs={tabs}
-      loading={loading}
-      error={error as Error}
-      notFound={isNotFound}
-      forbidden={isForbidden}
-    />
+    <>
+      <EntityDetailTemplate
+        breadcrumbs={[
+          { label: 'Home', path: '/' },
+          { label: 'Applications', path: '/entities/applications' },
+          { label: entity?.name || id },
+        ]}
+        title={entity?.name || 'Application'}
+        subtitle={entity?.description}
+        badges={badges}
+        actions={actions}
+        properties={properties}
+        tabs={tabs}
+        loading={loading}
+        error={error as Error}
+        notFound={isNotFound}
+        forbidden={isForbidden}
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entity ? `application "${entity.name}"` : 'application'}
+        loading={deleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
+    </>
   );
 };

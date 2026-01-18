@@ -11,6 +11,7 @@ import type { FilterDefinition } from '../../components/entity/FilterPanel';
 import { useEntityList, useBulkSelection, useEntityActions } from '../../hooks/useEntityList';
 import { applicationInterfacesApi } from '../../api/entitiesApi';
 import type { ApplicationInterface } from '../../types/entities';
+import { DeleteConfirmModal } from '../../components/forms/DeleteConfirmModal';
 import './ApplicationInterfaceListPage.css';
 
 const COLUMNS: ColumnConfig<ApplicationInterface>[] = [
@@ -64,6 +65,8 @@ const FILTERS: FilterDefinition[] = [
 export const ApplicationInterfaceListPage: React.FC = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<ApplicationInterface | null>(null);
 
   const {
     items,
@@ -75,6 +78,7 @@ export const ApplicationInterfaceListPage: React.FC = () => {
     setLimit,
     setSort,
     clearFilters: clearQueryFilters,
+    refetch,
   } = useEntityList(
     (filterParams) =>
       applicationInterfacesApi.list({
@@ -129,11 +133,29 @@ export const ApplicationInterfaceListPage: React.FC = () => {
         navigate(`/entities/application-interfaces/${item.id}/edit`);
         break;
       case 'delete':
-        if (window.confirm(`Delete interface "${item.name}"?`)) {
-          deleteEntity(async () => applicationInterfacesApi.delete(item.id));
-        }
+        setEntityToDelete(item);
+        setDeleteModalOpen(true);
         break;
     }
+  };
+
+  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
+    if (!entityToDelete) return;
+    
+    try {
+      await deleteEntity(async () => applicationInterfacesApi.delete(entityToDelete.id, approvalId, reason));
+      setDeleteModalOpen(false);
+      setEntityToDelete(null);
+      refetch();
+    } catch (err) {
+      console.error('Delete failed:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setEntityToDelete(null);
   };
 
   const handleBulkDelete = async (ids: string[]) => {
@@ -170,6 +192,14 @@ export const ApplicationInterfaceListPage: React.FC = () => {
         onClearSelection={clearSelection}
         onBulkDelete={handleBulkDelete}
         showBulkActions
+      />
+      
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        entityLabel={entityToDelete ? `application interface "${entityToDelete.name}"` : 'application interface'}
+        loading={actionLoading}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
       />
     </div>
   );
