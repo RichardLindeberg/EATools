@@ -142,6 +142,7 @@ Results:
 ### Phase 5: Page Integration Tests (12-16 hours) 🟡 IN PROGRESS
 **Test user workflows across pages:**
 - [x] Login flow test (enter credentials/auth state, redirect to `returnUrl`)
+- [x] Application list page tests (filters + sort params asserted)
 - [ ] Entity list page tests (fetch entities, pagination, filtering, sorting)
 - [ ] Entity detail page tests (fetch entity, display, relationships tab)
 - [x] Entity create flow test (fill form, submit via POST, redirect to detail)
