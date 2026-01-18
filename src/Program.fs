@@ -79,6 +79,7 @@ let main args =
         HealthEndpoint.routes
         @ MetricsEndpoint.routes
         @ Endpoints.routes
+        @ AuthEndpoints.routes
         @ ApplicationsEndpoints.routes
         @ ApplicationServicesEndpoints.routes
         @ ApplicationInterfacesEndpoints.routes

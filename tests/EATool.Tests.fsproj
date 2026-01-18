@@ -4,6 +4,8 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="fixtures/AuthTestHelpers.fs" />
+    <Compile Include="AuthenticationTests.fs" />
     <Compile Include="fixtures/MockOTelExporter.fs" />
     <Compile Include="fixtures/OTelTestHelpers.fs" />
     <Compile Include="CommandFrameworkTests.fs" />
@@ -19,12 +21,14 @@
     <Compile Include="ContextPropagationTests.fs" />
     <Compile Include="PIIDetectionTests.fs" />
     <Compile Include="integration/ObservabilityIntegrationTests.fs" />
+    <Compile Include="integration/AuthIntegrationTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../src/EATool.fsproj" />

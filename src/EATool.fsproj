@@ -20,6 +20,9 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.9.0-beta.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -97,6 +100,12 @@
     <Compile Include="Infrastructure/ApplicationInterfaceRepository.fs" />
     <Compile Include="Infrastructure/Json.fs" />
     <Compile Include="Infrastructure/OrganizationRepository.fs" />
+    <Compile Include="Auth/AuthTypes.fs" />
+    <Compile Include="Auth/PasswordHasher.fs" />
+    <Compile Include="Auth/JwtTokenService.fs" />
+    <Compile Include="Auth/UserStore.fs" />
+    <Compile Include="Auth/TokenStore.fs" />
+    <Compile Include="Auth/AuthService.fs" />
     <Compile Include="Api/ErrorCodes.fs" />
     <Compile Include="Api/ErrorResponse.fs" />
     <Compile Include="Api/Middleware/ErrorHandlingMiddleware.fs" />
@@ -115,6 +124,7 @@
     <Compile Include="Api/RelationsEndpoints.fs" />
     <Compile Include="Api/ServersEndpoints.fs" />
     <Compile Include="Api/OrganizationsEndpoints.fs" />
+    <Compile Include="Api/AuthEndpoints.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

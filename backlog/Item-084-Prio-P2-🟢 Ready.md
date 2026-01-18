@@ -42,6 +42,23 @@ Without these endpoints, the frontend cannot perform real authentication and mus
 - [FRONTEND-READINESS-REPORT.md](../FRONTEND-READINESS-REPORT.md) - Auth gap identification
 - [BACKEND-UI-ALIGNMENT.md](../BACKEND-UI-ALIGNMENT.md) - Auth flow alignment
 
+## Architecture & Implementation Guide
+
+📋 **Comprehensive Implementation Architecture**: [Item_084_Authentication_Implementation_Architecture.md](../Item_084_Authentication_Implementation_Architecture.md)
+
+This document provides:
+- System context and component architecture diagrams
+- Complete data flow diagrams (login, refresh, logout, me endpoints)
+- Database schema with migrations
+- Detailed specifications for all 7 F# modules
+- Configuration and environment variables
+- Test strategy and examples
+- **8-phase implementation checklist** with 35+ tasks and time estimates
+- Security considerations and best practices
+- Deployment checklist for production
+
+**Start here for implementation guidance.**
+
 ---
 
 ## Detailed Tasks
