@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
@@ -8,9 +8,13 @@ import { LoginPage } from './LoginPage';
 vi.mock('../../hooks/useAuth');
 
 describe('ProtectedRoute redirect integration', () => {
-  it('redirects unauthenticated users to login with returnUrl', async () => {
-    const { useAuth } = await import('../../hooks/useAuth');
-    (useAuth as any).mockReturnValue({
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('redirects unauthenticated users to login with returnUrl', () => {
+    const { useAuth } = vi.importActual('../../hooks/useAuth') as any;
+    vi.mocked(useAuth).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       hasPermission: vi.fn(() => false),
@@ -35,14 +39,14 @@ describe('ProtectedRoute redirect integration', () => {
     );
 
     expect(
-      await screen.findByText(/Sign in to your account/i)
+      screen.getByText(/Sign in to your account/i)
     ).toBeInTheDocument();
     expect(screen.queryByText('Applications')).not.toBeInTheDocument();
   });
 
-  it('renders protected page when authenticated & permitted', async () => {
-    const { useAuth } = await import('../../hooks/useAuth');
-    (useAuth as any).mockReturnValue({
+  it('renders protected page when authenticated & permitted', () => {
+    const { useAuth } = vi.importActual('../../hooks/useAuth') as any;
+    vi.mocked(useAuth).mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       hasPermission: vi.fn(() => true),
@@ -66,7 +70,7 @@ describe('ProtectedRoute redirect integration', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText('Applications')).toBeInTheDocument();
+    expect(screen.getByText('Applications')).toBeInTheDocument();
     expect(
       screen.queryByText(/Sign in to your account/i)
     ).not.toBeInTheDocument();

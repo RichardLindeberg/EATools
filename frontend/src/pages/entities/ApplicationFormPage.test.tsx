@@ -65,9 +65,7 @@ describe('ApplicationFormPage', () => {
       await user.click(submitButton);
 
       // Form should not call API when validation fails
-      await waitFor(() => {
-        expect(mockApiClient.post).not.toHaveBeenCalled();
-      });
+      expect(mockApiClient.post).not.toHaveBeenCalled();
     });
 
     it('creates application successfully with valid data', async () => {

@@ -77,9 +77,7 @@ describe('ServerFormPage', () => {
       await user.click(submitButton);
 
       // Validation should prevent API call
-      await waitFor(() => {
-        expect(mockApiClient.post).not.toHaveBeenCalled();
-      });
+      expect(mockApiClient.post).not.toHaveBeenCalled();
     });
   });
 
