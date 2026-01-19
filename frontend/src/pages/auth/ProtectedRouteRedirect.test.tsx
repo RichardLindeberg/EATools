@@ -1,78 +1,83 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
-import { ApplicationListPage } from '../entities/ApplicationListPage';
-import { LoginPage } from './LoginPage';
+import * as useAuthModule from '../../hooks/useAuth';
 
 vi.mock('../../hooks/useAuth');
+vi.mock('../../components/Loading/Spinner', () => ({
+  Spinner: () => <div data-testid="spinner">Loading...</div>,
+}));
+
+const TestPage = () => <div>Test Protected Content</div>;
+const LoginPageTest = () => <div>Sign in to your account</div>;
 
 describe('ProtectedRoute redirect integration', () => {
+  const mockUseAuth = vi.mocked(useAuthModule.useAuth);
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('redirects unauthenticated users to login with returnUrl', () => {
-    const { useAuth } = vi.importActual('../../hooks/useAuth') as any;
-    vi.mocked(useAuth).mockReturnValue({
+  it('redirects unauthenticated users to login', async () => {
+    mockUseAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       hasPermission: vi.fn(() => false),
       hasRole: vi.fn(() => false),
       login: vi.fn(),
-    });
+    } as any);
 
     render(
-      <MemoryRouter initialEntries={[{ pathname: '/entities/applications' }]}>
+      <MemoryRouter initialEntries={[{ pathname: '/protected' }]}>
         <Routes>
           <Route
-            path="/entities/applications"
+            path="/protected"
             element={
-              <ProtectedRoute requiredPermission="app:read">
-                <ApplicationListPage />
+              <ProtectedRoute requiredPermission="test:read">
+                <TestPage />
               </ProtectedRoute>
             }
           />
-          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/login" element={<LoginPageTest />} />
         </Routes>
       </MemoryRouter>
     );
 
-    expect(
-      screen.getByText(/Sign in to your account/i)
-    ).toBeInTheDocument();
-    expect(screen.queryByText('Applications')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Sign in to your account/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByText('Test Protected Content')).not.toBeInTheDocument();
   });
 
-  it('renders protected page when authenticated & permitted', () => {
-    const { useAuth } = vi.importActual('../../hooks/useAuth') as any;
-    vi.mocked(useAuth).mockReturnValue({
+  it('renders protected page when authenticated & permitted', async () => {
+    mockUseAuth.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       hasPermission: vi.fn(() => true),
       hasRole: vi.fn(() => true),
       login: vi.fn(),
-    });
+    } as any);
 
     render(
-      <MemoryRouter initialEntries={[{ pathname: '/entities/applications' }]}>
+      <MemoryRouter initialEntries={[{ pathname: '/protected' }]}>
         <Routes>
           <Route
-            path="/entities/applications"
+            path="/protected"
             element={
-              <ProtectedRoute requiredPermission="app:read">
-                <ApplicationListPage />
+              <ProtectedRoute requiredPermission="test:read">
+                <TestPage />
               </ProtectedRoute>
             }
           />
-          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/login" element={<LoginPageTest />} />
         </Routes>
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Applications')).toBeInTheDocument();
-    expect(
-      screen.queryByText(/Sign in to your account/i)
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
+    });
+    expect(screen.queryByText(/Sign in to your account/i)).not.toBeInTheDocument();
   });
 });

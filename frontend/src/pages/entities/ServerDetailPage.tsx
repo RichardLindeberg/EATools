@@ -52,24 +52,6 @@ export const ServerDetailPage: React.FC = () => {
       ]
     : [];
 
-  const handleDeleteConfirm = async (approvalId: string, reason: string) => {
-    if (!id) return;
-    
-    try {
-      setDeleting(true);
-      await serversApi.delete(id, approvalId, reason);
-      navigate('/entities/servers');
-    } catch (err) {
-      console.error('Delete failed:', err);
-      setDeleting(false);
-      throw err;
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setDeleteModalOpen(false);
-  };
-
   const tabs = [
     {
       id: 'overview',
@@ -119,25 +101,25 @@ export const ServerDetailPage: React.FC = () => {
   return (
     <>
       <EntityDetailTemplate
-      breadcrumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'Servers', path: '/entities/servers' },
-        { label: entity?.name || id },
-      ]}
-      title={entity?.name || 'Server'}
-      badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' }] : []}
-      actions={[
-        { label: 'Edit', onClick: () => navigate(`/entities/servers/${id}/edit`), variant: 'primary' },
-        { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' },
-        { label: 'Back to List', onClick: () => navigate('/entities/servers'), variant: 'secondary' },
-      ]}
-      properties={properties}
-      tabs={tabs}
-      loading={loading}
-      error={error as Error}
-      notFound={isNotFound}
-      forbidden={isForbidden}
-    />
+        breadcrumbs={[
+          { label: 'Home', path: '/' },
+          { label: 'Servers', path: '/entities/servers' },
+          { label: entity?.name || id },
+        ]}
+        title={entity?.name || 'Server'}
+        badges={entity ? [{ label: entity.status || 'Unknown', variant: 'info' as const }] : []}
+        actions={[
+          { label: 'Edit', onClick: () => navigate(`/entities/servers/${id}/edit`), variant: 'primary' as const },
+          { label: 'Delete', onClick: () => setDeleteModalOpen(true), variant: 'danger' as const },
+          { label: 'Back to List', onClick: () => navigate('/entities/servers'), variant: 'secondary' as const },
+        ]}
+        properties={properties}
+        tabs={tabs}
+        loading={loading}
+        error={error as Error}
+        notFound={isNotFound}
+        forbidden={isForbidden}
+      />
       
       <DeleteConfirmModal
         isOpen={deleteModalOpen}
@@ -147,4 +129,5 @@ export const ServerDetailPage: React.FC = () => {
         onCancel={handleDeleteCancel}
       />
     </>
-export default ServerDetailPage;
+  );
+};
